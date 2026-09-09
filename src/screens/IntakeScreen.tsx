@@ -7,7 +7,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { Button } from '@/components/Button';
 import { ProgressBar } from '@/components/ProgressBar';
 import { SelectOption } from '@/components/SelectOption';
-import { intakeQuestions } from '@/data/intakeQuestions';
+import { intakeQuestions, ARC_LABELS, type IntakeArc } from '@/data/intakeQuestions';
 import { saveIntakeResponses } from '@/services/intake';
 import { useRequireAuth } from '@/services/useRequireAuth';
 
@@ -21,6 +21,8 @@ export function IntakeScreen() {
 
   const totalQuestions = intakeQuestions.length;
   const currentQuestion = intakeQuestions[questionIndex];
+  const arcOrder: IntakeArc[] = ['identity', 'body', 'movement', 'nutrition'];
+  const arcNumber = arcOrder.indexOf(currentQuestion.arc) + 1;
 
   async function selectOption(optionId: string) {
     const nextAnswers = { ...answers, [currentQuestion.id]: optionId };
@@ -80,6 +82,9 @@ export function IntakeScreen() {
         </Pressable>
 
         <ProgressBar progress={(questionIndex + 1) / totalQuestions} />
+        <ThemedText variant="caption" color={colors.sageDark} style={styles.arcLabel}>
+          PART {arcNumber} OF {arcOrder.length} · {ARC_LABELS[currentQuestion.arc].toUpperCase()}
+        </ThemedText>
         <ThemedText variant="caption" color={colors.inkMuted} style={styles.stepLabel}>
           QUESTION {questionIndex + 1} OF {totalQuestions}
         </ThemedText>
@@ -124,8 +129,10 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     marginBottom: spacing.lg,
   },
-  stepLabel: {
+  arcLabel: {
     marginTop: spacing.lg,
+  },
+  stepLabel: {
     marginBottom: spacing.sm,
   },
   question: {

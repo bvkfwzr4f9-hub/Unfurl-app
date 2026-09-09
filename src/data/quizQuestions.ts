@@ -1,9 +1,15 @@
 /**
  * Teaser quiz content.
- * Short, low-commitment questions (~60 seconds) that lead into a
+ * Short, low-commitment questions (~90 seconds) that lead into a
  * personalized-sounding "path" result, which is the hook for waitlist
  * email capture. Not diagnostic, not medical — just enough signal to
  * make the result feel tailored.
+ *
+ * Opens with two identity/emotional questions (the "emotional entry
+ * point"), then the four original practical/symptom questions —
+ * getPathForAnswers only reads the `symptom` answer, so the extra
+ * questions are just richer context captured alongside the waitlist
+ * signup, not something the path result depends on.
  */
 
 export interface QuizOption {
@@ -18,6 +24,26 @@ export interface QuizQuestion {
 }
 
 export const quizQuestions: QuizQuestion[] = [
+  {
+    id: 'griefOfSelf',
+    question: "Do you ever feel like you're grieving a version of yourself — even if nothing \"bad\" has happened?",
+    options: [
+      { id: 'yes-often', label: 'Yes, often' },
+      { id: 'yes-sometimes', label: 'Sometimes' },
+      { id: 'not-really', label: 'Not really' },
+      { id: 'never-thought-about-it', label: 'Never thought about it that way' },
+    ],
+  },
+  {
+    id: 'nextChapter',
+    question: 'Have you been thinking about what you want the next chapter of your life to look like?',
+    options: [
+      { id: 'yes-a-lot', label: 'Yes, a lot lately' },
+      { id: 'starting-to', label: 'Just starting to' },
+      { id: 'not-yet', label: 'Not yet' },
+      { id: 'always-thinking-about-it', label: "I'm always thinking about this" },
+    ],
+  },
   {
     id: 'stage',
     question: 'Where are you in your journey?',

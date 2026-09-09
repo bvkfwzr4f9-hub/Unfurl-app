@@ -13,9 +13,10 @@ Non-medical menopause wellness app. Expo (React Native) + Firebase.
   design system.
 - **Landing screen** (`/`) — entry point, CTA into the teaser quiz, plus a
   "Sign in" link for returning users.
-- **Teaser quiz + waitlist capture** (`/quiz`) — a 4-question, ~60-second quiz
-  that resolves to one of five "path" results, then captures an email into
-  Firestore's `waitlist` collection to unlock it.
+- **Teaser quiz + waitlist capture** (`/quiz`) — a 6-question, ~90-second quiz
+  (opens with two identity/emotional questions, then the four original
+  practical ones) that resolves to one of five "path" results, then captures
+  an email into Firestore's `waitlist` collection to unlock it.
 - **Auth** (`/auth`) — email/password sign-up and sign-in, wired to Firebase
   Auth. "Continue with Apple" / "Continue with Google" are visible but
   disabled ("coming soon") — real OAuth needs Apple/Google developer
@@ -28,13 +29,16 @@ Non-medical menopause wellness app. Expo (React Native) + Firebase.
   deep-intake quiz if you haven't, surfaces personalized recommendations
   (members) or an "unlock your personalized plan" upsell (free), and links
   into the library, doctor toolkit, and upgrade.
-- **Deep-intake quiz** (`/intake`) — a 26-question questionnaire (age range,
-  stage, cycle regularity, the full symptom picture — hot flashes, sleep,
-  mood, focus, joint aches, palpitations, headaches, skin/hair, body
-  composition, bladder changes, symptom triggers, stress, HRT interest,
-  current support, goals, and how you relate to your changing body) saved to
-  your profile. Longer and more
-  specific than the teaser quiz; requires being signed in.
+- **Deep-intake quiz** (`/intake`) — a 53-question questionnaire, organized
+  into the 4-arc structure from the build plan and question bank: **Getting
+  to know you** (identity/emotional entry — 12 questions), **Body &
+  symptoms** (24 — the full physician-lens picture: cycle, hot flashes,
+  sleep, mood, focus, joint aches, palpitations, headaches, skin/hair,
+  bladder, family history, bone density, bloodwork, chronic conditions,
+  doctor history, HRT), **Movement** (9), and **Nutrition** (8, including
+  stress/social support/priority). Saved to your profile; requires being
+  signed in. `src/data/intakeQuestions.ts` documents which of the 100-question
+  bank's items were skipped as duplicates of existing questions.
 - **Content library** (`/library`, `/library/[slug]`) — the 11 sections named
   in the build plan: Recognition & Validation, The Mishandled Symptom
   Cluster, Body Literacy, Movement, Nutrition, Sleep, Sexual Health, Mental &
