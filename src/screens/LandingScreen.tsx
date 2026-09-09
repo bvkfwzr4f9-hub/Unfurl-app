@@ -1,4 +1,4 @@
-import { View, StyleSheet } from 'react-native';
+import { View, Pressable, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { colors, spacing } from '@/theme';
@@ -34,6 +34,11 @@ export function LandingScreen() {
           <ThemedText variant="bodySmall" color={colors.inkMuted} style={styles.disclaimer}>
             No medical advice, no diagnoses — just a clearer place to start.
           </ThemedText>
+          <Pressable onPress={() => router.push('/auth')} style={styles.signInLink}>
+            <ThemedText variant="bodySmall" color={colors.woodBrown}>
+              Already have an account? Sign in
+            </ThemedText>
+          </Pressable>
         </View>
       </View>
     </SafeAreaView>
@@ -67,5 +72,9 @@ const styles = StyleSheet.create({
   disclaimer: {
     textAlign: 'center',
     marginTop: spacing.md,
+  },
+  signInLink: {
+    alignSelf: 'center',
+    marginTop: spacing.lg,
   },
 });

@@ -14,7 +14,12 @@ Non-medical menopause wellness app. Expo (React Native) + Firebase.
   Firestore's `waitlist` collection to unlock it. This is the app's front
   door and its only job right now is validating demand.
 - **Landing screen** (`/`, `app/index.tsx`) — the entry point, CTA into the
-  quiz.
+  quiz, with a secondary "Sign in" link for returning users.
+- **Auth** (`/auth`) — email/password sign-up and sign-in, wired to Firebase
+  Auth. "Continue with Apple" and "Continue with Google" are visible but
+  disabled ("coming soon") — real OAuth needs Apple/Google developer
+  credentials that don't exist yet, so they're honestly marked rather than
+  wired to something broken.
 - **A Style Guide screen** (`/dev-style-guide`) — dev-only route that renders
   the whole design system for reference; not part of the real app flow.
 - **Firebase service** (`src/services/firebase.ts`) — placeholder, ready for
@@ -47,14 +52,18 @@ screen. Any code changes reload automatically while `expo start` is running.
    submission create it automatically) and set security rules that allow
    `create` on that collection from unauthenticated clients but not `read`,
    `update`, or `delete` — this app only ever writes to it.
+6. In the Firebase Console, go to Authentication → Sign-in method → enable
+   "Email/Password" — that's all sign-up/sign-in needs to work.
 
-Until real config is in place, submitting the quiz's email form will show an
-inline error instead of crashing — that's expected.
+Until real config is in place, submitting the quiz's email form or the
+sign-up/sign-in form will show an inline error instead of crashing — that's
+expected.
 
 ## What's next (in build order)
 
 1. ~~Teaser quiz + waitlist capture~~ — done, see above
-2. Auth (email/password + Sign in with Apple + Google)
+2. ~~Auth~~ — email/password done, see above; Apple/Google sign-in still
+   need real developer credentials before they can be wired up
 3. Full deep-intake quiz (post-signup)
 4. 11-section content library + Cloudflare Stream video integration
 5. Freemium paywall (Firestore security rules)
@@ -68,6 +77,7 @@ inline error instead of crashing — that's expected.
 app/                  Expo Router screens (file-based routing, thin wrappers)
   index.tsx           Landing screen
   quiz.tsx            Teaser quiz + waitlist capture flow
+  auth.tsx            Sign-up / sign-in
   dev-style-guide.tsx Dev-only design system reference
 src/
   theme/              Design system: colors, typography, spacing
@@ -75,6 +85,6 @@ src/
                         TextField, ProgressBar
   screens/             Real screen implementations, one per app/ route
   data/                Static content, e.g. quiz questions and path results
-  services/            Firebase, waitlist writes, and later: Cloudflare
-                        Stream, Stripe
+  services/            Firebase, auth error messages, waitlist writes, and
+                        later: Cloudflare Stream, Stripe
 ```
