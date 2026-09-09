@@ -26,7 +26,7 @@ Non-medical menopause wellness app. Expo (React Native) + Firebase.
 **Signed-in**
 - **Home** (`/home`) — the post-signin dashboard: prompts you to complete the
   deep-intake quiz if you haven't, and links into the library, doctor
-  toolkit, events, and upgrade.
+  toolkit, and upgrade.
 - **Deep-intake quiz** (`/intake`) — an 11-question questionnaire (age range,
   stage, symptom specifics, current support, goals) saved to your profile.
   Longer and more specific than the teaser quiz; requires being signed in.
@@ -42,9 +42,6 @@ Non-medical menopause wellness app. Expo (React Native) + Firebase.
 - **Symptom Log** (`/symptom-log`, membership-gated) — log symptoms over time
   (category, severity, notes) to Firestore, then **export as a PDF**
   (`expo-print` + `expo-sharing`) to bring to an appointment.
-- **Virtual Events** (`/events`) — upcoming live sessions with a "Join on
-  Zoom" link-out. Currently placeholder events — swap in real Zoom links in
-  `src/data/events.ts` once sessions are scheduled.
 - **Paywall** (`/paywall`) — membership pricing (monthly/annual, currently
   disabled pending real billing) plus a **dev-only toggle** to flip your own
   account between free and active so you can test every gated screen today.
@@ -117,7 +114,6 @@ error instead of crashing — that's expected.
 6. ~~Doctor toolkit~~ — done (free tips + paid symptom log with PDF export)
 7. Apple IAP + Stripe checkout — needs real accounts/backend, see "Billing"
    above
-8. ~~Virtual events~~ — done; needs real Zoom links in `src/data/events.ts`
 
 ## Project structure
 
@@ -131,7 +127,6 @@ app/                  Expo Router screens (file-based routing, thin wrappers)
   library/            Content library (list + [slug] detail)
   doctor-toolkit.tsx  Free doctor-prep content + link to symptom log
   symptom-log.tsx     Symptom tracking + PDF export (membership-gated)
-  events.tsx          Virtual events (Zoom link-out)
   paywall.tsx         Membership screen + dev unlock toggle
   dev-style-guide.tsx Dev-only design system reference
 src/
@@ -140,7 +135,7 @@ src/
                         TextField, ProgressBar, PremiumLock
   screens/             Real screen implementations, one per app/ route
   data/                Static content: quiz/intake questions, content
-                        library, doctor toolkit tips, events
+                        library, doctor toolkit tips
   services/            Firebase, auth hooks, subscription/paywall state,
                         intake + symptom log writes, PDF export, Cloudflare
                         Stream URL builder

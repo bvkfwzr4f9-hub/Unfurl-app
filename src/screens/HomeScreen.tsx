@@ -11,13 +11,12 @@ import { auth } from '@/services/firebase';
 interface HomeLink {
   title: string;
   description: string;
-  route: '/library' | '/doctor-toolkit' | '/events' | '/intake' | '/paywall';
+  route: '/library' | '/doctor-toolkit' | '/intake' | '/paywall';
 }
 
 const LINKS: HomeLink[] = [
   { title: 'Content Library', description: '11 sections, at your pace.', route: '/library' },
   { title: 'Doctor Toolkit', description: 'Prep for your next appointment.', route: '/doctor-toolkit' },
-  { title: 'Virtual Events', description: 'Live sessions with the community.', route: '/events' },
 ];
 
 export function HomeScreen() {
