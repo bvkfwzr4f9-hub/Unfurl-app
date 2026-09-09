@@ -29,7 +29,6 @@ export function AuthScreen() {
   const [password, setPassword] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [signedInEmail, setSignedInEmail] = useState<string | null>(null);
 
   const isSignUp = mode === 'signUp';
 
@@ -39,35 +38,17 @@ export function AuthScreen() {
     setSubmitting(true);
     try {
       const trimmedEmail = email.trim();
-      const credential = isSignUp
-        ? await createUserWithEmailAndPassword(auth, trimmedEmail, password)
-        : await signInWithEmailAndPassword(auth, trimmedEmail, password);
-      setSignedInEmail(credential.user.email);
+      if (isSignUp) {
+        await createUserWithEmailAndPassword(auth, trimmedEmail, password);
+      } else {
+        await signInWithEmailAndPassword(auth, trimmedEmail, password);
+      }
+      router.replace('/home');
     } catch (err) {
       setError(getAuthErrorMessage(err));
     } finally {
       setSubmitting(false);
     }
-  }
-
-  if (signedInEmail) {
-    return (
-      <SafeAreaView style={styles.screen} edges={['top', 'bottom']}>
-        <View style={styles.centeredContent}>
-          <ThemedText variant="caption" color={colors.sageDark} style={styles.eyebrow}>
-            YOU'RE IN
-          </ThemedText>
-          <ThemedText variant="h1" style={styles.spaced}>
-            Welcome, {signedInEmail}.
-          </ThemedText>
-          <ThemedText variant="body" color={colors.inkMuted} style={styles.spaced}>
-            The full Unfurl experience is still being built — for now, this
-            just confirms your account works. More is coming soon.
-          </ThemedText>
-          <Button label="Back to home" variant="secondary" onPress={() => router.replace('/')} />
-        </View>
-      </SafeAreaView>
-    );
   }
 
   return (
@@ -177,17 +158,9 @@ const styles = StyleSheet.create({
     padding: spacing.xl,
     paddingBottom: spacing.huge,
   },
-  centeredContent: {
-    flex: 1,
-    justifyContent: 'center',
-    padding: spacing.xl,
-  },
   backButton: {
     alignSelf: 'flex-start',
     marginBottom: spacing.lg,
-  },
-  eyebrow: {
-    marginBottom: spacing.md,
   },
   spaced: {
     marginBottom: spacing.lg,

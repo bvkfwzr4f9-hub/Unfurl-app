@@ -1,0 +1,32 @@
+rules_version = '2';
+
+// Deploy from the Firebase Console: Firestore Database → Rules → paste this
+// in and Publish. (This sandbox can't reach firebase.google.com to deploy
+// it for you — see the README's "Connecting Firebase" section.)
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Teaser quiz waitlist signups — anyone can add one, nobody can read,
+    // change, or delete them back out through the client.
+    match /waitlist/{docId} {
+      allow create: if true;
+      allow read, update, delete: if false;
+    }
+
+    // A user's own profile: subscription status, intake answers. Only the
+    // signed-in owner can read or write it.
+    //
+    // NOTE: subscriptionStatus lives on this same owner-writable document,
+    // which is fine for now (see src/services/subscription.ts) but is not
+    // secure against a determined user granting themselves access — once
+    // real billing (Stripe/Apple IAP webhooks) exists, move that field to a
+    // separate document only a backend can write, and make it read-only
+    // here.
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+
+      match /symptomLogs/{logId} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
+    }
+  }
+}
