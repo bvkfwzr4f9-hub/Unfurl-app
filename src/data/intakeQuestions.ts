@@ -150,4 +150,135 @@ export const intakeQuestions: IntakeQuestion[] = [
       { id: 'figuring-out', label: 'Still figuring it out' },
     ],
   },
+  {
+    id: 'cycleRegularity',
+    question: 'How regular are your periods currently?',
+    options: [
+      { id: 'regular', label: 'Still regular' },
+      { id: 'somewhat-irregular', label: 'Somewhat irregular' },
+      { id: 'very-irregular', label: 'Very irregular or unpredictable' },
+      { id: 'none', label: 'No periods anymore' },
+      { id: 'not-applicable', label: 'Not applicable to me' },
+    ],
+  },
+  {
+    id: 'jointAches',
+    question: 'How often do you notice joint aches, stiffness, or muscle pain?',
+    options: [
+      { id: 'rarely', label: 'Rarely' },
+      { id: 'occasionally', label: 'Occasionally' },
+      { id: 'frequently', label: 'Frequently' },
+      { id: 'daily', label: 'Nearly every day' },
+    ],
+  },
+  {
+    id: 'palpitations',
+    question: 'Do you ever notice heart palpitations or a racing heart without exercise?',
+    options: [
+      { id: 'never', label: 'Never' },
+      { id: 'rarely', label: 'Rarely' },
+      { id: 'sometimes', label: 'Sometimes' },
+      { id: 'often', label: 'Often' },
+    ],
+  },
+  {
+    id: 'headaches',
+    question: 'Have you noticed new or worsened headaches?',
+    options: [
+      { id: 'no', label: 'No change' },
+      { id: 'occasionally', label: 'Occasionally' },
+      { id: 'frequently', label: 'Frequently' },
+      { id: 'always-had', label: "I've always gotten these" },
+    ],
+  },
+  {
+    id: 'skinHairChanges',
+    question: 'Have you noticed changes in your skin or hair?',
+    options: [
+      { id: 'not-really', label: 'Not really' },
+      { id: 'a-little', label: 'A little' },
+      { id: 'noticeably', label: 'Noticeably' },
+      { id: 'significantly', label: 'Significantly' },
+    ],
+  },
+  {
+    id: 'bodyComposition',
+    question: 'Have you noticed changes in your weight or body shape?',
+    options: [
+      { id: 'no-change', label: 'No real change' },
+      { id: 'some-change', label: 'Some change' },
+      { id: 'noticeable-change', label: 'Noticeable change' },
+      { id: 'significant-change', label: 'Significant change' },
+    ],
+  },
+  {
+    id: 'bladderChanges',
+    question: 'Any changes in bladder control or urinary urgency?',
+    options: [
+      { id: 'none', label: 'None' },
+      { id: 'occasional', label: 'Occasional' },
+      { id: 'frequent', label: 'Frequent' },
+      { id: 'prefer-not-to-say', label: 'Prefer not to say' },
+    ],
+  },
+  {
+    id: 'symptomTriggers',
+    question: 'Do certain foods or drinks seem to trigger your symptoms (caffeine, alcohol, spicy food)?',
+    options: [
+      { id: 'yes-definitely', label: 'Yes, definitely' },
+      { id: 'maybe', label: "Maybe, haven't tracked it" },
+      { id: 'no', label: "No, doesn't seem to" },
+      { id: 'havent-noticed', label: "Haven't paid attention" },
+    ],
+  },
+  {
+    id: 'stressLevel',
+    question: 'How would you rate your overall stress level lately?',
+    options: [
+      { id: 'low', label: 'Low' },
+      { id: 'moderate', label: 'Moderate' },
+      { id: 'high', label: 'High' },
+      { id: 'overwhelming', label: 'Overwhelming' },
+    ],
+  },
+  {
+    id: 'workImpact',
+    question: 'Is this affecting your work or daily responsibilities?',
+    options: [
+      { id: 'not-at-all', label: 'Not at all' },
+      { id: 'a-little', label: 'A little' },
+      { id: 'moderately', label: 'Moderately' },
+      { id: 'significantly', label: 'Significantly' },
+    ],
+  },
+  {
+    id: 'socialSupport',
+    question: 'Do you have people in your life you can talk to about this?',
+    options: [
+      { id: 'several', label: 'Yes, several' },
+      { id: 'one-or-two', label: 'Yes, one or two' },
+      { id: 'not-really', label: 'Not really' },
+      { id: 'prefer-not-to-say', label: 'Prefer not to say' },
+    ],
+  },
+  {
+    id: 'movementPreference',
+    question: 'What kind of movement do you enjoy most?',
+    options: [
+      { id: 'walking-cardio', label: 'Walking or cardio' },
+      { id: 'strength', label: 'Strength training' },
+      { id: 'yoga-stretching', label: 'Yoga or stretching' },
+      { id: 'none-right-now', label: 'None right now' },
+    ],
+  },
+  {
+    id: 'priorityFix',
+    question: 'If you could feel better in just one area right now, which would it be?',
+    options: [
+      { id: 'sleep', label: 'Sleep' },
+      { id: 'hot-flashes', label: 'Hot flashes' },
+      { id: 'mood', label: 'Mood' },
+      { id: 'energy-focus', label: 'Energy & focus' },
+    ],
+  },
 ];

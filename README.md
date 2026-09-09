@@ -28,9 +28,12 @@ Non-medical menopause wellness app. Expo (React Native) + Firebase.
   deep-intake quiz if you haven't, surfaces personalized recommendations
   (members) or an "unlock your personalized plan" upsell (free), and links
   into the library, doctor toolkit, and upgrade.
-- **Deep-intake quiz** (`/intake`) — a 13-question questionnaire (age range,
-  stage, symptom specifics, HRT interest, current support, goals, and how
-  you relate to your changing body) saved to your profile. Longer and more
+- **Deep-intake quiz** (`/intake`) — a 26-question questionnaire (age range,
+  stage, cycle regularity, the full symptom picture — hot flashes, sleep,
+  mood, focus, joint aches, palpitations, headaches, skin/hair, body
+  composition, bladder changes, symptom triggers, stress, HRT interest,
+  current support, goals, and how you relate to your changing body) saved to
+  your profile. Longer and more
   specific than the teaser quiz; requires being signed in.
 - **Content library** (`/library`, `/library/[slug]`) — the 11 sections named
   in the build plan: Recognition & Validation, The Mishandled Symptom
