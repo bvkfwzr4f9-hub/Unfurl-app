@@ -25,26 +25,53 @@ Non-medical menopause wellness app. Expo (React Native) + Firebase.
 
 **Signed-in**
 - **Home** (`/home`) — the post-signin dashboard: prompts you to complete the
-  deep-intake quiz if you haven't, and links into the library, doctor
-  toolkit, and upgrade.
-- **Deep-intake quiz** (`/intake`) — an 11-question questionnaire (age range,
-  stage, symptom specifics, current support, goals) saved to your profile.
-  Longer and more specific than the teaser quiz; requires being signed in.
-- **Content library** (`/library`, `/library/[slug]`) — 11 written sections
-  covering the transition, symptoms, and lifestyle topics. 3 are free
-  (Understanding the Transition, Hot Flashes & Night Sweats, Talking to Your
-  Doctor); the other 8 are membership-gated. Each section can optionally
-  carry a Cloudflare Stream video (`src/services/cloudflareStream.ts`) — none
-  are attached yet since there's no video content, but the player is fully
-  wired for when there is.
+  deep-intake quiz if you haven't, surfaces personalized recommendations
+  (members) or an "unlock your personalized plan" upsell (free), and links
+  into the library, doctor toolkit, and upgrade.
+- **Deep-intake quiz** (`/intake`) — a 13-question questionnaire (age range,
+  stage, symptom specifics, HRT interest, current support, goals, and how
+  you relate to your changing body) saved to your profile. Longer and more
+  specific than the teaser quiz; requires being signed in.
+- **Content library** (`/library`, `/library/[slug]`) — the 11 sections named
+  in the build plan: Recognition & Validation, The Mishandled Symptom
+  Cluster, Body Literacy, Movement, Nutrition, Sleep, Sexual Health, Mental &
+  Emotional Health, Doctor-Talk Toolkit, HRT Education, and Identity &
+  Life-Stage Exploration. Recognition & Validation, Doctor-Talk Toolkit, and
+  HRT Education are fully free; the other 8 always show a free teaser
+  paragraph, with the rest of the section gated behind membership. Each
+  section can carry a Cloudflare Stream video
+  (`src/services/cloudflareStream.ts`) and a per-section "mark as done"
+  checkmark (`src/services/subscription.ts`'s `setSectionWatched`) — no
+  videos are attached yet since there's no video content, but both are fully
+  wired.
+- **Content recommendations** (`src/services/recommendations.ts`) — members
+  who've completed the intake quiz see sections recommended from their
+  answers on `/home`, matching the plan's "quiz answers connect to tagged
+  content" paid-tier hook. Each section carries `tags` (question:answer
+  pairs) matched against the member's intake answers.
 - **Doctor Toolkit** (`/doctor-toolkit`) — free conversation-starter prompts
-  and an appointment-prep checklist, plus a link into the Symptom Log.
+  and an appointment-prep checklist, plus a link into the Symptom Log. The
+  library's Doctor-Talk Toolkit section links back here for the full version.
 - **Symptom Log** (`/symptom-log`, membership-gated) — log symptoms over time
   (category, severity, notes) to Firestore, then **export as a PDF**
   (`expo-print` + `expo-sharing`) to bring to an appointment.
-- **Paywall** (`/paywall`) — membership pricing (monthly/annual, currently
-  disabled pending real billing) plus a **dev-only toggle** to flip your own
-  account between free and active so you can test every gated screen today.
+- **Paywall** (`/paywall`) — membership pricing ($9.99/mo or $69.99/yr,
+  currently disabled pending real billing) plus a **dev-only toggle** to flip
+  your own account between free and active so you can test every gated
+  screen today.
+
+## Deliberately deferred from the build plan
+
+A few things in the "App Build Plan (MVP)" doc were discussed and
+intentionally left out for now, by request rather than by oversight:
+
+- **Virtual events / Zoom registration** — removed; can be re-added later.
+- **Storing quiz/intake answers separately from identity data, linked only
+  by an internal ID** — the plan calls for this as a privacy safeguard;
+  intake answers currently live directly on the user's own `users/{uid}`
+  profile doc instead, for simplicity. Worth revisiting before handling real
+  sensitive health data at scale.
+- **Promo/discount codes** on the paywall — not built.
 
 ## Billing (Apple IAP + Stripe) — what's real vs. not
 

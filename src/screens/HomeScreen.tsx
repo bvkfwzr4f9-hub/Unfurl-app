@@ -7,6 +7,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { useRequireAuth } from '@/services/useRequireAuth';
 import { useUserProfile } from '@/services/useUserProfile';
 import { auth } from '@/services/firebase';
+import { getRecommendedSections } from '@/services/recommendations';
 
 interface HomeLink {
   title: string;
@@ -30,6 +31,7 @@ export function HomeScreen() {
 
   const isActive = profile?.subscriptionStatus === 'active';
   const hasCompletedIntake = !!profile?.intakeCompletedAt;
+  const recommended = isActive ? getRecommendedSections(profile?.intake) : [];
 
   return (
     <SafeAreaView style={styles.screen} edges={['top', 'bottom']}>
@@ -56,6 +58,28 @@ export function HomeScreen() {
           </Pressable>
         )}
 
+        {recommended.length > 0 && (
+          <View style={styles.recommendedBlock}>
+            <ThemedText variant="caption" color={colors.woodBrown} style={styles.recommendedLabel}>
+              RECOMMENDED FOR YOU
+            </ThemedText>
+            {recommended.map((section) => (
+              <Pressable
+                key={section.slug}
+                onPress={() => router.push(`/library/${section.slug}`)}
+                style={({ pressed }) => [styles.card, pressed && styles.cardPressed]}
+              >
+                <ThemedText variant="h3" style={styles.cardTitle}>
+                  {section.title}
+                </ThemedText>
+                <ThemedText variant="bodySmall" color={colors.inkMuted}>
+                  {section.summary}
+                </ThemedText>
+              </Pressable>
+            ))}
+          </View>
+        )}
+
         {LINKS.map((link) => (
           <Pressable
             key={link.route}
@@ -77,10 +101,12 @@ export function HomeScreen() {
             style={({ pressed }) => [styles.card, styles.upgradeCard, pressed && styles.cardPressed]}
           >
             <ThemedText variant="h3" style={styles.cardTitle}>
-              Upgrade to full membership
+              {hasCompletedIntake ? 'Your personalized plan is ready' : 'Upgrade to full membership'}
             </ThemedText>
             <ThemedText variant="bodySmall" color={colors.inkMuted}>
-              Unlock the full library and the symptom log.
+              {hasCompletedIntake
+                ? 'Unlock the recommendations built from your answers, plus the full library and symptom log.'
+                : 'Unlock the full library and the symptom log.'}
             </ThemedText>
           </Pressable>
         )}
@@ -132,6 +158,12 @@ const styles = StyleSheet.create({
   },
   cardTitle: {
     marginBottom: spacing.xs,
+  },
+  recommendedBlock: {
+    marginBottom: spacing.md,
+  },
+  recommendedLabel: {
+    marginBottom: spacing.md,
   },
   signOut: {
     alignSelf: 'center',

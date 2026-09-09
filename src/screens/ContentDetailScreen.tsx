@@ -4,11 +4,13 @@ import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useVideoPlayer, VideoView } from 'expo-video';
 import { colors, spacing, radius } from '@/theme';
 import { ThemedText } from '@/components/ThemedText';
+import { Button } from '@/components/Button';
 import { PremiumLock } from '@/components/PremiumLock';
 import { getContentSection } from '@/data/contentLibrary';
 import { getStreamPlaybackUrl } from '@/services/cloudflareStream';
 import { useAuth } from '@/services/useAuth';
 import { useUserProfile } from '@/services/useUserProfile';
+import { setSectionWatched } from '@/services/subscription';
 
 function StreamVideoPlayer({ videoId }: { videoId: string }) {
   const player = useVideoPlayer(getStreamPlaybackUrl(videoId), (instance) => {
@@ -37,6 +39,7 @@ export function ContentDetailScreen() {
   }
 
   const isLocked = section.isPremium && profile?.subscriptionStatus !== 'active';
+  const isWatched = !!profile?.watchedSections.includes(section.slug);
 
   return (
     <SafeAreaView style={styles.screen} edges={['top', 'bottom']}>
@@ -49,26 +52,31 @@ export function ContentDetailScreen() {
 
         {section.isPremium && (
           <ThemedText variant="caption" color={colors.woodBrown} style={styles.premiumLabel}>
-            PREMIUM
+            MEMBERS
           </ThemedText>
         )}
         <ThemedText variant="display" style={styles.title}>
           {section.title}
         </ThemedText>
 
+        {section.videoId && <StreamVideoPlayer videoId={section.videoId} />}
+
+        <ThemedText variant="bodyLarge" color={colors.ink} style={styles.paragraph}>
+          {section.teaser}
+        </ThemedText>
+
         {isLocked ? (
           <PremiumLock
             message={
               user
-                ? 'Upgrade to unlock this section, along with the rest of the premium library.'
-                : 'Sign in and upgrade to unlock this section, along with the rest of the premium library.'
+                ? 'Upgrade to unlock the rest of this section, along with the rest of the membership library.'
+                : 'Sign in and upgrade to unlock the rest of this section, along with the rest of the membership library.'
             }
             ctaLabel={user ? 'See membership options' : 'Sign in'}
             onPress={() => router.push(user ? '/paywall' : '/auth')}
           />
         ) : (
           <>
-            {section.videoId && <StreamVideoPlayer videoId={section.videoId} />}
             {section.body.map((paragraph, index) => (
               <ThemedText
                 key={index}
@@ -79,12 +87,33 @@ export function ContentDetailScreen() {
                 {paragraph}
               </ThemedText>
             ))}
+
+            {section.slug === 'doctor-talk-toolkit' && (
+              <Button
+                label="Open the full Doctor Toolkit"
+                variant="secondary"
+                onPress={() => router.push('/doctor-toolkit')}
+                style={styles.toolkitButton}
+              />
+            )}
+
             <View style={styles.disclaimer}>
               <ThemedText variant="bodySmall" color={colors.inkMuted}>
                 General information only, not medical advice. If something
                 here concerns you, it's worth bringing to a doctor.
               </ThemedText>
             </View>
+
+            {user && (
+              <Pressable
+                onPress={() => setSectionWatched(user.uid, section.slug, !isWatched)}
+                style={styles.watchedRow}
+              >
+                <ThemedText variant="bodySmall" color={isWatched ? colors.sageDark : colors.woodBrown}>
+                  {isWatched ? '✓ Marked as done' : 'Mark as done'}
+                </ThemedText>
+              </Pressable>
+            )}
           </>
         )}
       </ScrollView>
@@ -121,7 +150,14 @@ const styles = StyleSheet.create({
     marginBottom: spacing.lg,
     backgroundColor: colors.forestDark,
   },
+  toolkitButton: {
+    marginBottom: spacing.lg,
+  },
   disclaimer: {
     marginTop: spacing.md,
+  },
+  watchedRow: {
+    alignSelf: 'flex-start',
+    marginTop: spacing.xl,
   },
 });

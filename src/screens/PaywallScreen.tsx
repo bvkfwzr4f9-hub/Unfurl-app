@@ -53,7 +53,7 @@ export function PaywallScreen() {
         </Card>
         <Card variant="sage" style={styles.spacedLarge}>
           <ThemedText variant="h3" color={colors.forestDark} style={styles.tierTitle}>
-            Annual — $79/yr
+            Annual — $69.99/yr
           </ThemedText>
           <Button label="Subscribe annually (coming soon)" variant="secondary" fullWidth disabled />
         </Card>

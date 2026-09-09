@@ -130,4 +130,24 @@ export const intakeQuestions: IntakeQuestion[] = [
       { id: 'community', label: 'Connect with others going through this' },
     ],
   },
+  {
+    id: 'hrtInterest',
+    question: 'Where are you with hormone therapy (HRT)?',
+    options: [
+      { id: 'currently-taking', label: "I'm currently taking it" },
+      { id: 'considering', label: "I'm considering it" },
+      { id: 'not-interested', label: "Not interested right now" },
+      { id: 'unfamiliar', label: "Not sure what it is" },
+    ],
+  },
+  {
+    id: 'bodyRelationship',
+    question: 'How would you describe your relationship with your changing body right now?',
+    options: [
+      { id: 'curious', label: 'Curious and open to it' },
+      { id: 'frustrated', label: 'Frustrated' },
+      { id: 'grieving', label: "Grieving what's changing" },
+      { id: 'figuring-out', label: 'Still figuring it out' },
+    ],
+  },
 ];

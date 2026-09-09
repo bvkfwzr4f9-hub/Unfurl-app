@@ -1,4 +1,12 @@
-import { doc, onSnapshot, setDoc, serverTimestamp, Timestamp } from 'firebase/firestore';
+import {
+  doc,
+  onSnapshot,
+  setDoc,
+  serverTimestamp,
+  Timestamp,
+  arrayUnion,
+  arrayRemove,
+} from 'firebase/firestore';
 import { db } from './firebase';
 
 export type SubscriptionStatus = 'free' | 'active';
@@ -6,6 +14,8 @@ export type SubscriptionStatus = 'free' | 'active';
 export interface UserProfile {
   subscriptionStatus: SubscriptionStatus;
   intakeCompletedAt: Timestamp | null;
+  intake: Record<string, string> | null;
+  watchedSections: string[];
 }
 
 /** Subscribes to a user's profile doc (users/{uid}) and calls onChange whenever it updates. Returns an unsubscribe function. */
@@ -18,6 +28,8 @@ export function subscribeToUserProfile(
     onChange({
       subscriptionStatus: (data?.subscriptionStatus as SubscriptionStatus) ?? 'free',
       intakeCompletedAt: (data?.intakeCompletedAt as Timestamp) ?? null,
+      intake: (data?.intake as Record<string, string>) ?? null,
+      watchedSections: (data?.watchedSections as string[]) ?? [],
     });
   });
 }
@@ -35,6 +47,15 @@ export async function devSetSubscriptionStatus(uid: string, status: Subscription
   await setDoc(
     doc(db, 'users', uid),
     { subscriptionStatus: status, updatedAt: serverTimestamp() },
+    { merge: true }
+  );
+}
+
+/** Toggles a content section's "watched"/done state for the given user. */
+export async function setSectionWatched(uid: string, slug: string, watched: boolean) {
+  await setDoc(
+    doc(db, 'users', uid),
+    { watchedSections: watched ? arrayUnion(slug) : arrayRemove(slug) },
     { merge: true }
   );
 }

@@ -4,9 +4,13 @@ import { useRouter } from 'expo-router';
 import { colors, spacing, radius, shadow } from '@/theme';
 import { ThemedText } from '@/components/ThemedText';
 import { contentLibrary } from '@/data/contentLibrary';
+import { useAuth } from '@/services/useAuth';
+import { useUserProfile } from '@/services/useUserProfile';
 
 export function ContentLibraryScreen() {
   const router = useRouter();
+  const { user } = useAuth();
+  const profile = useUserProfile(user?.uid);
 
   return (
     <SafeAreaView style={styles.screen} edges={['top', 'bottom']}>
@@ -22,25 +26,35 @@ export function ContentLibraryScreen() {
           relevant right now.
         </ThemedText>
 
-        {contentLibrary.map((section) => (
-          <Pressable
-            key={section.slug}
-            onPress={() => router.push(`/library/${section.slug}`)}
-            style={({ pressed }) => [styles.card, pressed && styles.cardPressed]}
-          >
-            <View style={styles.cardHeader}>
-              <ThemedText variant="h3">{section.title}</ThemedText>
-              {section.isPremium && (
-                <ThemedText variant="caption" color={colors.woodBrown}>
-                  PREMIUM
-                </ThemedText>
-              )}
-            </View>
-            <ThemedText variant="bodySmall" color={colors.inkMuted}>
-              {section.summary}
-            </ThemedText>
-          </Pressable>
-        ))}
+        {contentLibrary.map((section) => {
+          const isWatched = !!profile?.watchedSections.includes(section.slug);
+          return (
+            <Pressable
+              key={section.slug}
+              onPress={() => router.push(`/library/${section.slug}`)}
+              style={({ pressed }) => [styles.card, pressed && styles.cardPressed]}
+            >
+              <View style={styles.cardHeader}>
+                <ThemedText variant="h3">{section.title}</ThemedText>
+                <View style={styles.cardBadges}>
+                  {isWatched && (
+                    <ThemedText variant="caption" color={colors.sageDark}>
+                      DONE
+                    </ThemedText>
+                  )}
+                  {section.isPremium && (
+                    <ThemedText variant="caption" color={colors.woodBrown}>
+                      MEMBERS
+                    </ThemedText>
+                  )}
+                </View>
+              </View>
+              <ThemedText variant="bodySmall" color={colors.inkMuted}>
+                {section.summary}
+              </ThemedText>
+            </Pressable>
+          );
+        })}
       </ScrollView>
     </SafeAreaView>
   );
@@ -79,5 +93,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: spacing.xs,
+  },
+  cardBadges: {
+    flexDirection: 'row',
+    gap: spacing.sm,
   },
 });
