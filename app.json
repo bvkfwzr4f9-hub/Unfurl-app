@@ -1,0 +1,22 @@
+{
+  "expo": {
+    "name": "Unfurl",
+    "slug": "unfurl-app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "unfurl",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.unfurl.app"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-font"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}
