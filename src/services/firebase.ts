@@ -12,12 +12,12 @@ import { getFirestore } from 'firebase/firestore';
  * (which we'll write when we build the paywall gating).
  */
 const firebaseConfig = {
-  apiKey: 'REPLACE_ME',
-  authDomain: 'REPLACE_ME.firebaseapp.com',
-  projectId: 'REPLACE_ME',
-  storageBucket: 'REPLACE_ME.appspot.com',
-  messagingSenderId: 'REPLACE_ME',
-  appId: 'REPLACE_ME',
+  apiKey: 'AIzaSyAI9o3-hdusxBk6JB5LV96Im6Mgu6ARZw8',
+  authDomain: 'unfurl-b36a5.firebaseapp.com',
+  projectId: 'unfurl-b36a5',
+  storageBucket: 'unfurl-b36a5.firebasestorage.app',
+  messagingSenderId: '8382599155',
+  appId: '1:8382599155:web:ba8c1e075fede886f34c86',
 };
 
 export const firebaseApp = initializeApp(firebaseConfig);
