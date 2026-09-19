@@ -15,6 +15,12 @@ export function ContentLibraryScreen() {
   return (
     <SafeAreaView style={styles.screen} edges={['top', 'bottom']}>
       <ScrollView contentContainerStyle={styles.content}>
+        <Pressable onPress={() => router.back()} hitSlop={12} style={styles.backButton}>
+          <ThemedText variant="bodySmall" color={colors.woodBrown}>
+            ← Back
+          </ThemedText>
+        </Pressable>
+
         <ThemedText variant="caption" color={colors.sageDark} style={styles.eyebrow}>
           THE LIBRARY
         </ThemedText>
@@ -68,6 +74,10 @@ const styles = StyleSheet.create({
   content: {
     padding: spacing.xl,
     paddingBottom: spacing.huge,
+  },
+  backButton: {
+    alignSelf: 'flex-start',
+    marginBottom: spacing.lg,
   },
   eyebrow: {
     marginBottom: spacing.md,
