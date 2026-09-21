@@ -1,25 +1,19 @@
 import { ScrollView, View, StyleSheet, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
-import { useVideoPlayer, VideoView } from 'expo-video';
 import { colors, spacing, radius } from '@/theme';
 import { ThemedText } from '@/components/ThemedText';
 import { Button } from '@/components/Button';
 import { PremiumLock } from '@/components/PremiumLock';
-import { getContentSection } from '@/data/contentLibrary';
-import { getStreamPlaybackUrl } from '@/services/cloudflareStream';
+import { getContentSection, isStepCompleted, isStepUnlocked } from '@/data/contentLibrary';
 import { useAuth } from '@/services/useAuth';
 import { useUserProfile } from '@/services/useUserProfile';
-import { setSectionWatched } from '@/services/subscription';
-import { awardPoints, POINTS } from '@/services/gamification';
 
-function StreamVideoPlayer({ videoId }: { videoId: string }) {
-  const player = useVideoPlayer(getStreamPlaybackUrl(videoId), (instance) => {
-    instance.loop = false;
-  });
-
-  return <VideoView player={player} style={styles.video} nativeControls />;
-}
+const STEP_TYPE_LABEL: Record<string, string> = {
+  article: 'ARTICLE',
+  video: 'VIDEO',
+  practice: 'PRACTICE',
+};
 
 export function ContentDetailScreen() {
   const router = useRouter();
@@ -40,15 +34,7 @@ export function ContentDetailScreen() {
   }
 
   const isLocked = section.isPremium && profile?.subscriptionStatus !== 'active';
-  const isWatched = !!profile?.watchedSections.includes(section.slug);
-
-  async function toggleWatched() {
-    if (!user || !section) return;
-    await setSectionWatched(user.uid, section.slug, !isWatched);
-    if (!isWatched) {
-      await awardPoints(user.uid, POINTS.finishSection);
-    }
-  }
+  const completedSteps = profile?.completedSteps ?? [];
 
   return (
     <SafeAreaView style={styles.screen} edges={['top', 'bottom']}>
@@ -68,8 +54,6 @@ export function ContentDetailScreen() {
           {section.title}
         </ThemedText>
 
-        {section.videoId && <StreamVideoPlayer videoId={section.videoId} />}
-
         <ThemedText variant="bodyLarge" color={colors.ink} style={styles.paragraph}>
           {section.teaser}
         </ThemedText>
@@ -78,24 +62,45 @@ export function ContentDetailScreen() {
           <PremiumLock
             message={
               user
-                ? 'Upgrade to unlock the rest of this section, along with the rest of the membership library.'
-                : 'Sign in and upgrade to unlock the rest of this section, along with the rest of the membership library.'
+                ? 'Upgrade to unlock this section, along with the rest of the membership library.'
+                : 'Sign in and upgrade to unlock this section, along with the rest of the membership library.'
             }
             ctaLabel={user ? 'See membership options' : 'Sign in'}
             onPress={() => router.push(user ? '/paywall' : '/auth')}
           />
         ) : (
           <>
-            {section.body.map((paragraph, index) => (
-              <ThemedText
-                key={index}
-                variant="bodyLarge"
-                color={colors.ink}
-                style={styles.paragraph}
-              >
-                {paragraph}
-              </ThemedText>
-            ))}
+            <ThemedText variant="caption" color={colors.woodBrown} style={styles.stepsLabel}>
+              STEPS
+            </ThemedText>
+            {section.steps.map((step, index) => {
+              const done = isStepCompleted(completedSteps, section.slug, step.id);
+              const unlocked = isStepUnlocked(section, index, completedSteps);
+              return (
+                <Pressable
+                  key={step.id}
+                  disabled={!unlocked}
+                  onPress={() => router.push(`/library/${section.slug}/${step.id}`)}
+                  style={({ pressed }) => [
+                    styles.stepRow,
+                    !unlocked && styles.stepRowLocked,
+                    pressed && unlocked && styles.stepRowPressed,
+                  ]}
+                >
+                  <View style={styles.stepText}>
+                    <ThemedText variant="caption" color={colors.woodBrown}>
+                      {STEP_TYPE_LABEL[step.type]}
+                    </ThemedText>
+                    <ThemedText variant="h3" color={unlocked ? colors.ink : colors.inkMuted}>
+                      {step.title}
+                    </ThemedText>
+                  </View>
+                  <ThemedText variant="h3" color={done ? colors.sageDark : colors.inkMuted}>
+                    {done ? '✓' : unlocked ? '›' : '🔒'}
+                  </ThemedText>
+                </Pressable>
+              );
+            })}
 
             {section.slug === 'doctor-talk-toolkit' && (
               <Button
@@ -104,21 +109,6 @@ export function ContentDetailScreen() {
                 onPress={() => router.push('/doctor-toolkit')}
                 style={styles.toolkitButton}
               />
-            )}
-
-            <View style={styles.disclaimer}>
-              <ThemedText variant="bodySmall" color={colors.inkMuted}>
-                General information only, not medical advice. If something
-                here concerns you, it's worth bringing to a doctor.
-              </ThemedText>
-            </View>
-
-            {user && (
-              <Pressable onPress={toggleWatched} style={styles.watchedRow}>
-                <ThemedText variant="bodySmall" color={isWatched ? colors.sageDark : colors.woodBrown}>
-                  {isWatched ? '✓ Marked as done' : `Mark as done (+${POINTS.finishSection} pts)`}
-                </ThemedText>
-              </Pressable>
             )}
           </>
         )}
@@ -147,23 +137,33 @@ const styles = StyleSheet.create({
     marginBottom: spacing.lg,
   },
   paragraph: {
-    marginBottom: spacing.lg,
+    marginBottom: spacing.xl,
   },
-  video: {
-    width: '100%',
-    height: 220,
+  stepsLabel: {
+    marginBottom: spacing.md,
+  },
+  stepRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: colors.creamLight,
     borderRadius: radius.lg,
-    marginBottom: spacing.lg,
-    backgroundColor: colors.forestDark,
+    padding: spacing.lg,
+    marginBottom: spacing.md,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  stepRowLocked: {
+    opacity: 0.5,
+  },
+  stepRowPressed: {
+    opacity: 0.85,
+  },
+  stepText: {
+    flex: 1,
+    marginRight: spacing.md,
   },
   toolkitButton: {
-    marginBottom: spacing.lg,
-  },
-  disclaimer: {
     marginTop: spacing.md,
-  },
-  watchedRow: {
-    alignSelf: 'flex-start',
-    marginTop: spacing.xl,
   },
 });

@@ -15,7 +15,8 @@ export interface UserProfile {
   subscriptionStatus: SubscriptionStatus;
   intakeCompletedAt: Timestamp | null;
   intake: Record<string, string> | null;
-  watchedSections: string[];
+  /** Composite `${sectionSlug}:${stepId}` ids — see src/data/contentLibrary.ts. */
+  completedSteps: string[];
   points: number;
   streakDays: number;
   /** YYYY-MM-DD, local date of the last daily-visit credit — see src/services/gamification.ts. */
@@ -33,7 +34,7 @@ export function subscribeToUserProfile(
       subscriptionStatus: (data?.subscriptionStatus as SubscriptionStatus) ?? 'free',
       intakeCompletedAt: (data?.intakeCompletedAt as Timestamp) ?? null,
       intake: (data?.intake as Record<string, string>) ?? null,
-      watchedSections: (data?.watchedSections as string[]) ?? [],
+      completedSteps: (data?.completedSteps as string[]) ?? [],
       points: (data?.points as number) ?? 0,
       streakDays: (data?.streakDays as number) ?? 0,
       lastActiveDate: (data?.lastActiveDate as string) ?? null,
@@ -58,11 +59,11 @@ export async function devSetSubscriptionStatus(uid: string, status: Subscription
   );
 }
 
-/** Toggles a content section's "watched"/done state for the given user. */
-export async function setSectionWatched(uid: string, slug: string, watched: boolean) {
+/** Marks a content step's completion id present or absent for the given user. */
+export async function setStepCompletion(uid: string, compositeStepId: string, completed: boolean) {
   await setDoc(
     doc(db, 'users', uid),
-    { watchedSections: watched ? arrayUnion(slug) : arrayRemove(slug) },
+    { completedSteps: completed ? arrayUnion(compositeStepId) : arrayRemove(compositeStepId) },
     { merge: true }
   );
 }

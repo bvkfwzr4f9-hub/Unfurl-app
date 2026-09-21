@@ -34,7 +34,7 @@ export function HomeScreen() {
     if (!user || !profile) return;
     recordDailyVisit(user.uid, profile.lastActiveDate, profile.streakDays);
     // Only re-run if the identity of the user or their stored streak state
-    // changes — not on every profile field update (points/watchedSections
+    // changes — not on every profile field update (points/completedSteps
     // etc. change far more often and would spam this write).
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, profile?.lastActiveDate]);

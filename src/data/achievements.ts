@@ -1,5 +1,5 @@
 import type { UserProfile } from '@/services/subscription';
-import { contentLibrary } from './contentLibrary';
+import { contentLibrary, countCompletedSections } from './contentLibrary';
 import { GAME_LEVELS } from './gameLevels';
 
 export interface Achievement {
@@ -23,19 +23,19 @@ export const achievements: Achievement[] = [
     id: 'first-section',
     emoji: '📖',
     title: 'First Section',
-    isEarned: (profile) => profile.watchedSections.length >= 1,
+    isEarned: (profile) => countCompletedSections(profile.completedSteps) >= 1,
   },
   {
     id: 'bookworm',
     emoji: '📚',
     title: 'Bookworm',
-    isEarned: (profile) => profile.watchedSections.length >= 5,
+    isEarned: (profile) => countCompletedSections(profile.completedSteps) >= 5,
   },
   {
     id: 'completionist',
     emoji: '🏆',
     title: 'Completionist',
-    isEarned: (profile) => profile.watchedSections.length >= contentLibrary.length,
+    isEarned: (profile) => countCompletedSections(profile.completedSteps) >= contentLibrary.length,
   },
   {
     id: 'week-streak',

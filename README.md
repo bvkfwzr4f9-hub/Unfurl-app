@@ -39,18 +39,22 @@ Non-medical menopause wellness app. Expo (React Native) + Firebase.
   stress/social support/priority). Saved to your profile; requires being
   signed in. `src/data/intakeQuestions.ts` documents which of the 100-question
   bank's items were skipped as duplicates of existing questions.
-- **Content library** (`/library`, `/library/[slug]`) — the 11 sections named
-  in the build plan: Recognition & Validation, The Mishandled Symptom
-  Cluster, Body Literacy, Movement, Nutrition, Sleep, Sexual Health, Mental &
-  Emotional Health, Doctor-Talk Toolkit, HRT Education, and Identity &
-  Life-Stage Exploration. Recognition & Validation, Doctor-Talk Toolkit, and
-  HRT Education are fully free; the other 8 always show a free teaser
-  paragraph, with the rest of the section gated behind membership. Each
-  section can carry a Cloudflare Stream video
-  (`src/services/cloudflareStream.ts`) and a per-section "mark as done"
-  checkmark (`src/services/subscription.ts`'s `setSectionWatched`) — no
-  videos are attached yet since there's no video content, but both are fully
-  wired.
+- **Content library** (`/library`, `/library/[slug]`, `/library/[slug]/[stepId]`)
+  — the 11 sections named in the build plan: Recognition & Validation, The
+  Mishandled Symptom Cluster, Body Literacy, Movement, Nutrition, Sleep,
+  Sexual Health, Mental & Emotional Health, Doctor-Talk Toolkit, HRT
+  Education, and Identity & Life-Stage Exploration. Recognition & Validation,
+  Doctor-Talk Toolkit, and HRT Education are fully free; the other 8 always
+  show a free teaser paragraph on the section overview, with the section's
+  steps gated behind membership.
+  Each section is a short **ordered course of 3 steps** — an article, a
+  video, and a hands-on practice (`src/data/contentLibrary.ts`) — that
+  **unlock sequentially**: step 2 stays locked until step 1 is marked
+  complete, and so on (`isStepUnlocked`). A step can carry a Cloudflare
+  Stream video (`src/services/cloudflareStream.ts`); none are attached yet,
+  so video steps show a "coming soon" note with a short text summary
+  instead, so nobody's blocked from progressing. Completing all of a
+  section's steps is what counts as "finishing" it for badges and points.
 - **Content recommendations** (`src/services/recommendations.ts`) — members
   who've completed the intake quiz see sections recommended from their
   answers on `/home`, matching the plan's "quiz answers connect to tagged
@@ -69,9 +73,10 @@ Non-medical menopause wellness app. Expo (React Native) + Firebase.
 - **Levels & streaks** (`/home`) — a plant-growth level system tied to the
   app's own name (Seed → Sprout → Bud → Bloom → Unfurled,
   `src/data/gameLevels.ts`) that turns real engagement into points: +50 for
-  finishing intake, +15 per content section marked done, +5 per symptom
-  logged, +5 for opening the app on a new day (which also builds a daily
-  streak — `src/services/gamification.ts`). A handful of badges
+  finishing intake, +10 per content step completed plus a +20 bonus for
+  finishing every step in a section, +5 per symptom logged, +5 for opening
+  the app on a new day (which also builds a daily streak —
+  `src/services/gamification.ts`). A handful of badges
   (`src/data/achievements.ts`) are derived purely from existing profile
   stats — no extra storage — and shown on Home alongside a level progress
   bar.
@@ -167,7 +172,7 @@ app/                  Expo Router screens (file-based routing, thin wrappers)
   auth.tsx            Sign-up / sign-in
   home.tsx            Signed-in dashboard
   intake.tsx           Deep-intake questionnaire
-  library/            Content library (list + [slug] detail)
+  library/            Content library (list, [slug] overview, [slug]/[stepId] step)
   doctor-toolkit.tsx  Free doctor-prep content + link to symptom log
   symptom-log.tsx     Symptom tracking + PDF export (membership-gated)
   paywall.tsx         Membership screen + dev unlock toggle

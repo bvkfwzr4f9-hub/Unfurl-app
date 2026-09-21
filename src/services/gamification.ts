@@ -3,7 +3,8 @@ import { db } from './firebase';
 
 export const POINTS = {
   completeIntake: 50,
-  finishSection: 15,
+  completeStep: 10,
+  completeSectionBonus: 20,
   logSymptom: 5,
   dailyVisit: 5,
 } as const;

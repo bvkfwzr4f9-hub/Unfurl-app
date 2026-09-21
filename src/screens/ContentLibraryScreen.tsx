@@ -3,7 +3,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { colors, spacing, radius, shadow } from '@/theme';
 import { ThemedText } from '@/components/ThemedText';
-import { contentLibrary } from '@/data/contentLibrary';
+import { contentLibrary, isSectionComplete, isStepCompleted } from '@/data/contentLibrary';
 import { useAuth } from '@/services/useAuth';
 import { useUserProfile } from '@/services/useUserProfile';
 
@@ -33,7 +33,11 @@ export function ContentLibraryScreen() {
         </ThemedText>
 
         {contentLibrary.map((section) => {
-          const isWatched = !!profile?.watchedSections.includes(section.slug);
+          const completedSteps = profile?.completedSteps ?? [];
+          const isDone = isSectionComplete(section, completedSteps);
+          const stepsDone = section.steps.filter((step) =>
+            isStepCompleted(completedSteps, section.slug, step.id)
+          ).length;
           return (
             <Pressable
               key={section.slug}
@@ -43,7 +47,7 @@ export function ContentLibraryScreen() {
               <View style={styles.cardHeader}>
                 <ThemedText variant="h3">{section.title}</ThemedText>
                 <View style={styles.cardBadges}>
-                  {isWatched && (
+                  {isDone && (
                     <ThemedText variant="caption" color={colors.sageDark}>
                       DONE
                     </ThemedText>
@@ -55,8 +59,11 @@ export function ContentLibraryScreen() {
                   )}
                 </View>
               </View>
-              <ThemedText variant="bodySmall" color={colors.inkMuted}>
+              <ThemedText variant="bodySmall" color={colors.inkMuted} style={styles.cardSummary}>
                 {section.summary}
+              </ThemedText>
+              <ThemedText variant="caption" color={colors.woodBrown}>
+                {stepsDone}/{section.steps.length} STEPS
               </ThemedText>
             </Pressable>
           );
@@ -103,6 +110,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: spacing.xs,
+  },
+  cardSummary: {
+    marginBottom: spacing.sm,
   },
   cardBadges: {
     flexDirection: 'row',
