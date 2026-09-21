@@ -15,6 +15,7 @@ import {
   type SymptomLogEntry,
 } from '@/services/symptomLog';
 import { exportSymptomLogToPdf } from '@/services/exportSymptomLog';
+import { awardPoints, POINTS } from '@/services/gamification';
 
 const CATEGORIES = ['Hot flashes', 'Sleep', 'Mood', 'Energy/Focus', 'Other'];
 const SEVERITIES = [1, 2, 3, 4, 5];
@@ -41,6 +42,7 @@ export function SymptomLogScreen() {
     if (!user || saving) return;
     setSaving(true);
     await addSymptomLogEntry(user.uid, { category, severity, note: note.trim() });
+    await awardPoints(user.uid, POINTS.logSymptom);
     setNote('');
     setSaving(false);
   }
@@ -127,7 +129,7 @@ export function SymptomLogScreen() {
               style={styles.field}
             />
             <Button
-              label={saving ? 'Saving…' : 'Add entry'}
+              label={saving ? 'Saving…' : `Add entry (+${POINTS.logSymptom} pts)`}
               variant="primary"
               fullWidth
               disabled={saving}

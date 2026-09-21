@@ -11,6 +11,7 @@ import { getStreamPlaybackUrl } from '@/services/cloudflareStream';
 import { useAuth } from '@/services/useAuth';
 import { useUserProfile } from '@/services/useUserProfile';
 import { setSectionWatched } from '@/services/subscription';
+import { awardPoints, POINTS } from '@/services/gamification';
 
 function StreamVideoPlayer({ videoId }: { videoId: string }) {
   const player = useVideoPlayer(getStreamPlaybackUrl(videoId), (instance) => {
@@ -40,6 +41,14 @@ export function ContentDetailScreen() {
 
   const isLocked = section.isPremium && profile?.subscriptionStatus !== 'active';
   const isWatched = !!profile?.watchedSections.includes(section.slug);
+
+  async function toggleWatched() {
+    if (!user || !section) return;
+    await setSectionWatched(user.uid, section.slug, !isWatched);
+    if (!isWatched) {
+      await awardPoints(user.uid, POINTS.finishSection);
+    }
+  }
 
   return (
     <SafeAreaView style={styles.screen} edges={['top', 'bottom']}>
@@ -105,12 +114,9 @@ export function ContentDetailScreen() {
             </View>
 
             {user && (
-              <Pressable
-                onPress={() => setSectionWatched(user.uid, section.slug, !isWatched)}
-                style={styles.watchedRow}
-              >
+              <Pressable onPress={toggleWatched} style={styles.watchedRow}>
                 <ThemedText variant="bodySmall" color={isWatched ? colors.sageDark : colors.woodBrown}>
-                  {isWatched ? '✓ Marked as done' : 'Mark as done'}
+                  {isWatched ? '✓ Marked as done' : `Mark as done (+${POINTS.finishSection} pts)`}
                 </ThemedText>
               </Pressable>
             )}

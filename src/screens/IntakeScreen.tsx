@@ -10,6 +10,7 @@ import { SelectOption } from '@/components/SelectOption';
 import { intakeQuestions, ARC_LABELS, type IntakeArc } from '@/data/intakeQuestions';
 import { saveIntakeResponses } from '@/services/intake';
 import { useRequireAuth } from '@/services/useRequireAuth';
+import { awardPoints, POINTS } from '@/services/gamification';
 
 export function IntakeScreen() {
   const router = useRouter();
@@ -36,6 +37,7 @@ export function IntakeScreen() {
     if (!user) return;
     setSaving(true);
     await saveIntakeResponses(user.uid, nextAnswers);
+    await awardPoints(user.uid, POINTS.completeIntake);
     setSaving(false);
     setDone(true);
   }
@@ -65,6 +67,9 @@ export function IntakeScreen() {
           <ThemedText variant="body" color={colors.inkMuted} style={styles.spaced}>
             We'll use this to point you toward the sections that matter most
             for you first.
+          </ThemedText>
+          <ThemedText variant="h3" color={colors.sageDark} style={styles.spaced}>
+            +{POINTS.completeIntake} pts
           </ThemedText>
           <Button label="Go to your home" variant="primary" onPress={() => router.replace('/home')} />
         </View>

@@ -1,13 +1,18 @@
+import { useEffect } from 'react';
 import { ScrollView, View, Pressable, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { signOut } from 'firebase/auth';
 import { colors, spacing, radius, shadow } from '@/theme';
 import { ThemedText } from '@/components/ThemedText';
+import { ProgressBar } from '@/components/ProgressBar';
 import { useRequireAuth } from '@/services/useRequireAuth';
 import { useUserProfile } from '@/services/useUserProfile';
 import { auth } from '@/services/firebase';
 import { getRecommendedSections } from '@/services/recommendations';
+import { recordDailyVisit } from '@/services/gamification';
+import { getLevelProgress } from '@/data/gameLevels';
+import { getEarnedAchievements } from '@/data/achievements';
 
 interface HomeLink {
   title: string;
@@ -25,6 +30,15 @@ export function HomeScreen() {
   const { user, initializing } = useRequireAuth();
   const profile = useUserProfile(user?.uid);
 
+  useEffect(() => {
+    if (!user || !profile) return;
+    recordDailyVisit(user.uid, profile.lastActiveDate, profile.streakDays);
+    // Only re-run if the identity of the user or their stored streak state
+    // changes — not on every profile field update (points/watchedSections
+    // etc. change far more often and would spam this write).
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, profile?.lastActiveDate]);
+
   if (initializing || !user) {
     return <View style={styles.screen} />;
   }
@@ -32,6 +46,8 @@ export function HomeScreen() {
   const isActive = profile?.subscriptionStatus === 'active';
   const hasCompletedIntake = !!profile?.intakeCompletedAt;
   const recommended = isActive ? getRecommendedSections(profile?.intake) : [];
+  const levelProgress = getLevelProgress(profile?.points ?? 0);
+  const earnedAchievements = profile ? getEarnedAchievements(profile) : [];
 
   return (
     <SafeAreaView style={styles.screen} edges={['top', 'bottom']}>
@@ -42,6 +58,37 @@ export function HomeScreen() {
         <ThemedText variant="display" style={styles.spacedLarge}>
           Welcome back.
         </ThemedText>
+
+        <View style={styles.levelCard}>
+          <View style={styles.levelHeader}>
+            <ThemedText variant="h2" color={colors.cream100}>
+              {levelProgress.level.emoji} {levelProgress.level.name}
+            </ThemedText>
+            {(profile?.streakDays ?? 0) > 1 && (
+              <ThemedText variant="bodySmall" color={colors.sage}>
+                🔥 {profile?.streakDays}-day streak
+              </ThemedText>
+            )}
+          </View>
+          <ProgressBar progress={levelProgress.progress} />
+          <ThemedText variant="bodySmall" color={colors.creamMuted} style={styles.levelSubtext}>
+            {levelProgress.nextLevel
+              ? `${levelProgress.pointsToNextLevel} pts to ${levelProgress.nextLevel.name} ${levelProgress.nextLevel.emoji}`
+              : `${profile?.points ?? 0} pts — fully unfurled!`}
+          </ThemedText>
+
+          {earnedAchievements.length > 0 && (
+            <View style={styles.badgeRow}>
+              {earnedAchievements.map((achievement) => (
+                <View key={achievement.id} style={styles.badge}>
+                  <ThemedText variant="bodySmall" color={colors.cream100}>
+                    {achievement.emoji} {achievement.title}
+                  </ThemedText>
+                </View>
+              ))}
+            </View>
+          )}
+        </View>
 
         {!hasCompletedIntake && (
           <Pressable
@@ -135,6 +182,34 @@ const styles = StyleSheet.create({
   },
   spacedLarge: {
     marginBottom: spacing.xl,
+  },
+  levelCard: {
+    backgroundColor: colors.forestDeep,
+    borderRadius: radius.lg,
+    padding: spacing.lg,
+    marginBottom: spacing.xl,
+    ...shadow.card,
+  },
+  levelHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: spacing.md,
+  },
+  levelSubtext: {
+    marginTop: spacing.sm,
+  },
+  badgeRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: spacing.sm,
+    marginTop: spacing.lg,
+  },
+  badge: {
+    backgroundColor: colors.forest,
+    borderRadius: radius.pill,
+    paddingVertical: spacing.xs,
+    paddingHorizontal: spacing.md,
   },
   card: {
     backgroundColor: colors.creamLight,

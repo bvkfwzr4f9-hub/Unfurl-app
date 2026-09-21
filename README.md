@@ -66,6 +66,15 @@ Non-medical menopause wellness app. Expo (React Native) + Firebase.
   currently disabled pending real billing) plus a **dev-only toggle** to flip
   your own account between free and active so you can test every gated
   screen today.
+- **Levels & streaks** (`/home`) — a plant-growth level system tied to the
+  app's own name (Seed → Sprout → Bud → Bloom → Unfurled,
+  `src/data/gameLevels.ts`) that turns real engagement into points: +50 for
+  finishing intake, +15 per content section marked done, +5 per symptom
+  logged, +5 for opening the app on a new day (which also builds a daily
+  streak — `src/services/gamification.ts`). A handful of badges
+  (`src/data/achievements.ts`) are derived purely from existing profile
+  stats — no extra storage — and shown on Home alongside a level progress
+  bar.
 
 ## Deliberately deferred from the build plan
 
@@ -169,9 +178,10 @@ src/
                         TextField, ProgressBar, PremiumLock
   screens/             Real screen implementations, one per app/ route
   data/                Static content: quiz/intake questions, content
-                        library, doctor toolkit tips
+                        library, doctor toolkit tips, game levels,
+                        achievements
   services/            Firebase, auth hooks, subscription/paywall state,
                         intake + symptom log writes, PDF export, Cloudflare
-                        Stream URL builder
+                        Stream URL builder, points/streaks (gamification.ts)
 firestore.rules        Security rules — deploy via Firebase Console
 ```

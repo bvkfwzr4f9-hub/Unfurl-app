@@ -16,6 +16,10 @@ export interface UserProfile {
   intakeCompletedAt: Timestamp | null;
   intake: Record<string, string> | null;
   watchedSections: string[];
+  points: number;
+  streakDays: number;
+  /** YYYY-MM-DD, local date of the last daily-visit credit — see src/services/gamification.ts. */
+  lastActiveDate: string | null;
 }
 
 /** Subscribes to a user's profile doc (users/{uid}) and calls onChange whenever it updates. Returns an unsubscribe function. */
@@ -30,6 +34,9 @@ export function subscribeToUserProfile(
       intakeCompletedAt: (data?.intakeCompletedAt as Timestamp) ?? null,
       intake: (data?.intake as Record<string, string>) ?? null,
       watchedSections: (data?.watchedSections as string[]) ?? [],
+      points: (data?.points as number) ?? 0,
+      streakDays: (data?.streakDays as number) ?? 0,
+      lastActiveDate: (data?.lastActiveDate as string) ?? null,
     });
   });
 }
