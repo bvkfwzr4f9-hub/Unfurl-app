@@ -78,6 +78,10 @@ Non-medical menopause wellness app. Expo (React Native) + Firebase.
   currently disabled pending real billing) plus a **dev-only toggle** to flip
   your own account between free and active so you can test every gated
   screen today.
+- **Symptom Log summary card** (`/home`) — its own dark forest-gradient card
+  on the dashboard (same treatment as the level card), showing entry count
+  and most recent date, or a prompt to start tracking. Tapping it opens the
+  full Symptom Log.
 - **Levels & streaks** (`/home`) — a plant-growth level system tied to the
   app's own name (Seed → Sprout → Bud → Bloom → Unfurled,
   `src/data/gameLevels.ts`) that turns real engagement into points: +50 for

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { ScrollView, View, Pressable, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
@@ -14,16 +14,16 @@ import { recordDailyVisit } from '@/services/gamification';
 import { getLevelProgress } from '@/data/gameLevels';
 import { getEarnedAchievements } from '@/data/achievements';
 import { BrandArcs } from '@/components/BrandArcs';
+import { subscribeToSymptomLogs, type SymptomLogEntry } from '@/services/symptomLog';
 
 interface HomeLink {
   title: string;
   description: string;
-  route: '/library' | '/doctor-toolkit' | '/symptom-log' | '/intake' | '/paywall';
+  route: '/library' | '/doctor-toolkit' | '/intake' | '/paywall';
 }
 
 const LINKS: HomeLink[] = [
   { title: 'Content Library', description: '11 sections, at your pace.', route: '/library' },
-  { title: 'Symptom Log', description: 'Track symptoms, export a PDF for your doctor.', route: '/symptom-log' },
   { title: 'Doctor Toolkit', description: 'Prep for your next appointment.', route: '/doctor-toolkit' },
 ];
 
@@ -31,6 +31,7 @@ export function HomeScreen() {
   const router = useRouter();
   const { user, initializing } = useRequireAuth();
   const profile = useUserProfile(user?.uid);
+  const [symptomEntries, setSymptomEntries] = useState<SymptomLogEntry[]>([]);
 
   useEffect(() => {
     if (!user || !profile) return;
@@ -40,6 +41,11 @@ export function HomeScreen() {
     // etc. change far more often and would spam this write).
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, profile?.lastActiveDate]);
+
+  useEffect(() => {
+    if (!user) return;
+    return subscribeToSymptomLogs(user.uid, setSymptomEntries);
+  }, [user]);
 
   if (initializing || !user) {
     return <View style={styles.screen} />;
@@ -92,6 +98,25 @@ export function HomeScreen() {
             </View>
           )}
         </View>
+
+        <Pressable
+          onPress={() => router.push('/symptom-log')}
+          style={({ pressed }) => [styles.symptomCard, pressed && styles.cardPressed]}
+        >
+          <BrandArcs size={150} style={styles.levelArcs} />
+          <ThemedText variant="h2" color={colors.cream100} style={styles.symptomTitle}>
+            📋 Symptom Log
+          </ThemedText>
+          <ThemedText variant="bodySmall" color={colors.creamMuted}>
+            {symptomEntries.length === 0
+              ? 'Nothing logged yet — track how you feel day to day, then export it for your doctor.'
+              : `${symptomEntries.length} ${symptomEntries.length === 1 ? 'entry' : 'entries'} logged · most recent ${
+                  symptomEntries[0].loggedAt
+                    ? symptomEntries[0].loggedAt.toDate().toLocaleDateString()
+                    : 'just now'
+                }`}
+          </ThemedText>
+        </Pressable>
 
         {!hasCompletedIntake && (
           <Pressable
@@ -197,6 +222,17 @@ const styles = StyleSheet.create({
   levelArcs: {
     top: -30,
     right: -30,
+  },
+  symptomCard: {
+    backgroundColor: colors.forestDeep,
+    borderRadius: radius.lg,
+    padding: spacing.lg,
+    marginBottom: spacing.xl,
+    overflow: 'hidden',
+    ...shadow.card,
+  },
+  symptomTitle: {
+    marginBottom: spacing.xs,
   },
   levelHeader: {
     flexDirection: 'row',
