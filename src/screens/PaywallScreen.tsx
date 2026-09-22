@@ -2,10 +2,11 @@ import { useState } from 'react';
 import { ScrollView, View, StyleSheet, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
-import { colors, spacing } from '@/theme';
+import { colors, spacing, type as typeScale, fontFamily } from '@/theme';
 import { ThemedText } from '@/components/ThemedText';
 import { Button } from '@/components/Button';
 import { Card } from '@/components/Card';
+import { HeroPanel } from '@/components/HeroPanel';
 import { useAuth } from '@/services/useAuth';
 import { useUserProfile } from '@/services/useUserProfile';
 import { devSetSubscriptionStatus } from '@/services/subscription';
@@ -34,16 +35,19 @@ export function PaywallScreen() {
           </ThemedText>
         </Pressable>
 
-        <ThemedText variant="caption" color={colors.sageDark} style={styles.eyebrow}>
-          MEMBERSHIP
-        </ThemedText>
-        <ThemedText variant="display" style={styles.spaced}>
-          Everything, unlocked.
-        </ThemedText>
-        <ThemedText variant="bodyLarge" color={colors.inkMuted} style={styles.spacedLarge}>
-          Membership unlocks the full content library, the symptom log and
-          export, and everything added going forward.
-        </ThemedText>
+        <HeroPanel
+          style={styles.hero}
+          eyebrow="MEMBERSHIP"
+          title={
+            <ThemedText variant="display" color={colors.cream100}>
+              Everything,{' '}
+              <ThemedText style={[typeScale.display, styles.italic]} color={colors.sage}>
+                unlocked.
+              </ThemedText>
+            </ThemedText>
+          }
+          subtitle="Membership unlocks the full content library, the symptom log and export, and everything added going forward."
+        />
 
         <Card variant="dark" style={styles.spaced}>
           <ThemedText variant="h3" color={colors.cream100} style={styles.tierTitle}>
@@ -100,8 +104,11 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     marginBottom: spacing.lg,
   },
-  eyebrow: {
-    marginBottom: spacing.md,
+  hero: {
+    marginBottom: spacing.xl,
+  },
+  italic: {
+    fontFamily: fontFamily.serifItalic,
   },
   spaced: {
     marginBottom: spacing.lg,

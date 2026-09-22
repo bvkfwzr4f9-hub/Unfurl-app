@@ -11,6 +11,14 @@ Non-medical menopause wellness app. Expo (React Native) + Firebase.
 - **UI primitives** (`src/components/`) — `ThemedText`, `Button`, `Card`,
   `SelectOption`, `TextField`, `ProgressBar`, `PremiumLock`, all wired to the
   design system.
+- **Brand motif** (`BrandArcs`, `HeroPanel` in `src/components/`) — the pitch
+  deck's recurring visual signature (thin overlapping circle arcs with small
+  dot "nodes", dark forest-gradient hero panels, mixed regular/italic serif
+  headlines) brought into the app itself, not just the deck. `HeroPanel` is
+  the reusable dark gradient block used for Landing's hero, the Paywall
+  intro, and section headers; `BrandArcs` is the standalone decorative motif
+  layered onto Home's level card and Auth's header for the same texture in
+  smaller doses.
 - **Landing screen** (`/`) — entry point, CTA into the teaser quiz, plus a
   "Sign in" link for returning users.
 - **Teaser quiz + waitlist capture** (`/quiz`) — a 6-question, ~90-second quiz

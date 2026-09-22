@@ -13,10 +13,11 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from 'firebase/auth';
-import { colors, spacing } from '@/theme';
+import { colors, spacing, type as typeScale, fontFamily } from '@/theme';
 import { ThemedText } from '@/components/ThemedText';
 import { Button } from '@/components/Button';
 import { TextField } from '@/components/TextField';
+import { BrandArcs } from '@/components/BrandArcs';
 import { auth } from '@/services/firebase';
 import { getAuthErrorMessage } from '@/services/authErrors';
 
@@ -64,14 +65,25 @@ export function AuthScreen() {
             </ThemedText>
           </Pressable>
 
-          <ThemedText variant="display" style={styles.spaced}>
-            {isSignUp ? 'Create your account' : 'Welcome back'}
-          </ThemedText>
-          <ThemedText variant="body" color={colors.inkMuted} style={styles.spacedLarge}>
-            {isSignUp
-              ? 'Save your path and pick up where you left off.'
-              : 'Sign in to pick up where you left off.'}
-          </ThemedText>
+          <View style={styles.headerWrap}>
+            <BrandArcs
+              size={140}
+              style={styles.arcs}
+              color="rgba(30, 50, 38, 0.1)"
+              dotColor="rgba(110, 139, 96, 0.5)"
+            />
+            <ThemedText variant="display" style={styles.spaced}>
+              {isSignUp ? 'Create your ' : 'Welcome '}
+              <ThemedText style={[typeScale.display, styles.italic]} color={colors.sageDark}>
+                {isSignUp ? 'account' : 'back'}
+              </ThemedText>
+            </ThemedText>
+            <ThemedText variant="body" color={colors.inkMuted} style={styles.spacedLarge}>
+              {isSignUp
+                ? 'Save your path and pick up where you left off.'
+                : 'Sign in to pick up where you left off.'}
+            </ThemedText>
+          </View>
 
           <TextField
             value={email}
@@ -161,6 +173,16 @@ const styles = StyleSheet.create({
   backButton: {
     alignSelf: 'flex-start',
     marginBottom: spacing.lg,
+  },
+  headerWrap: {
+    position: 'relative',
+  },
+  arcs: {
+    top: -20,
+    right: -30,
+  },
+  italic: {
+    fontFamily: fontFamily.serifItalic,
   },
   spaced: {
     marginBottom: spacing.lg,

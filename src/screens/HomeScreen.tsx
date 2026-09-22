@@ -13,6 +13,7 @@ import { getRecommendedSections } from '@/services/recommendations';
 import { recordDailyVisit } from '@/services/gamification';
 import { getLevelProgress } from '@/data/gameLevels';
 import { getEarnedAchievements } from '@/data/achievements';
+import { BrandArcs } from '@/components/BrandArcs';
 
 interface HomeLink {
   title: string;
@@ -61,6 +62,7 @@ export function HomeScreen() {
         </ThemedText>
 
         <View style={styles.levelCard}>
+          <BrandArcs size={150} style={styles.levelArcs} />
           <View style={styles.levelHeader}>
             <ThemedText variant="h2" color={colors.cream100}>
               {levelProgress.level.emoji} {levelProgress.level.name}
@@ -189,7 +191,12 @@ const styles = StyleSheet.create({
     borderRadius: radius.lg,
     padding: spacing.lg,
     marginBottom: spacing.xl,
+    overflow: 'hidden',
     ...shadow.card,
+  },
+  levelArcs: {
+    top: -30,
+    right: -30,
   },
   levelHeader: {
     flexDirection: 'row',
