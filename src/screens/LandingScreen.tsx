@@ -19,6 +19,7 @@ export function LandingScreen() {
         <HeroPanel
           bleed
           style={styles.hero}
+          image={require('../../assets/images/brand/moss-driftwood-sky.jpg')}
           title={
             <ThemedText variant="display" color={colors.cream100}>
               Menopause,{'\n'}
@@ -71,6 +72,8 @@ const styles = StyleSheet.create({
   },
   hero: {
     borderRadius: 28,
+    minHeight: 380,
+    justifyContent: 'flex-end',
   },
   headlineItalic: {
     fontFamily: fontFamily.serifItalic,

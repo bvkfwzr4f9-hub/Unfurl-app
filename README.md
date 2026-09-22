@@ -18,7 +18,12 @@ Non-medical menopause wellness app. Expo (React Native) + Firebase.
   the reusable dark gradient block used for Landing's hero, the Paywall
   intro, and section headers; `BrandArcs` is the standalone decorative motif
   layered onto Home's level card and Auth's header for the same texture in
-  smaller doses.
+  smaller doses. `HeroPanel` also accepts a real photo (`image` prop) with a
+  dark overlay for legibility — Landing uses the mossy-driftwood shot
+  (`assets/images/brand/moss-driftwood-sky.jpg`) and Paywall uses the fern
+  spiral (`fern-spiral.jpg`, a nod to the app's own name). Two more brand
+  photos (`moss-trunk-closeup.jpg`, `terraces-aerial.jpg`) are already in
+  the repo, unused, ready for future sections.
 - **Landing screen** (`/`) — entry point, CTA into the teaser quiz, plus a
   "Sign in" link for returning users.
 - **Teaser quiz + waitlist capture** (`/quiz`) — a 6-question, ~90-second quiz

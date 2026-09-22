@@ -37,6 +37,7 @@ export function PaywallScreen() {
 
         <HeroPanel
           style={styles.hero}
+          image={require('../../assets/images/brand/fern-spiral.jpg')}
           eyebrow="MEMBERSHIP"
           title={
             <ThemedText variant="display" color={colors.cream100}>
@@ -106,6 +107,8 @@ const styles = StyleSheet.create({
   },
   hero: {
     marginBottom: spacing.xl,
+    minHeight: 280,
+    justifyContent: 'flex-end',
   },
   italic: {
     fontFamily: fontFamily.serifItalic,
