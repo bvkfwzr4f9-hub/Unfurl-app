@@ -17,11 +17,12 @@ import { getEarnedAchievements } from '@/data/achievements';
 interface HomeLink {
   title: string;
   description: string;
-  route: '/library' | '/doctor-toolkit' | '/intake' | '/paywall';
+  route: '/library' | '/doctor-toolkit' | '/symptom-log' | '/intake' | '/paywall';
 }
 
 const LINKS: HomeLink[] = [
   { title: 'Content Library', description: '11 sections, at your pace.', route: '/library' },
+  { title: 'Symptom Log', description: 'Track symptoms, export a PDF for your doctor.', route: '/symptom-log' },
   { title: 'Doctor Toolkit', description: 'Prep for your next appointment.', route: '/doctor-toolkit' },
 ];
 
