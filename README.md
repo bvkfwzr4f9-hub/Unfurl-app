@@ -24,10 +24,12 @@ Non-medical menopause wellness app. Expo (React Native) + Firebase.
   spiral (`fern-spiral.jpg`, a nod to the app's own name). Two more brand
   photos (`moss-trunk-closeup.jpg`, `terraces-aerial.jpg`) are already in
   the repo, unused, ready for future sections.
-- **Landing screen** (`/`) — entry point, CTA into the teaser quiz, a "Sign
-  in" link for returning users, and a **level-system teaser** (Seed → Sprout
-  → Bud → Bloom → Unfurled) so the gamification hook — "doesn't feel like
-  homework" — is visible before signup, not hidden behind login.
+- **Landing screen** (`/`) — the mossy-driftwood photo runs full-bleed behind
+  the *entire* screen (not just a hero card), with a dark gradient overlay
+  for legibility; entry point, CTA into the teaser quiz, a "Sign in" link
+  for returning users, and a **level-system teaser** (Seed → Sprout → Bud →
+  Bloom → Unfurled) so the gamification hook — "doesn't feel like homework"
+  — is visible before signup, not hidden behind login.
 - **Teaser quiz + waitlist capture** (`/quiz`) — a 6-question, ~90-second quiz
   (opens with two identity/emotional questions, then the four original
   practical ones) that resolves to one of five "path" results, then captures
