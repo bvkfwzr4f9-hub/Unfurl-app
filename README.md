@@ -95,11 +95,15 @@ Non-medical menopause wellness app. Expo (React Native) + Firebase.
   glass-panel cards, each section's `emoji` in a circular icon bubble, a
   highlighted "UP NEXT" step in the section overview, and a small dot
   stepper on the step-reading screen showing progress through the section.
-- **Content recommendations** (`src/services/recommendations.ts`) — members
-  who've completed the intake quiz see sections recommended from their
-  answers on `/home`, matching the plan's "quiz answers connect to tagged
-  content" paid-tier hook. Each section carries `tags` (question:answer
-  pairs) matched against the member's intake answers.
+- **Your Plan** (`src/services/recommendations.ts`, `getYourPlan`) — Home's
+  former "Recommended for you" rail is now a vertical checklist of concrete
+  next actions, not whole sections: for each intake-matched section it
+  surfaces only the next incomplete step (e.g. "🌱 Practice: Name what
+  you're noticing — 💚 Recognition & Validation"), tapping jumps straight
+  into that step. Members whose recommended sections are all finished see a
+  "you're caught up" message instead of an empty gap. Shown only once
+  intake is complete, for active members. Still built on `tags`
+  (question:answer pairs on each section, matched against intake answers).
 - **Doctor Toolkit** (`/doctor-toolkit`) — free conversation-starter prompts
   and an appointment-prep checklist, plus a link into the Symptom Log. The
   library's Doctor-Talk Toolkit section links back here for the full version.
@@ -108,8 +112,13 @@ Non-medical menopause wellness app. Expo (React Native) + Firebase.
   (`expo-print` + `expo-sharing`) to bring to an appointment. A **Trends**
   chart (`SymptomChart`, `react-native-svg`) sits above the history list —
   one small severity-over-time line per category actually logged, dots
-  colored on a mild→severe sequential ramp, tap a dot to see its date. Below
-  it, the full text history remains as the detailed/tabular view.
+  colored on a mild→severe sequential ramp, tap a dot to see its date. A
+  **Your Patterns** insights card (`src/services/symptomInsights.ts`) sits
+  just below the chart once there are at least 5 entries — client-side
+  pattern-spotting over the member's own data (a category trending up or
+  down, a recurring worst weekday, or their most-logged category as a
+  fallback) with no server round-trip. Below that, the full text history
+  remains as the detailed/tabular view.
 - **Paywall** (`/paywall`) — membership pricing ($9.99/mo or $69.99/yr,
   currently disabled pending real billing) plus a **dev-only toggle** to flip
   your own account between free and active so you can test every gated

@@ -8,6 +8,7 @@ import { Button } from '@/components/Button';
 import { TextField } from '@/components/TextField';
 import { PremiumLock } from '@/components/PremiumLock';
 import { SymptomChart } from '@/components/SymptomChart';
+import { Card } from '@/components/Card';
 import { useRequireAuth } from '@/services/useRequireAuth';
 import { useUserProfile } from '@/services/useUserProfile';
 import {
@@ -16,6 +17,7 @@ import {
   SYMPTOM_CATEGORIES,
   type SymptomLogEntry,
 } from '@/services/symptomLog';
+import { getSymptomInsights } from '@/services/symptomInsights';
 import { exportSymptomLogToPdf } from '@/services/exportSymptomLog';
 import { awardPoints, POINTS } from '@/services/gamification';
 
@@ -39,6 +41,7 @@ export function SymptomLogScreen() {
   }, [user]);
 
   const isPremium = profile?.subscriptionStatus === 'active';
+  const insights = getSymptomInsights(entries);
 
   async function handleAddEntry() {
     if (!user || saving) return;
@@ -141,6 +144,22 @@ export function SymptomLogScreen() {
 
             <SymptomChart entries={entries} />
 
+            {insights.length > 0 && (
+              <Card variant="dark" style={styles.insightsCard}>
+                <ThemedText variant="caption" color={colors.sage} style={styles.insightsLabel}>
+                  YOUR PATTERNS
+                </ThemedText>
+                {insights.map((insight) => (
+                  <View key={insight.id} style={styles.insightRow}>
+                    <ThemedText style={styles.insightIcon}>{insight.icon}</ThemedText>
+                    <ThemedText variant="body" color={colors.cream100} style={styles.insightText}>
+                      {insight.text}
+                    </ThemedText>
+                  </View>
+                ))}
+              </Card>
+            )}
+
             <View style={styles.historyHeader}>
               <ThemedText variant="h3">History</ThemedText>
               <Pressable onPress={handleExport} disabled={exporting || entries.length === 0}>
@@ -235,6 +254,25 @@ const styles = StyleSheet.create({
   },
   field: {
     marginBottom: spacing.md,
+  },
+  insightsCard: {
+    marginBottom: spacing.xl,
+  },
+  insightsLabel: {
+    marginBottom: spacing.md,
+  },
+  insightRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    marginBottom: spacing.sm,
+  },
+  insightIcon: {
+    fontSize: 18,
+    lineHeight: 24,
+    marginRight: spacing.sm,
+  },
+  insightText: {
+    flex: 1,
   },
   historyHeader: {
     flexDirection: 'row',

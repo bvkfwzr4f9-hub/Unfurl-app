@@ -10,7 +10,7 @@ import { ProgressBar } from '@/components/ProgressBar';
 import { useRequireAuth } from '@/services/useRequireAuth';
 import { useUserProfile } from '@/services/useUserProfile';
 import { auth } from '@/services/firebase';
-import { getRecommendedSections } from '@/services/recommendations';
+import { getYourPlan } from '@/services/recommendations';
 import { recordDailyVisit } from '@/services/gamification';
 import { getLevelProgress, GAME_LEVELS, type GameLevel } from '@/data/gameLevels';
 import { getEarnedAchievements } from '@/data/achievements';
@@ -18,6 +18,12 @@ import { contentLibrary } from '@/data/contentLibrary';
 import { BrandArcs } from '@/components/BrandArcs';
 import { LevelUpBanner } from '@/components/LevelUpBanner';
 import { subscribeToSymptomLogs, type SymptomLogEntry } from '@/services/symptomLog';
+
+const STEP_TYPE_EMOJI: Record<string, string> = {
+  article: '📖',
+  video: '🎥',
+  practice: '🌱',
+};
 
 export function HomeScreen() {
   const router = useRouter();
@@ -69,7 +75,10 @@ export function HomeScreen() {
 
   const isActive = profile?.subscriptionStatus === 'active';
   const hasCompletedIntake = !!profile?.intakeCompletedAt;
-  const recommended = isActive ? getRecommendedSections(profile?.intake) : [];
+  const plan =
+    isActive && hasCompletedIntake
+      ? getYourPlan(profile?.intake, profile?.completedSteps ?? [])
+      : [];
   const levelProgress = getLevelProgress(profile?.points ?? 0);
   const earnedAchievements = profile ? getEarnedAchievements(profile) : [];
 
@@ -188,38 +197,48 @@ export function HomeScreen() {
             </Pressable>
           )}
 
-          {recommended.length > 0 && (
+          {isActive && hasCompletedIntake && (
             <View style={styles.railBlock}>
               <ThemedText variant="caption" color={colors.sage} style={styles.railLabel}>
-                RECOMMENDED FOR YOU
+                YOUR PLAN
               </ThemedText>
-              <ScrollView
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={styles.railContent}
-                decelerationRate="fast"
-                snapToInterval={228}
-              >
-                {recommended.map((section) => (
-                  <Pressable
-                    key={section.slug}
-                    onPress={() => router.push(`/library/${section.slug}`)}
-                    style={({ pressed }) => [
-                      styles.glassCard,
-                      styles.recommendedCard,
-                      pressed && styles.cardPressed,
-                    ]}
-                  >
-                    <ThemedText style={styles.recommendedEmoji}>{section.emoji}</ThemedText>
-                    <ThemedText variant="h3" color={colors.cream100} style={styles.cardTitle}>
-                      {section.title}
-                    </ThemedText>
-                    <ThemedText variant="bodySmall" color={colors.creamMuted} numberOfLines={3}>
-                      {section.summary}
-                    </ThemedText>
-                  </Pressable>
-                ))}
-              </ScrollView>
+              {plan.length > 0 ? (
+                <View style={[styles.glassCard, styles.planCard]}>
+                  {plan.map((item, index) => (
+                    <Pressable
+                      key={`${item.sectionSlug}:${item.stepId}`}
+                      onPress={() => router.push(`/library/${item.sectionSlug}/${item.stepId}`)}
+                      style={({ pressed }) => [
+                        styles.planRow,
+                        index < plan.length - 1 && styles.planRowBorder,
+                        pressed && styles.cardPressed,
+                      ]}
+                    >
+                      <ThemedText style={styles.planEmoji}>
+                        {STEP_TYPE_EMOJI[item.stepType]}
+                      </ThemedText>
+                      <View style={styles.planTextBlock}>
+                        <ThemedText variant="caption" color={colors.sage}>
+                          {item.sectionEmoji} {item.sectionTitle}
+                        </ThemedText>
+                        <ThemedText variant="h3" color={colors.cream100}>
+                          {item.stepTitle}
+                        </ThemedText>
+                      </View>
+                      <ThemedText variant="h3" color={colors.creamMuted}>
+                        ›
+                      </ThemedText>
+                    </Pressable>
+                  ))}
+                </View>
+              ) : (
+                <View style={[styles.glassCard, styles.planEmptyCard]}>
+                  <ThemedText variant="body" color={colors.creamMuted}>
+                    You've completed everything recommended for you — nice
+                    work. Explore the full library below for what's next.
+                  </ThemedText>
+                </View>
+              )}
             </View>
           )}
 
@@ -393,15 +412,29 @@ const styles = StyleSheet.create({
   railContent: {
     paddingRight: spacing.md,
   },
-  recommendedCard: {
-    width: 212,
+  planCard: {
+    overflow: 'hidden',
+  },
+  planEmptyCard: {
     padding: spacing.lg,
+  },
+  planRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: spacing.lg,
+  },
+  planRowBorder: {
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(253, 251, 246, 0.1)',
+  },
+  planEmoji: {
+    fontSize: 22,
+    lineHeight: 30,
     marginRight: spacing.md,
   },
-  recommendedEmoji: {
-    fontSize: 24,
-    lineHeight: 32,
-    marginBottom: spacing.sm,
+  planTextBlock: {
+    flex: 1,
+    marginRight: spacing.sm,
   },
   libraryRailCard: {
     width: 116,
