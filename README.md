@@ -78,7 +78,11 @@ Non-medical menopause wellness app. Expo (React Native) + Firebase.
   library's Doctor-Talk Toolkit section links back here for the full version.
 - **Symptom Log** (`/symptom-log`, membership-gated) — log symptoms over time
   (category, severity, notes) to Firestore, then **export as a PDF**
-  (`expo-print` + `expo-sharing`) to bring to an appointment.
+  (`expo-print` + `expo-sharing`) to bring to an appointment. A **Trends**
+  chart (`SymptomChart`, `react-native-svg`) sits above the history list —
+  one small severity-over-time line per category actually logged, dots
+  colored on a mild→severe sequential ramp, tap a dot to see its date. Below
+  it, the full text history remains as the detailed/tabular view.
 - **Paywall** (`/paywall`) — membership pricing ($9.99/mo or $69.99/yr,
   currently disabled pending real billing) plus a **dev-only toggle** to flip
   your own account between free and active so you can test every gated

@@ -7,17 +7,19 @@ import { ThemedText } from '@/components/ThemedText';
 import { Button } from '@/components/Button';
 import { TextField } from '@/components/TextField';
 import { PremiumLock } from '@/components/PremiumLock';
+import { SymptomChart } from '@/components/SymptomChart';
 import { useRequireAuth } from '@/services/useRequireAuth';
 import { useUserProfile } from '@/services/useUserProfile';
 import {
   addSymptomLogEntry,
   subscribeToSymptomLogs,
+  SYMPTOM_CATEGORIES,
   type SymptomLogEntry,
 } from '@/services/symptomLog';
 import { exportSymptomLogToPdf } from '@/services/exportSymptomLog';
 import { awardPoints, POINTS } from '@/services/gamification';
 
-const CATEGORIES = ['Hot flashes', 'Sleep', 'Mood', 'Energy/Focus', 'Other'];
+const CATEGORIES = SYMPTOM_CATEGORIES;
 const SEVERITIES = [1, 2, 3, 4, 5];
 
 export function SymptomLogScreen() {
@@ -25,7 +27,7 @@ export function SymptomLogScreen() {
   const { user, initializing } = useRequireAuth();
   const profile = useUserProfile(user?.uid);
   const [entries, setEntries] = useState<SymptomLogEntry[]>([]);
-  const [category, setCategory] = useState(CATEGORIES[0]);
+  const [category, setCategory] = useState<(typeof CATEGORIES)[number]>(CATEGORIES[0]);
   const [severity, setSeverity] = useState(3);
   const [note, setNote] = useState('');
   const [saving, setSaving] = useState(false);
@@ -136,6 +138,8 @@ export function SymptomLogScreen() {
               onPress={handleAddEntry}
               style={styles.spacedLarge}
             />
+
+            <SymptomChart entries={entries} />
 
             <View style={styles.historyHeader}>
               <ThemedText variant="h3">History</ThemedText>

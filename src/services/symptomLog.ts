@@ -9,6 +9,8 @@ import {
 } from 'firebase/firestore';
 import { db } from './firebase';
 
+export const SYMPTOM_CATEGORIES = ['Hot flashes', 'Sleep', 'Mood', 'Energy/Focus', 'Other'] as const;
+
 export interface SymptomLogEntry {
   id: string;
   category: string;
