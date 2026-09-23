@@ -23,7 +23,7 @@ interface HomeLink {
 }
 
 const LINKS: HomeLink[] = [
-  { title: 'Content Library', description: '11 sections, at your pace.', route: '/library' },
+  { title: 'Content Library', description: '12 sections, at your pace.', route: '/library' },
   { title: 'Doctor Toolkit', description: 'Prep for your next appointment.', route: '/doctor-toolkit' },
 ];
 

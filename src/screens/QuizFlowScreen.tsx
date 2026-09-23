@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import {
   View,
   ScrollView,
@@ -9,6 +9,8 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
+import * as Sharing from 'expo-sharing';
+import type { ViewShotRef } from 'react-native-view-shot';
 import { colors, spacing } from '@/theme';
 import { ThemedText } from '@/components/ThemedText';
 import { Button } from '@/components/Button';
@@ -16,6 +18,7 @@ import { Card } from '@/components/Card';
 import { ProgressBar } from '@/components/ProgressBar';
 import { SelectOption } from '@/components/SelectOption';
 import { TextField } from '@/components/TextField';
+import { ShareableResultCard } from '@/components/ShareableResultCard';
 import { quizQuestions, getPathForAnswers } from '@/data/quizQuestions';
 import { joinWaitlist } from '@/services/waitlist';
 
@@ -29,6 +32,8 @@ export function QuizFlowScreen() {
   const [email, setEmail] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [sharing, setSharing] = useState(false);
+  const cardRef = useRef<ViewShotRef>(null);
 
   const totalQuestions = quizQuestions.length;
   const currentQuestion = quizQuestions[questionIndex];
@@ -54,6 +59,20 @@ export function QuizFlowScreen() {
       setQuestionIndex(questionIndex - 1);
     } else {
       router.back();
+    }
+  }
+
+  async function handleShare() {
+    if (sharing || !cardRef.current) return;
+    setSharing(true);
+    try {
+      const uri = await cardRef.current.capture();
+      const canShare = await Sharing.isAvailableAsync();
+      if (canShare) {
+        await Sharing.shareAsync(uri, { mimeType: 'image/png', dialogTitle: 'Share your path' });
+      }
+    } finally {
+      setSharing(false);
     }
   }
 
@@ -133,15 +152,19 @@ export function QuizFlowScreen() {
 
           {phase === 'result' && (
             <>
-              <ThemedText variant="caption" color={colors.sageDark} style={styles.eyebrow}>
-                YOUR PATH
-              </ThemedText>
-              <ThemedText variant="display" style={styles.spaced}>
-                {path.name}
-              </ThemedText>
-              <ThemedText variant="bodyLarge" color={colors.inkMuted} style={styles.spaced}>
-                {path.description}
-              </ThemedText>
+              <ShareableResultCard
+                ref={cardRef}
+                pathName={path.name}
+                pathDescription={path.description}
+              />
+              <Button
+                label={sharing ? 'Preparing…' : 'Share my path'}
+                variant="secondary"
+                fullWidth
+                disabled={sharing}
+                onPress={handleShare}
+                style={styles.shareButton}
+              />
 
               <Card variant="dark" style={styles.spaced}>
                 <ThemedText variant="h3" color={colors.cream100} style={styles.cardTitle}>
@@ -219,6 +242,10 @@ const styles = StyleSheet.create({
   },
   cardTitle: {
     marginBottom: spacing.md,
+  },
+  shareButton: {
+    marginTop: spacing.lg,
+    marginBottom: spacing.xl,
   },
   emailField: {
     marginBottom: spacing.md,

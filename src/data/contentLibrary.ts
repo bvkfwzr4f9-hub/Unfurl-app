@@ -1,5 +1,8 @@
 /**
- * The 11-section content library, matching the build plan's section list.
+ * The content library: the 11 sections from the build plan, plus a 12th —
+ * "Wisdom From Around the World" — added as a differentiator, since none of
+ * the comparable apps combine personalization with a cross-cultural lens on
+ * this stage of life.
  * General wellness information, not medical advice — every step screen
  * shows a disclaimer alongside this.
  *
@@ -553,6 +556,56 @@ export const contentLibrary: ContentSection[] = [
       'mourningOrCurious:mostly-mourning',
       'mourningOrCurious:mostly-curious',
       'mourningOrCurious:both-equally',
+    ],
+  },
+  {
+    slug: 'global-wisdom',
+    title: 'Wisdom From Around the World',
+    summary: 'How other cultures have framed this stage of life — beyond the Western clinical lens.',
+    isPremium: true,
+    teaser:
+      "Most of what gets written about menopause comes from a narrow, Western, clinical point of view — symptoms to manage, a decline to slow down. That's not the only way this stage of life has ever been understood. Cultures around the world have long treated it as a shift worth marking, not just enduring.",
+    steps: [
+      {
+        id: 'article',
+        type: 'article',
+        title: 'Six ways this stage has been understood',
+        body: [
+          "This isn't a medical comparison and it isn't a claim that any one tradition has it 'right' — it's a reminder that the Western framing of menopause as a problem to solve is a choice, not the only lens available. Here are a few others.",
+          "Japan: the word often used is konenki — roughly 'renewal years.' Traditional framing treats this as a gradual transition rather than a medical event, and some researchers have noted that hot flashes are reported far less frequently there, a reminder that culture and expectation shape lived experience.",
+          "India: in Ayurvedic tradition, this stage is associated with the transition into the vata life phase — a time associated with lightness, movement, and change, where diet and daily rhythm (not just symptom management) are treated as the main tools for staying steady.",
+          "Mesoamerica: among Maya communities studied by anthropologists, menopause has often been described with far less distress than in Western populations, tied to an increase in social status and freedom rather than a loss — elder women frequently take on more respected roles, not fewer.",
+          "West Africa: in several traditions, this stage is tied to eldership and the transition into a role as a community knowledge-holder — the physical change is one part of a broader, honored life passage, not the headline of it.",
+          "China: in Traditional Chinese Medicine, this transition is understood through the lens of balance — particularly a shift in yin and yang — with food, rest, and daily rhythm treated as the primary levers, long before it would be framed as something to 'fix.'",
+          "North America (Indigenous traditions): several Indigenous nations mark this stage as the beginning of a woman's role as a Grandmother — a time of increased standing and spiritual responsibility within the community, actively welcomed rather than quietly endured.",
+          "None of this replaces medical care, and none of it is offered as 'the' answer. It's offered as evidence that how you're taught to expect this stage to feel shapes how it actually feels — and you get to choose which story you tell yourself about it.",
+        ],
+      },
+      {
+        id: 'video',
+        type: 'video',
+        title: 'Voices from different traditions',
+        body: [
+          'A short video conversation with women describing how this stage is talked about in their own cultural backgrounds.',
+        ],
+      },
+      {
+        id: 'practice',
+        type: 'practice',
+        title: 'Write your own story of this stage',
+        body: [
+          "Across every tradition above, this transition is marked, not ignored — with a role, a ritual, or a new kind of standing. Western culture mostly skips that step.",
+          "Take five minutes and write one paragraph: if this stage of your life were being marked or celebrated, instead of just managed, what would that look like? There's no wrong answer — this is just practice at telling yourself a different story than 'something to get through.'",
+        ],
+      },
+    ],
+    tags: [
+      'goal:community',
+      'mourningOrCurious:mostly-curious',
+      'mourningOrCurious:both-equally',
+      'bodyRelationship:curious',
+      'bodyRelationship:figuring-out',
+      'permissionToPrioritize:working-on-it',
     ],
   },
 ];

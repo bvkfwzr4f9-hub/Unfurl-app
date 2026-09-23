@@ -24,12 +24,18 @@ Non-medical menopause wellness app. Expo (React Native) + Firebase.
   spiral (`fern-spiral.jpg`, a nod to the app's own name). Two more brand
   photos (`moss-trunk-closeup.jpg`, `terraces-aerial.jpg`) are already in
   the repo, unused, ready for future sections.
-- **Landing screen** (`/`) — entry point, CTA into the teaser quiz, plus a
-  "Sign in" link for returning users.
+- **Landing screen** (`/`) — entry point, CTA into the teaser quiz, a "Sign
+  in" link for returning users, and a **level-system teaser** (Seed → Sprout
+  → Bud → Bloom → Unfurled) so the gamification hook — "doesn't feel like
+  homework" — is visible before signup, not hidden behind login.
 - **Teaser quiz + waitlist capture** (`/quiz`) — a 6-question, ~90-second quiz
   (opens with two identity/emotional questions, then the four original
   practical ones) that resolves to one of five "path" results, then captures
-  an email into Firestore's `waitlist` collection to unlock it.
+  an email into Firestore's `waitlist` collection to unlock it. The result
+  screen renders as a **shareable branded card** (`ShareableResultCard`,
+  `react-native-view-shot`) — a "Share my path" button captures it as a PNG
+  and opens the native share sheet, turning a quiz result into a low-cost
+  acquisition loop.
 - **Auth** (`/auth`) — email/password sign-up and sign-in, wired to Firebase
   Auth. "Continue with Apple" / "Continue with Google" are visible but
   disabled ("coming soon") — real OAuth needs Apple/Google developer
@@ -53,11 +59,16 @@ Non-medical menopause wellness app. Expo (React Native) + Firebase.
   signed in. `src/data/intakeQuestions.ts` documents which of the 100-question
   bank's items were skipped as duplicates of existing questions.
 - **Content library** (`/library`, `/library/[slug]`, `/library/[slug]/[stepId]`)
-  — the 11 sections named in the build plan: Recognition & Validation, The
-  Mishandled Symptom Cluster, Body Literacy, Movement, Nutrition, Sleep,
-  Sexual Health, Mental & Emotional Health, Doctor-Talk Toolkit, HRT
-  Education, and Identity & Life-Stage Exploration. Recognition & Validation,
-  Doctor-Talk Toolkit, and HRT Education are fully free; the other 8 always
+  — the 11 sections named in the build plan, plus a 12th added as a
+  differentiator: Recognition & Validation, The Mishandled Symptom Cluster,
+  Body Literacy, Movement, Nutrition, Sleep, Sexual Health, Mental &
+  Emotional Health, Doctor-Talk Toolkit, HRT Education, Identity &
+  Life-Stage Exploration, and **Wisdom From Around the World** — six short
+  cultural perspectives on this life stage (Japan, India, Mesoamerica, West
+  Africa, China, Indigenous North America), framed as general/cultural
+  information, not medical claims. No app in the comp set combines
+  personalization with this cross-cultural lens. Recognition & Validation,
+  Doctor-Talk Toolkit, and HRT Education are fully free; the other 9 always
   show a free teaser paragraph on the section overview, with the section's
   steps gated behind membership.
   Each section is a short **ordered course of 3 steps** — an article, a
