@@ -46,10 +46,19 @@ Non-medical menopause wellness app. Expo (React Native) + Firebase.
   whole design system for reference; not part of the real app flow.
 
 **Signed-in**
-- **Home** (`/home`) — the post-signin dashboard: prompts you to complete the
-  deep-intake quiz if you haven't, surfaces personalized recommendations
-  (members) or an "unlock your personalized plan" upsell (free), and links
-  into the library, doctor toolkit, and upgrade.
+- **Home** (`/home`) — the post-signin dashboard, redesigned as a dark,
+  layered space: a wood-grain photo (`assets/images/brand/wood-grain-dark.jpg`)
+  runs full-bleed behind the whole screen under a forest-green gradient, with
+  every card now a translucent "glass" panel (`rgba` fill + hairline border)
+  floating over the texture instead of a flat card on a cream page. Symptom
+  Log and Doctor Toolkit sit **side by side** as a quick-actions row instead
+  of stacked links. Two **horizontal, snap-scrolling rails** replace what
+  used to be vertical lists: "Recommended for you" (members, from intake
+  answers) and "Explore the Library" (all 12 sections, each with its own
+  emoji, ending in a "See all 12" card) — closer to a browse experience than
+  a link list. Still prompts you to complete the deep-intake quiz if you
+  haven't, and surfaces an "unlock your personalized plan" upsell for free
+  users.
 - **Deep-intake quiz** (`/intake`) — a 53-question questionnaire, organized
   into the 4-arc structure from the build plan and question bank: **Getting
   to know you** (identity/emotional entry — 12 questions), **Body &

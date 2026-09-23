@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
-import { ScrollView, View, Pressable, StyleSheet } from 'react-native';
+import { ScrollView, View, ImageBackground, Pressable, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { signOut } from 'firebase/auth';
-import { colors, spacing, radius, shadow } from '@/theme';
+import { colors, spacing, radius } from '@/theme';
 import { ThemedText } from '@/components/ThemedText';
 import { ProgressBar } from '@/components/ProgressBar';
 import { useRequireAuth } from '@/services/useRequireAuth';
@@ -13,19 +14,9 @@ import { getRecommendedSections } from '@/services/recommendations';
 import { recordDailyVisit } from '@/services/gamification';
 import { getLevelProgress } from '@/data/gameLevels';
 import { getEarnedAchievements } from '@/data/achievements';
+import { contentLibrary } from '@/data/contentLibrary';
 import { BrandArcs } from '@/components/BrandArcs';
 import { subscribeToSymptomLogs, type SymptomLogEntry } from '@/services/symptomLog';
-
-interface HomeLink {
-  title: string;
-  description: string;
-  route: '/library' | '/doctor-toolkit' | '/intake' | '/paywall';
-}
-
-const LINKS: HomeLink[] = [
-  { title: 'Content Library', description: '12 sections, at your pace.', route: '/library' },
-  { title: 'Doctor Toolkit', description: 'Prep for your next appointment.', route: '/doctor-toolkit' },
-];
 
 export function HomeScreen() {
   const router = useRouter();
@@ -58,181 +49,267 @@ export function HomeScreen() {
   const earnedAchievements = profile ? getEarnedAchievements(profile) : [];
 
   return (
-    <SafeAreaView style={styles.screen} edges={['top', 'bottom']}>
-      <ScrollView contentContainerStyle={styles.content}>
-        <ThemedText variant="caption" color={colors.sageDark} style={styles.eyebrow}>
-          {isActive ? 'MEMBER' : 'FREE PLAN'}
-        </ThemedText>
-        <ThemedText variant="display" style={styles.spacedLarge}>
-          Welcome back.
-        </ThemedText>
-
-        <View style={styles.levelCard}>
-          <BrandArcs size={150} style={styles.levelArcs} />
-          <View style={styles.levelHeader}>
-            <ThemedText variant="h2" color={colors.cream100}>
-              {levelProgress.level.emoji} {levelProgress.level.name}
-            </ThemedText>
-            {(profile?.streakDays ?? 0) > 1 && (
-              <ThemedText variant="bodySmall" color={colors.sage}>
-                🔥 {profile?.streakDays}-day streak
+    <ImageBackground
+      source={require('../../assets/images/brand/wood-grain-dark.jpg')}
+      style={styles.background}
+    >
+      <LinearGradient
+        colors={['rgba(22, 36, 27, 0.55)', 'rgba(22, 36, 27, 0.8)', 'rgba(15, 24, 18, 0.92)']}
+        locations={[0, 0.4, 1]}
+        style={StyleSheet.absoluteFill}
+      />
+      <SafeAreaView style={styles.screen} edges={['top', 'bottom']}>
+        <ScrollView contentContainerStyle={styles.content}>
+          <View style={styles.headerRow}>
+            <View>
+              <ThemedText variant="caption" color={colors.sage} style={styles.eyebrow}>
+                {isActive ? 'MEMBER' : 'FREE PLAN'}
               </ThemedText>
+              <ThemedText variant="display" color={colors.cream100}>
+                Welcome back.
+              </ThemedText>
+            </View>
+          </View>
+
+          {/* Level + streak */}
+          <View style={[styles.glassCard, styles.levelCard]}>
+            <BrandArcs size={150} style={styles.cornerArcs} />
+            <View style={styles.levelHeader}>
+              <ThemedText variant="h2" color={colors.cream100}>
+                {levelProgress.level.emoji} {levelProgress.level.name}
+              </ThemedText>
+              {(profile?.streakDays ?? 0) > 1 && (
+                <ThemedText variant="bodySmall" color={colors.sage}>
+                  🔥 {profile?.streakDays}-day streak
+                </ThemedText>
+              )}
+            </View>
+            <ProgressBar progress={levelProgress.progress} />
+            <ThemedText variant="bodySmall" color={colors.creamMuted} style={styles.levelSubtext}>
+              {levelProgress.nextLevel
+                ? `${levelProgress.pointsToNextLevel} pts to ${levelProgress.nextLevel.name} ${levelProgress.nextLevel.emoji}`
+                : `${profile?.points ?? 0} pts — fully unfurled!`}
+            </ThemedText>
+
+            {earnedAchievements.length > 0 && (
+              <View style={styles.badgeRow}>
+                {earnedAchievements.map((achievement) => (
+                  <View key={achievement.id} style={styles.badge}>
+                    <ThemedText variant="bodySmall" color={colors.cream100}>
+                      {achievement.emoji} {achievement.title}
+                    </ThemedText>
+                  </View>
+                ))}
+              </View>
             )}
           </View>
-          <ProgressBar progress={levelProgress.progress} />
-          <ThemedText variant="bodySmall" color={colors.creamMuted} style={styles.levelSubtext}>
-            {levelProgress.nextLevel
-              ? `${levelProgress.pointsToNextLevel} pts to ${levelProgress.nextLevel.name} ${levelProgress.nextLevel.emoji}`
-              : `${profile?.points ?? 0} pts — fully unfurled!`}
-          </ThemedText>
 
-          {earnedAchievements.length > 0 && (
-            <View style={styles.badgeRow}>
-              {earnedAchievements.map((achievement) => (
-                <View key={achievement.id} style={styles.badge}>
-                  <ThemedText variant="bodySmall" color={colors.cream100}>
-                    {achievement.emoji} {achievement.title}
-                  </ThemedText>
-                </View>
-              ))}
+          {/* Quick actions — side by side, not stacked */}
+          <View style={styles.quickActionsRow}>
+            <Pressable
+              onPress={() => router.push('/symptom-log')}
+              style={({ pressed }) => [
+                styles.glassCard,
+                styles.quickActionCard,
+                pressed && styles.cardPressed,
+              ]}
+            >
+              <ThemedText style={styles.quickActionEmoji}>📋</ThemedText>
+              <ThemedText variant="h3" color={colors.cream100} style={styles.quickActionTitle}>
+                Symptom Log
+              </ThemedText>
+              <ThemedText variant="caption" color={colors.creamMuted}>
+                {symptomEntries.length === 0
+                  ? 'Start tracking'
+                  : `${symptomEntries.length} logged`}
+              </ThemedText>
+            </Pressable>
+
+            <Pressable
+              onPress={() => router.push('/doctor-toolkit')}
+              style={({ pressed }) => [
+                styles.glassCard,
+                styles.quickActionCard,
+                pressed && styles.cardPressed,
+              ]}
+            >
+              <ThemedText style={styles.quickActionEmoji}>🩺</ThemedText>
+              <ThemedText variant="h3" color={colors.cream100} style={styles.quickActionTitle}>
+                Doctor Toolkit
+              </ThemedText>
+              <ThemedText variant="caption" color={colors.creamMuted}>
+                Prep for your visit
+              </ThemedText>
+            </Pressable>
+          </View>
+
+          {!hasCompletedIntake && (
+            <Pressable
+              onPress={() => router.push('/intake')}
+              style={({ pressed }) => [
+                styles.glassCard,
+                styles.highlightCard,
+                pressed && styles.cardPressed,
+              ]}
+            >
+              <ThemedText variant="h3" color={colors.cream100} style={styles.cardTitle}>
+                Complete your intake
+              </ThemedText>
+              <ThemedText variant="body" color={colors.creamMuted}>
+                A few questions so we can point you toward what matters most,
+                first.
+              </ThemedText>
+            </Pressable>
+          )}
+
+          {recommended.length > 0 && (
+            <View style={styles.railBlock}>
+              <ThemedText variant="caption" color={colors.sage} style={styles.railLabel}>
+                RECOMMENDED FOR YOU
+              </ThemedText>
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.railContent}
+                decelerationRate="fast"
+                snapToInterval={228}
+              >
+                {recommended.map((section) => (
+                  <Pressable
+                    key={section.slug}
+                    onPress={() => router.push(`/library/${section.slug}`)}
+                    style={({ pressed }) => [
+                      styles.glassCard,
+                      styles.recommendedCard,
+                      pressed && styles.cardPressed,
+                    ]}
+                  >
+                    <ThemedText style={styles.recommendedEmoji}>{section.emoji}</ThemedText>
+                    <ThemedText variant="h3" color={colors.cream100} style={styles.cardTitle}>
+                      {section.title}
+                    </ThemedText>
+                    <ThemedText variant="bodySmall" color={colors.creamMuted} numberOfLines={3}>
+                      {section.summary}
+                    </ThemedText>
+                  </Pressable>
+                ))}
+              </ScrollView>
             </View>
           )}
-        </View>
 
-        <Pressable
-          onPress={() => router.push('/symptom-log')}
-          style={({ pressed }) => [styles.symptomCard, pressed && styles.cardPressed]}
-        >
-          <BrandArcs size={150} style={styles.levelArcs} />
-          <ThemedText variant="h2" color={colors.cream100} style={styles.symptomTitle}>
-            📋 Symptom Log
-          </ThemedText>
-          <ThemedText variant="bodySmall" color={colors.creamMuted}>
-            {symptomEntries.length === 0
-              ? 'Nothing logged yet — track how you feel day to day, then export it for your doctor.'
-              : `${symptomEntries.length} ${symptomEntries.length === 1 ? 'entry' : 'entries'} logged · most recent ${
-                  symptomEntries[0].loggedAt
-                    ? symptomEntries[0].loggedAt.toDate().toLocaleDateString()
-                    : 'just now'
-                }`}
-          </ThemedText>
-        </Pressable>
-
-        {!hasCompletedIntake && (
-          <Pressable
-            onPress={() => router.push('/intake')}
-            style={({ pressed }) => [styles.highlightCard, pressed && styles.cardPressed]}
-          >
-            <ThemedText variant="h3" color={colors.cream100} style={styles.cardTitle}>
-              Complete your intake
+          <View style={styles.railBlock}>
+            <ThemedText variant="caption" color={colors.sage} style={styles.railLabel}>
+              EXPLORE THE LIBRARY
             </ThemedText>
-            <ThemedText variant="body" color={colors.creamMuted}>
-              A few questions so we can point you toward what matters most,
-              first.
-            </ThemedText>
-          </Pressable>
-        )}
-
-        {recommended.length > 0 && (
-          <View style={styles.recommendedBlock}>
-            <ThemedText variant="caption" color={colors.woodBrown} style={styles.recommendedLabel}>
-              RECOMMENDED FOR YOU
-            </ThemedText>
-            {recommended.map((section) => (
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.railContent}
+              decelerationRate="fast"
+              snapToInterval={132}
+            >
+              {contentLibrary.map((section) => (
+                <Pressable
+                  key={section.slug}
+                  onPress={() => router.push(`/library/${section.slug}`)}
+                  style={({ pressed }) => [
+                    styles.glassCard,
+                    styles.libraryRailCard,
+                    pressed && styles.cardPressed,
+                  ]}
+                >
+                  <ThemedText style={styles.libraryRailEmoji}>{section.emoji}</ThemedText>
+                  <ThemedText
+                    variant="bodySmall"
+                    color={colors.cream100}
+                    style={styles.libraryRailTitle}
+                    numberOfLines={3}
+                  >
+                    {section.title}
+                  </ThemedText>
+                </Pressable>
+              ))}
               <Pressable
-                key={section.slug}
-                onPress={() => router.push(`/library/${section.slug}`)}
-                style={({ pressed }) => [styles.card, pressed && styles.cardPressed]}
+                onPress={() => router.push('/library')}
+                style={({ pressed }) => [
+                  styles.glassCard,
+                  styles.libraryRailCard,
+                  styles.seeAllCard,
+                  pressed && styles.cardPressed,
+                ]}
               >
-                <ThemedText variant="h3" style={styles.cardTitle}>
-                  {section.title}
+                <ThemedText variant="h3" color={colors.sage}>
+                  →
                 </ThemedText>
-                <ThemedText variant="bodySmall" color={colors.inkMuted}>
-                  {section.summary}
+                <ThemedText variant="bodySmall" color={colors.sage} style={styles.libraryRailTitle}>
+                  See all 12
                 </ThemedText>
               </Pressable>
-            ))}
+            </ScrollView>
           </View>
-        )}
 
-        {LINKS.map((link) => (
-          <Pressable
-            key={link.route}
-            onPress={() => router.push(link.route)}
-            style={({ pressed }) => [styles.card, pressed && styles.cardPressed]}
-          >
-            <ThemedText variant="h3" style={styles.cardTitle}>
-              {link.title}
-            </ThemedText>
-            <ThemedText variant="bodySmall" color={colors.inkMuted}>
-              {link.description}
+          {!isActive && (
+            <Pressable
+              onPress={() => router.push('/paywall')}
+              style={({ pressed }) => [styles.upgradeCard, pressed && styles.cardPressed]}
+            >
+              <ThemedText variant="h3" color={colors.forestDark} style={styles.cardTitle}>
+                {hasCompletedIntake ? 'Your personalized plan is ready' : 'Upgrade to full membership'}
+              </ThemedText>
+              <ThemedText variant="bodySmall" color={colors.forestDeep}>
+                {hasCompletedIntake
+                  ? 'Unlock the recommendations built from your answers, plus the full library and symptom log.'
+                  : 'Unlock the full library and the symptom log.'}
+              </ThemedText>
+            </Pressable>
+          )}
+
+          <Pressable onPress={() => signOut(auth)} style={styles.signOut}>
+            <ThemedText variant="bodySmall" color={colors.creamMuted}>
+              Sign out
             </ThemedText>
           </Pressable>
-        ))}
-
-        {!isActive && (
-          <Pressable
-            onPress={() => router.push('/paywall')}
-            style={({ pressed }) => [styles.card, styles.upgradeCard, pressed && styles.cardPressed]}
-          >
-            <ThemedText variant="h3" style={styles.cardTitle}>
-              {hasCompletedIntake ? 'Your personalized plan is ready' : 'Upgrade to full membership'}
-            </ThemedText>
-            <ThemedText variant="bodySmall" color={colors.inkMuted}>
-              {hasCompletedIntake
-                ? 'Unlock the recommendations built from your answers, plus the full library and symptom log.'
-                : 'Unlock the full library and the symptom log.'}
-            </ThemedText>
-          </Pressable>
-        )}
-
-        <Pressable onPress={() => signOut(auth)} style={styles.signOut}>
-          <ThemedText variant="bodySmall" color={colors.woodBrown}>
-            Sign out
-          </ThemedText>
-        </Pressable>
-      </ScrollView>
-    </SafeAreaView>
+        </ScrollView>
+      </SafeAreaView>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: colors.cream,
+  },
+  background: {
+    flex: 1,
+    backgroundColor: colors.forestDark,
   },
   content: {
     padding: spacing.xl,
     paddingBottom: spacing.huge,
   },
+  headerRow: {
+    marginBottom: spacing.xl,
+  },
   eyebrow: {
     marginBottom: spacing.md,
   },
-  spacedLarge: {
-    marginBottom: spacing.xl,
-  },
-  levelCard: {
-    backgroundColor: colors.forestDeep,
+  glassCard: {
+    backgroundColor: 'rgba(253, 251, 246, 0.08)',
+    borderWidth: 1,
+    borderColor: 'rgba(253, 251, 246, 0.14)',
     borderRadius: radius.lg,
-    padding: spacing.lg,
-    marginBottom: spacing.xl,
-    overflow: 'hidden',
-    ...shadow.card,
   },
-  levelArcs: {
+  cardPressed: {
+    opacity: 0.8,
+  },
+  cornerArcs: {
     top: -30,
     right: -30,
   },
-  symptomCard: {
-    backgroundColor: colors.forestDeep,
-    borderRadius: radius.lg,
+  levelCard: {
     padding: spacing.lg,
-    marginBottom: spacing.xl,
+    marginBottom: spacing.lg,
     overflow: 'hidden',
-    ...shadow.card,
-  },
-  symptomTitle: {
-    marginBottom: spacing.xs,
   },
   levelHeader: {
     flexDirection: 'row',
@@ -250,42 +327,79 @@ const styles = StyleSheet.create({
     marginTop: spacing.lg,
   },
   badge: {
-    backgroundColor: colors.forest,
+    backgroundColor: 'rgba(253, 251, 246, 0.12)',
     borderRadius: radius.pill,
     paddingVertical: spacing.xs,
     paddingHorizontal: spacing.md,
   },
-  card: {
-    backgroundColor: colors.creamLight,
-    borderRadius: radius.lg,
+  quickActionsRow: {
+    flexDirection: 'row',
+    gap: spacing.md,
+    marginBottom: spacing.lg,
+  },
+  quickActionCard: {
+    flex: 1,
     padding: spacing.lg,
-    marginBottom: spacing.md,
-    ...shadow.card,
+  },
+  quickActionEmoji: {
+    fontSize: 26,
+    marginBottom: spacing.sm,
+  },
+  quickActionTitle: {
+    marginBottom: spacing.xs,
   },
   highlightCard: {
-    backgroundColor: colors.forestDeep,
-    borderRadius: radius.lg,
     padding: spacing.lg,
-    marginBottom: spacing.md,
-    ...shadow.card,
-  },
-  upgradeCard: {
-    backgroundColor: colors.sageLight,
-  },
-  cardPressed: {
-    opacity: 0.85,
+    marginBottom: spacing.lg,
   },
   cardTitle: {
     marginBottom: spacing.xs,
   },
-  recommendedBlock: {
+  railBlock: {
+    marginBottom: spacing.lg,
+  },
+  railLabel: {
     marginBottom: spacing.md,
   },
-  recommendedLabel: {
-    marginBottom: spacing.md,
+  railContent: {
+    paddingRight: spacing.md,
+  },
+  recommendedCard: {
+    width: 212,
+    padding: spacing.lg,
+    marginRight: spacing.md,
+  },
+  recommendedEmoji: {
+    fontSize: 24,
+    marginBottom: spacing.sm,
+  },
+  libraryRailCard: {
+    width: 116,
+    minHeight: 116,
+    padding: spacing.md,
+    marginRight: spacing.md,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  libraryRailEmoji: {
+    fontSize: 28,
+    marginBottom: spacing.sm,
+  },
+  libraryRailTitle: {
+    textAlign: 'center',
+  },
+  seeAllCard: {
+    backgroundColor: 'rgba(159, 185, 143, 0.12)',
+    borderColor: 'rgba(159, 185, 143, 0.35)',
+  },
+  upgradeCard: {
+    backgroundColor: colors.sageLight,
+    borderRadius: radius.lg,
+    padding: spacing.lg,
+    marginBottom: spacing.lg,
   },
   signOut: {
     alignSelf: 'center',
-    marginTop: spacing.xl,
+    marginTop: spacing.lg,
   },
 });

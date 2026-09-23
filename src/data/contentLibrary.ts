@@ -40,6 +40,7 @@ export interface ContentStep {
 export interface ContentSection {
   slug: string;
   title: string;
+  emoji: string;
   summary: string;
   isPremium: boolean;
   teaser: string;
@@ -50,6 +51,7 @@ export interface ContentSection {
 export const contentLibrary: ContentSection[] = [
   {
     slug: 'recognition-validation',
+    emoji: '💚',
     title: 'Recognition & Validation',
     summary: "You're not imagining this — and you're not alone in it.",
     isPremium: false,
@@ -88,6 +90,7 @@ export const contentLibrary: ContentSection[] = [
   },
   {
     slug: 'mishandled-symptom-cluster',
+    emoji: '🔥',
     title: 'The Mishandled Symptom Cluster',
     summary: 'Hot flashes, palpitations, joint pain — often treated separately, but frequently connected.',
     isPremium: true,
@@ -140,6 +143,7 @@ export const contentLibrary: ContentSection[] = [
   },
   {
     slug: 'body-literacy',
+    emoji: '🧭',
     title: 'Body Literacy',
     summary: "What's actually happening hormonally, in plain language.",
     isPremium: true,
@@ -191,6 +195,7 @@ export const contentLibrary: ContentSection[] = [
   },
   {
     slug: 'movement',
+    emoji: '🏃',
     title: 'Movement',
     summary: 'Why strength training matters more now, and how to build a routine that sticks.',
     isPremium: true,
@@ -248,6 +253,7 @@ export const contentLibrary: ContentSection[] = [
   },
   {
     slug: 'nutrition',
+    emoji: '🥗',
     title: 'Nutrition',
     summary: 'Small, sustainable shifts — not another diet.',
     isPremium: true,
@@ -299,6 +305,7 @@ export const contentLibrary: ContentSection[] = [
   },
   {
     slug: 'sleep',
+    emoji: '🌙',
     title: 'Sleep',
     summary: 'Why it gets harder during this transition, and how to protect it.',
     isPremium: true,
@@ -334,6 +341,7 @@ export const contentLibrary: ContentSection[] = [
   },
   {
     slug: 'sexual-health',
+    emoji: '💗',
     title: 'Sexual Health',
     summary: 'Normalizing changes in desire and comfort, and what actually helps.',
     isPremium: true,
@@ -377,6 +385,7 @@ export const contentLibrary: ContentSection[] = [
   },
   {
     slug: 'mental-emotional-health',
+    emoji: '🧠',
     title: 'Mental & Emotional Health',
     summary: "Why mood can shift, and when it's worth seeking support.",
     isPremium: true,
@@ -423,6 +432,7 @@ export const contentLibrary: ContentSection[] = [
   },
   {
     slug: 'doctor-talk-toolkit',
+    emoji: '🩺',
     title: 'Doctor-Talk Toolkit',
     summary: "How to prepare for the conversation, and why it's worth having sooner.",
     isPremium: false,
@@ -465,6 +475,7 @@ export const contentLibrary: ContentSection[] = [
   },
   {
     slug: 'hrt-education',
+    emoji: '💊',
     title: 'HRT Education',
     summary: "What hormone therapy is, in plain terms — not a recommendation, just information.",
     isPremium: false,
@@ -507,6 +518,7 @@ export const contentLibrary: ContentSection[] = [
   },
   {
     slug: 'identity-life-stage-exploration',
+    emoji: '✨',
     title: 'Identity & Life-Stage Exploration',
     summary: "Redefining who you are through this transition, not just what's happening to your body.",
     isPremium: true,
@@ -560,6 +572,7 @@ export const contentLibrary: ContentSection[] = [
   },
   {
     slug: 'global-wisdom',
+    emoji: '🌍',
     title: 'Wisdom From Around the World',
     summary: 'How other cultures have framed this stage of life — beyond the Western clinical lens.',
     isPremium: true,

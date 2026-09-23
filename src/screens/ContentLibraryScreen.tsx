@@ -45,7 +45,9 @@ export function ContentLibraryScreen() {
               style={({ pressed }) => [styles.card, pressed && styles.cardPressed]}
             >
               <View style={styles.cardHeader}>
-                <ThemedText variant="h3">{section.title}</ThemedText>
+                <ThemedText variant="h3">
+                  {section.emoji} {section.title}
+                </ThemedText>
                 <View style={styles.cardBadges}>
                   {isDone && (
                     <ThemedText variant="caption" color={colors.sageDark}>
