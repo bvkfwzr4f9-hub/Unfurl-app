@@ -90,6 +90,11 @@ Non-medical menopause wellness app. Expo (React Native) + Firebase.
   so video steps show a "coming soon" note with a short text summary
   instead, so nobody's blocked from progressing. Completing all of a
   section's steps is what counts as "finishing" it for badges and points.
+  All three library screens (list, section overview, step reading) now
+  match Home's dark, layered look — the wood-grain photo full-bleed behind
+  glass-panel cards, each section's `emoji` in a circular icon bubble, a
+  highlighted "UP NEXT" step in the section overview, and a small dot
+  stepper on the step-reading screen showing progress through the section.
 - **Content recommendations** (`src/services/recommendations.ts`) — members
   who've completed the intake quiz see sections recommended from their
   answers on `/home`, matching the plan's "quiz answers connect to tagged
