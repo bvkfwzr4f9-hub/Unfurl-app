@@ -128,6 +128,12 @@ Non-medical menopause wellness app. Expo (React Native) + Firebase.
   (`src/data/achievements.ts`) are derived purely from existing profile
   stats — no extra storage — and shown on Home alongside a level progress
   bar.
+- **Level-up pop-up** (`LevelUpBanner`, using the fern-spiral photo) —
+  Home detects the moment a member's points cross into a new level
+  (comparing the previous render's level to the current one) and shows a
+  celebratory modal over the fern image, distinct from the moss/wood photos
+  used elsewhere. Only fires on a real level-up within the session, never
+  on initial load for a returning member already past level one.
 
 ## Deliberately deferred from the build plan
 

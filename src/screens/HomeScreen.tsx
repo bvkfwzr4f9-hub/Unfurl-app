@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ScrollView, View, ImageBackground, Pressable, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -12,10 +12,11 @@ import { useUserProfile } from '@/services/useUserProfile';
 import { auth } from '@/services/firebase';
 import { getRecommendedSections } from '@/services/recommendations';
 import { recordDailyVisit } from '@/services/gamification';
-import { getLevelProgress } from '@/data/gameLevels';
+import { getLevelProgress, GAME_LEVELS, type GameLevel } from '@/data/gameLevels';
 import { getEarnedAchievements } from '@/data/achievements';
 import { contentLibrary } from '@/data/contentLibrary';
 import { BrandArcs } from '@/components/BrandArcs';
+import { LevelUpBanner } from '@/components/LevelUpBanner';
 import { subscribeToSymptomLogs, type SymptomLogEntry } from '@/services/symptomLog';
 
 export function HomeScreen() {
@@ -23,6 +24,9 @@ export function HomeScreen() {
   const { user, initializing } = useRequireAuth();
   const profile = useUserProfile(user?.uid);
   const [symptomEntries, setSymptomEntries] = useState<SymptomLogEntry[]>([]);
+  const [leveledUpTo, setLeveledUpTo] = useState<GameLevel | null>(null);
+  const previousLevelId = useRef<string | null>(null);
+  const hasInitializedLevel = useRef(false);
 
   useEffect(() => {
     if (!user || !profile) return;
@@ -38,6 +42,27 @@ export function HomeScreen() {
     return subscribeToSymptomLogs(user.uid, setSymptomEntries);
   }, [user]);
 
+  useEffect(() => {
+    if (!profile) return;
+    const currentId = getLevelProgress(profile.points ?? 0).level.id;
+
+    if (!hasInitializedLevel.current) {
+      // Don't celebrate the level a returning member is already at.
+      hasInitializedLevel.current = true;
+      previousLevelId.current = currentId;
+      return;
+    }
+
+    if (previousLevelId.current && previousLevelId.current !== currentId) {
+      const previousIndex = GAME_LEVELS.findIndex((l) => l.id === previousLevelId.current);
+      const currentIndex = GAME_LEVELS.findIndex((l) => l.id === currentId);
+      if (currentIndex > previousIndex) {
+        setLeveledUpTo(GAME_LEVELS[currentIndex]);
+      }
+    }
+    previousLevelId.current = currentId;
+  }, [profile?.points]);
+
   if (initializing || !user) {
     return <View style={styles.screen} />;
   }
@@ -49,10 +74,11 @@ export function HomeScreen() {
   const earnedAchievements = profile ? getEarnedAchievements(profile) : [];
 
   return (
-    <ImageBackground
-      source={require('../../assets/images/brand/wood-grain-dark.jpg')}
-      style={styles.background}
-    >
+    <>
+      <ImageBackground
+        source={require('../../assets/images/brand/wood-grain-dark.jpg')}
+        style={styles.background}
+      >
       <LinearGradient
         colors={['rgba(22, 36, 27, 0.55)', 'rgba(22, 36, 27, 0.8)', 'rgba(15, 24, 18, 0.92)']}
         locations={[0, 0.4, 1]}
@@ -271,7 +297,9 @@ export function HomeScreen() {
           </Pressable>
         </ScrollView>
       </SafeAreaView>
-    </ImageBackground>
+      </ImageBackground>
+      <LevelUpBanner level={leveledUpTo} onDismiss={() => setLeveledUpTo(null)} />
+    </>
   );
 }
 
