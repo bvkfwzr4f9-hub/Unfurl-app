@@ -137,6 +137,7 @@ const styles = StyleSheet.create({
   },
   levelEmoji: {
     fontSize: 22,
+    lineHeight: 30,
     marginBottom: spacing.xs,
   },
   levelName: {

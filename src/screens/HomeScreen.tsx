@@ -343,6 +343,7 @@ const styles = StyleSheet.create({
   },
   quickActionEmoji: {
     fontSize: 26,
+    lineHeight: 34,
     marginBottom: spacing.sm,
   },
   quickActionTitle: {
@@ -371,6 +372,7 @@ const styles = StyleSheet.create({
   },
   recommendedEmoji: {
     fontSize: 24,
+    lineHeight: 32,
     marginBottom: spacing.sm,
   },
   libraryRailCard: {
@@ -383,6 +385,7 @@ const styles = StyleSheet.create({
   },
   libraryRailEmoji: {
     fontSize: 28,
+    lineHeight: 36,
     marginBottom: spacing.sm,
   },
   libraryRailTitle: {
