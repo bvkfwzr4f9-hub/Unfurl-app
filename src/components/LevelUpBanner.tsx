@@ -32,7 +32,6 @@ export function LevelUpBanner({ level, onDismiss }: LevelUpBannerProps) {
           </ThemedText>
           {level && (
             <>
-              <ThemedText style={styles.levelEmoji}>{level.emoji}</ThemedText>
               <ThemedText style={[typeScale.display, styles.levelName]} color={colors.cream100}>
                 {level.name}
               </ThemedText>
@@ -77,13 +76,9 @@ const styles = StyleSheet.create({
     letterSpacing: 2,
     marginBottom: spacing.lg,
   },
-  levelEmoji: {
-    fontSize: 56,
-    lineHeight: 68,
-    marginBottom: spacing.sm,
-  },
   levelName: {
     fontFamily: fontFamily.serifItalic,
+    marginTop: spacing.md,
     marginBottom: spacing.md,
     textAlign: 'center',
   },
