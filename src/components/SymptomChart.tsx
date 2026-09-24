@@ -47,7 +47,7 @@ export function SymptomChart({ entries }: { entries: SymptomLogEntry[] }) {
 
   return (
     <View style={styles.block}>
-      <ThemedText variant="h3" style={styles.title}>
+      <ThemedText variant="h3" color={colors.cream100} style={styles.title}>
         Trends
       </ThemedText>
       {trends.map((trend) => (
@@ -70,10 +70,10 @@ function CategoryRow({ trend }: { trend: CategoryTrend }) {
   return (
     <View style={styles.row}>
       <View style={styles.rowHeader}>
-        <ThemedText variant="bodySmall" color={colors.ink}>
+        <ThemedText variant="bodySmall" color={colors.cream100}>
           {trend.category}
         </ThemedText>
-        <ThemedText variant="caption" color={colors.woodBrown}>
+        <ThemedText variant="caption" color={colors.creamMuted}>
           {point.label} · severity {point.severity}/5
         </ThemedText>
       </View>
@@ -87,7 +87,7 @@ function CategoryRow({ trend }: { trend: CategoryTrend }) {
                 x2={width}
                 y1={yFor(tick)}
                 y2={yFor(tick)}
-                stroke={colors.border}
+                stroke="rgba(253, 251, 246, 0.15)"
                 strokeWidth={1}
               />
             ))}
@@ -96,7 +96,7 @@ function CategoryRow({ trend }: { trend: CategoryTrend }) {
                 .map((p, i) => `${xFor(i, trend.points.length, width)},${yFor(p.severity)}`)
                 .join(' ')}
               fill="none"
-              stroke={colors.sageDark}
+              stroke={colors.sage}
               strokeWidth={2}
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -108,7 +108,7 @@ function CategoryRow({ trend }: { trend: CategoryTrend }) {
                 cy={yFor(p.severity)}
                 r={i === selected ? 6 : 4}
                 fill={SEVERITY_COLOR[p.severity - 1]}
-                stroke={colors.creamLight}
+                stroke="rgba(253, 251, 246, 0.9)"
                 strokeWidth={i === selected ? 2 : 1}
               />
             ))}

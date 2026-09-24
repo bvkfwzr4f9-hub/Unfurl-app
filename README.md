@@ -115,11 +115,19 @@ Non-medical menopause wellness app. Expo (React Native) + Firebase.
   subcollection (`users/{uid}/habits`), separate from the profile doc so
   they can be subscribed to independently. Home's quick-actions row shows
   "X/Y today" once habits exist.
-- **Doctor Toolkit** (`/doctor-toolkit`) — free conversation-starter prompts
-  and an appointment-prep checklist, plus a link into the Symptom Log. The
-  library's Doctor-Talk Toolkit section links back here for the full version.
-- **Symptom Log** (`/symptom-log`, membership-gated) — log symptoms over time
-  (category, severity, notes) to Firestore, then **export as a PDF**
+- **Doctor Toolkit** (`/doctor-toolkit`) — deliberately kept **light**, not
+  the dark wood-grain theme most other screens use, and styled to read as
+  clinical/professional rather than "wellness app": a numbered "what to
+  say" list (bordered cards with number badges) instead of soft italic
+  quotes, a real checkbox-style appointment-prep checklist instead of
+  bullet dots, and a bordered "referral card" for the Symptom Log rather
+  than a soft shadowed one. Free conversation-starter prompts and an
+  appointment-prep checklist; the library's Doctor-Talk Toolkit section
+  links back here for the full version.
+- **Symptom Log** (`/symptom-log`, membership-gated) — now on the same dark
+  wood-grain theme as the rest of the app (previously still on the old
+  light background); log symptoms over time (category, severity, notes) to
+  Firestore, then **export as a PDF**
   (`expo-print` + `expo-sharing`) to bring to an appointment. A **Trends**
   chart (`SymptomChart`, `react-native-svg`) sits above the history list —
   one small severity-over-time line per category actually logged, dots

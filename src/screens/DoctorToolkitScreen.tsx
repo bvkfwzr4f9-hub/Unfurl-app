@@ -1,7 +1,7 @@
 import { ScrollView, View, Pressable, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
-import { colors, spacing, radius, shadow } from '@/theme';
+import { colors, spacing, radius } from '@/theme';
 import { ThemedText } from '@/components/ThemedText';
 import { Button } from '@/components/Button';
 import { conversationStarters, prepChecklist } from '@/data/doctorToolkit';
@@ -25,38 +25,55 @@ export function DoctorToolkitScreen() {
           </Pressable>
         </View>
 
-        <ThemedText variant="caption" color={colors.sageDark} style={styles.eyebrow}>
+        <View style={styles.iconBadge}>
+          <ThemedText style={styles.iconEmoji}>🩺</ThemedText>
+        </View>
+        <ThemedText variant="caption" color={colors.forestDeep} style={styles.eyebrow}>
           DOCTOR TOOLKIT
         </ThemedText>
-        <ThemedText variant="display" style={styles.spacedLarge}>
+        <ThemedText variant="display" style={styles.headline}>
           Walk in prepared.
         </ThemedText>
+        <ThemedText variant="body" color={colors.inkMuted} style={styles.subhead}>
+          A short, structured prep sheet for your next appointment — bring
+          it with you, screenshot it, or just review it beforehand.
+        </ThemedText>
+        <View style={styles.rule} />
 
-        <ThemedText variant="h3" style={styles.sectionTitle}>
-          Conversation starters
+        <ThemedText variant="caption" color={colors.forestDeep} style={styles.sectionLabel}>
+          WHAT TO SAY
         </ThemedText>
         {conversationStarters.map((line, index) => (
-          <View key={index} style={styles.listRow}>
-            <ThemedText variant="body" color={colors.inkMuted}>
-              "{line}"
+          <View key={index} style={styles.starterRow}>
+            <View style={styles.numberBadge}>
+              <ThemedText variant="caption" color={colors.cream100}>
+                {index + 1}
+              </ThemedText>
+            </View>
+            <ThemedText variant="body" color={colors.ink} style={styles.starterText}>
+              {line}
             </ThemedText>
           </View>
         ))}
 
-        <ThemedText variant="h3" style={[styles.sectionTitle, styles.spacedTop]}>
-          Before your visit
+        <ThemedText variant="caption" color={colors.forestDeep} style={[styles.sectionLabel, styles.spacedTop]}>
+          BEFORE YOUR VISIT
         </ThemedText>
         {prepChecklist.map((item, index) => (
-          <View key={index} style={styles.listRow}>
-            <ThemedText variant="body" color={colors.inkMuted}>
-              • {item}
+          <View key={index} style={styles.checklistRow}>
+            <View style={styles.checkbox} />
+            <ThemedText variant="body" color={colors.ink} style={styles.checklistText}>
+              {item}
             </ThemedText>
           </View>
         ))}
 
-        <View style={styles.card}>
+        <View style={styles.referralCard}>
+          <ThemedText variant="caption" color={colors.forestDeep} style={styles.sectionLabel}>
+            RECOMMENDED
+          </ThemedText>
           <ThemedText variant="h3" style={styles.cardTitle}>
-            Symptom Log
+            Bring your Symptom Log
           </ThemedText>
           <ThemedText variant="body" color={colors.inkMuted} style={styles.cardBody}>
             Track symptoms over time and export a clean PDF to bring to your
@@ -72,7 +89,7 @@ export function DoctorToolkitScreen() {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: colors.cream,
+    backgroundColor: colors.creamLight,
   },
   content: {
     padding: spacing.xl,
@@ -84,27 +101,92 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: spacing.lg,
   },
+  iconBadge: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    borderWidth: 1.5,
+    borderColor: colors.forestDeep,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: spacing.lg,
+  },
+  iconEmoji: {
+    fontSize: 26,
+    lineHeight: 34,
+  },
   eyebrow: {
+    letterSpacing: 1.5,
+    marginBottom: spacing.sm,
+  },
+  headline: {
     marginBottom: spacing.md,
   },
-  spacedLarge: {
+  subhead: {
+    marginBottom: spacing.lg,
+  },
+  rule: {
+    height: 1,
+    backgroundColor: colors.woodBrown,
+    opacity: 0.3,
     marginBottom: spacing.xl,
+  },
+  sectionLabel: {
+    letterSpacing: 1.5,
+    marginBottom: spacing.md,
   },
   spacedTop: {
     marginTop: spacing.xl,
   },
-  sectionTitle: {
-    marginBottom: spacing.md,
+  starterRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: radius.md,
+    padding: spacing.md,
+    marginBottom: spacing.sm,
+    backgroundColor: colors.white,
   },
-  listRow: {
-    marginBottom: spacing.md,
+  numberBadge: {
+    width: 22,
+    height: 22,
+    borderRadius: 11,
+    backgroundColor: colors.forestDeep,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: spacing.md,
+    marginTop: 1,
   },
-  card: {
-    backgroundColor: colors.creamLight,
-    borderRadius: radius.lg,
+  starterText: {
+    flex: 1,
+  },
+  checklistRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border,
+    paddingVertical: spacing.md,
+  },
+  checkbox: {
+    width: 16,
+    height: 16,
+    borderRadius: 3,
+    borderWidth: 1.5,
+    borderColor: colors.woodBrown,
+    marginRight: spacing.md,
+    marginTop: 2,
+  },
+  checklistText: {
+    flex: 1,
+  },
+  referralCard: {
+    backgroundColor: colors.white,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    borderColor: colors.forestDeep,
     padding: spacing.xl,
     marginTop: spacing.xxl,
-    ...shadow.card,
   },
   cardTitle: {
     marginBottom: spacing.sm,
