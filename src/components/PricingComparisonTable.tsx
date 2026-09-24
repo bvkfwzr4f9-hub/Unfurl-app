@@ -20,6 +20,12 @@ const ROWS: ComparisonRow[] = [
   { label: 'Identity & self-exploration methodology', free: false, membership: false, cohort: true },
 ];
 
+/** Column widths as flex ratios — label:data = 1.5:1, and every data column
+ *  uses the same ratio in both the header and body rows so marks line up
+ *  exactly under their header, regardless of screen width. */
+const LABEL_FLEX = 1.5;
+const DATA_FLEX = 1;
+
 function Mark({ included }: { included: boolean }) {
   return (
     <View style={styles.markCell}>
@@ -40,7 +46,7 @@ export function PricingComparisonTable() {
       <View style={styles.headerRow}>
         <View style={styles.labelHeaderCell} />
         <View style={styles.headerCell}>
-          <ThemedText variant="caption" color={colors.creamMuted}>
+          <ThemedText variant="caption" color={colors.creamMuted} numberOfLines={1}>
             FREE
           </ThemedText>
           <ThemedText variant="bodySmall" color={colors.cream100} style={styles.headerPrice}>
@@ -48,24 +54,24 @@ export function PricingComparisonTable() {
           </ThemedText>
         </View>
         <View style={[styles.headerCell, styles.membershipHeaderCell]}>
-          <ThemedText variant="caption" color={colors.forestDark}>
-            MEMBERSHIP
+          <ThemedText variant="caption" color={colors.forestDark} numberOfLines={1}>
+            MEMBER
           </ThemedText>
           <ThemedText variant="bodySmall" color={colors.forestDark} style={styles.headerPrice}>
             $9.99/mo
           </ThemedText>
-          <ThemedText variant="caption" color={colors.forestDark}>
+          <ThemedText variant="caption" color={colors.forestDark} numberOfLines={1}>
             or $69.99/yr
           </ThemedText>
         </View>
         <View style={styles.headerCell}>
-          <ThemedText variant="caption" color={colors.creamMuted}>
+          <ThemedText variant="caption" color={colors.creamMuted} numberOfLines={1}>
             COHORT
           </ThemedText>
           <ThemedText variant="bodySmall" color={colors.cream100} style={styles.headerPrice}>
             $249–299
           </ThemedText>
-          <ThemedText variant="caption" color={colors.sage}>
+          <ThemedText variant="caption" color={colors.sage} numberOfLines={1}>
             Phase 2
           </ThemedText>
         </View>
@@ -88,8 +94,6 @@ export function PricingComparisonTable() {
   );
 }
 
-const COLUMN_WIDTH = 66;
-
 const styles = StyleSheet.create({
   table: {
     backgroundColor: 'rgba(253, 251, 246, 0.08)',
@@ -106,11 +110,12 @@ const styles = StyleSheet.create({
     paddingTop: spacing.lg,
   },
   labelHeaderCell: {
-    flex: 1,
+    flex: LABEL_FLEX,
   },
   headerCell: {
-    width: COLUMN_WIDTH,
+    flex: DATA_FLEX,
     alignItems: 'center',
+    paddingHorizontal: spacing.xs,
   },
   membershipHeaderCell: {
     backgroundColor: colors.sage,
@@ -134,11 +139,11 @@ const styles = StyleSheet.create({
     borderBottomColor: 'rgba(253, 251, 246, 0.1)',
   },
   labelCell: {
-    flex: 1,
+    flex: LABEL_FLEX,
     marginRight: spacing.sm,
   },
   markCell: {
-    width: COLUMN_WIDTH,
+    flex: DATA_FLEX,
     alignItems: 'center',
   },
 });
