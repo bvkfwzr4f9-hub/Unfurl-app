@@ -130,15 +130,17 @@ Non-medical menopause wellness app. Expo (React Native) + Firebase.
   down, a recurring worst weekday, or their most-logged category as a
   fallback) with no server round-trip. Below that, the full text history
   remains as the detailed/tabular view.
-- **Paywall** (`/paywall`) — membership pricing ($9.99/mo or $69.99/yr,
-  currently disabled pending real billing) plus a **dev-only toggle** to flip
-  your own account between free and active so you can test every gated
-  screen today. Also shows the **3-Month Cohort Course** ($249–$299
-  one-time) from the build plan, clearly labeled "Coming later · Phase 2"
-  — no purchase flow (it needs a real member-verification approach first,
-  per the plan), just an "I'm interested" button that records real demand
-  (`cohortInterested` on the profile) so there's an honest signal instead
-  of a fake buy button.
+- **Paywall** (`/paywall`) — now built around a **plan comparison table**
+  (`PricingComparisonTable`) instead of stacked pricing cards: rows are
+  features (quiz, full library, symptom log, live sessions, etc.), columns
+  are Free / Membership / the 3-Month Cohort Course, with checkmarks
+  showing what each tier includes. The Cohort Course column is clearly
+  labeled "Phase 2" since it isn't launched — no purchase flow (it needs a
+  real member-verification approach first, per the build plan), just an
+  "I'm interested" button that records real demand (`cohortInterested` on
+  the profile) instead of faking a buy button. Below the table, a
+  **dev-only toggle** flips your own account between free and active so
+  you can test every gated screen today.
 - **Account** (`/account`, linked from Home) — cancel membership (reverts
   to the free plan — there's no real subscription to cancel yet, see
   "Billing" below), sign out, and **delete account**. Deletion is real:
