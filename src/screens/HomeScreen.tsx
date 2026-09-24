@@ -18,6 +18,7 @@ import { contentLibrary } from '@/data/contentLibrary';
 import { BrandArcs } from '@/components/BrandArcs';
 import { LevelUpBanner } from '@/components/LevelUpBanner';
 import { subscribeToSymptomLogs, type SymptomLogEntry } from '@/services/symptomLog';
+import { subscribeToHabits, isHabitDoneToday, type Habit } from '@/services/habits';
 
 const STEP_TYPE_EMOJI: Record<string, string> = {
   article: '📖',
@@ -30,6 +31,7 @@ export function HomeScreen() {
   const { user, initializing } = useRequireAuth();
   const profile = useUserProfile(user?.uid);
   const [symptomEntries, setSymptomEntries] = useState<SymptomLogEntry[]>([]);
+  const [habits, setHabits] = useState<Habit[]>([]);
   const [leveledUpTo, setLeveledUpTo] = useState<GameLevel | null>(null);
   const previousLevelId = useRef<string | null>(null);
   const hasInitializedLevel = useRef(false);
@@ -46,6 +48,11 @@ export function HomeScreen() {
   useEffect(() => {
     if (!user) return;
     return subscribeToSymptomLogs(user.uid, setSymptomEntries);
+  }, [user]);
+
+  useEffect(() => {
+    if (!user) return;
+    return subscribeToHabits(user.uid, setHabits);
   }, [user]);
 
   useEffect(() => {
@@ -157,6 +164,25 @@ export function HomeScreen() {
                 {symptomEntries.length === 0
                   ? 'Start tracking'
                   : `${symptomEntries.length} logged`}
+              </ThemedText>
+            </Pressable>
+
+            <Pressable
+              onPress={() => router.push('/habits')}
+              style={({ pressed }) => [
+                styles.glassCard,
+                styles.quickActionCard,
+                pressed && styles.cardPressed,
+              ]}
+            >
+              <ThemedText style={styles.quickActionEmoji}>✅</ThemedText>
+              <ThemedText variant="h3" color={colors.cream100} style={styles.quickActionTitle}>
+                Daily Habits
+              </ThemedText>
+              <ThemedText variant="caption" color={colors.creamMuted}>
+                {habits.length === 0
+                  ? 'Start building'
+                  : `${habits.filter(isHabitDoneToday).length}/${habits.length} today`}
               </ThemedText>
             </Pressable>
 

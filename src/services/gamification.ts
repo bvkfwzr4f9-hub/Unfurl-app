@@ -7,18 +7,22 @@ export const POINTS = {
   completeSectionBonus: 20,
   logSymptom: 5,
   dailyVisit: 5,
+  completeHabit: 3,
 } as const;
 
-/** Adds `amount` points to the user's running total. */
+/** Adds `amount` points to the user's running total. Pass a negative amount to deduct. */
 export async function awardPoints(uid: string, amount: number) {
   await setDoc(doc(db, 'users', uid), { points: increment(amount) }, { merge: true });
 }
 
-function todayLocalDate(): string {
-  const now = new Date();
-  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(
-    now.getDate()
+export function localDateString(date: Date): string {
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(
+    date.getDate()
   ).padStart(2, '0')}`;
+}
+
+export function todayLocalDate(): string {
+  return localDateString(new Date());
 }
 
 function daysBetween(a: string, b: string): number {

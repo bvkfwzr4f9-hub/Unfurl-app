@@ -104,6 +104,17 @@ Non-medical menopause wellness app. Expo (React Native) + Firebase.
   "you're caught up" message instead of an empty gap. Shown only once
   intake is complete, for active members. Still built on `tags`
   (question:answer pairs on each section, matched against intake answers).
+- **Daily Habits** (`/habits`, free for all signed-in users) — a
+  build-your-own daily checklist: pick from suggested habits (breathing
+  exercise, movement, hydration, journaling, etc.) or add a custom one,
+  then tap a habit done each day you do it. Each habit tracks its own
+  streak (`getHabitStreak` in `src/services/habits.ts`, based on
+  consecutive local-date completions), and checking one off awards
+  `POINTS.completeHabit` — unchecking deducts the same amount, so repeated
+  toggling can't farm points. Habits live in their own Firestore
+  subcollection (`users/{uid}/habits`), separate from the profile doc so
+  they can be subscribed to independently. Home's quick-actions row shows
+  "X/Y today" once habits exist.
 - **Doctor Toolkit** (`/doctor-toolkit`) — free conversation-starter prompts
   and an appointment-prep checklist, plus a link into the Symptom Log. The
   library's Doctor-Talk Toolkit section links back here for the full version.
