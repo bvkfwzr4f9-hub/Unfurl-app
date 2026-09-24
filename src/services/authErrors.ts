@@ -15,6 +15,8 @@ const MESSAGES: Record<string, string> = {
     'Firebase Auth isn’t configured for this project yet — enable Email/Password under Authentication → Sign-in method.',
   'auth/api-key-not-valid.-please-pass-a-valid-api-key.':
     'The Firebase API key in firebase.ts looks invalid — double check it was copied correctly.',
+  'auth/requires-recent-login':
+    'For your security, please confirm your password to continue.',
 };
 
 /**

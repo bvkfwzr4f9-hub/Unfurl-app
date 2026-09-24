@@ -9,21 +9,30 @@ import { Card } from '@/components/Card';
 import { HeroPanel } from '@/components/HeroPanel';
 import { useAuth } from '@/services/useAuth';
 import { useUserProfile } from '@/services/useUserProfile';
-import { devSetSubscriptionStatus } from '@/services/subscription';
+import { devSetSubscriptionStatus, setCohortInterest } from '@/services/subscription';
 
 export function PaywallScreen() {
   const router = useRouter();
   const { user } = useAuth();
   const profile = useUserProfile(user?.uid);
   const [updating, setUpdating] = useState(false);
+  const [submittingInterest, setSubmittingInterest] = useState(false);
 
   const isActive = profile?.subscriptionStatus === 'active';
+  const cohortInterested = profile?.cohortInterested ?? false;
 
   async function toggleDevAccess() {
     if (!user || updating) return;
     setUpdating(true);
     await devSetSubscriptionStatus(user.uid, isActive ? 'free' : 'active');
     setUpdating(false);
+  }
+
+  async function handleCohortInterest() {
+    if (!user || submittingInterest || cohortInterested) return;
+    setSubmittingInterest(true);
+    await setCohortInterest(user.uid);
+    setSubmittingInterest(false);
   }
 
   return (
@@ -56,11 +65,42 @@ export function PaywallScreen() {
           </ThemedText>
           <Button label="Subscribe monthly (coming soon)" variant="secondary" fullWidth disabled />
         </Card>
-        <Card variant="sage" style={styles.spacedLarge}>
+        <Card variant="sage" style={styles.spaced}>
           <ThemedText variant="h3" color={colors.forestDark} style={styles.tierTitle}>
             Annual — $69.99/yr
           </ThemedText>
           <Button label="Subscribe annually (coming soon)" variant="secondary" fullWidth disabled />
+        </Card>
+
+        <Card variant="dark" style={styles.spacedLarge}>
+          <ThemedText variant="caption" color={colors.sage} style={styles.cohortEyebrow}>
+            COMING LATER · PHASE 2
+          </ThemedText>
+          <ThemedText variant="h3" color={colors.cream100} style={styles.tierTitle}>
+            3-Month Cohort Course — $249–$299 one-time
+          </ThemedText>
+          <ThemedText variant="body" color={colors.creamMuted} style={styles.cohortBody}>
+            A live, small-group program — media, guided discussion, and an
+            identity & self-exploration methodology beyond the self-paced
+            library. Launches once a real member-verification approach is
+            in place, so the group stays safe.
+          </ThemedText>
+          {user ? (
+            <Button
+              label={cohortInterested ? "You're on the list ✓" : "I'm interested"}
+              variant="secondary"
+              fullWidth
+              disabled={submittingInterest || cohortInterested}
+              onPress={handleCohortInterest}
+            />
+          ) : (
+            <Button
+              label="Sign in to express interest"
+              variant="secondary"
+              fullWidth
+              onPress={() => router.push('/auth')}
+            />
+          )}
         </Card>
 
         <ThemedText variant="bodySmall" color={colors.inkMuted} style={styles.spacedLarge}>
@@ -121,5 +161,11 @@ const styles = StyleSheet.create({
   },
   tierTitle: {
     marginBottom: spacing.md,
+  },
+  cohortEyebrow: {
+    marginBottom: spacing.sm,
+  },
+  cohortBody: {
+    marginBottom: spacing.lg,
   },
 });

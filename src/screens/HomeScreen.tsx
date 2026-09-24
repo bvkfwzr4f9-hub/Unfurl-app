@@ -3,13 +3,11 @@ import { ScrollView, View, ImageBackground, Pressable, StyleSheet } from 'react-
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
-import { signOut } from 'firebase/auth';
 import { colors, spacing, radius } from '@/theme';
 import { ThemedText } from '@/components/ThemedText';
 import { ProgressBar } from '@/components/ProgressBar';
 import { useRequireAuth } from '@/services/useRequireAuth';
 import { useUserProfile } from '@/services/useUserProfile';
-import { auth } from '@/services/firebase';
 import { getYourPlan } from '@/services/recommendations';
 import { recordDailyVisit } from '@/services/gamification';
 import { getLevelProgress, GAME_LEVELS, type GameLevel } from '@/data/gameLevels';
@@ -335,9 +333,9 @@ export function HomeScreen() {
             </Pressable>
           )}
 
-          <Pressable onPress={() => signOut(auth)} style={styles.signOut}>
+          <Pressable onPress={() => router.push('/account')} style={styles.signOut}>
             <ThemedText variant="bodySmall" color={colors.creamMuted}>
-              Sign out
+              Account
             </ThemedText>
           </Pressable>
         </ScrollView>

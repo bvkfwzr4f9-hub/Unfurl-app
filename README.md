@@ -133,7 +133,19 @@ Non-medical menopause wellness app. Expo (React Native) + Firebase.
 - **Paywall** (`/paywall`) — membership pricing ($9.99/mo or $69.99/yr,
   currently disabled pending real billing) plus a **dev-only toggle** to flip
   your own account between free and active so you can test every gated
-  screen today.
+  screen today. Also shows the **3-Month Cohort Course** ($249–$299
+  one-time) from the build plan, clearly labeled "Coming later · Phase 2"
+  — no purchase flow (it needs a real member-verification approach first,
+  per the plan), just an "I'm interested" button that records real demand
+  (`cohortInterested` on the profile) so there's an honest signal instead
+  of a fake buy button.
+- **Account** (`/account`, linked from Home) — cancel membership (reverts
+  to the free plan — there's no real subscription to cancel yet, see
+  "Billing" below), sign out, and **delete account**. Deletion is real:
+  after re-entering your password (Firebase requires a recent sign-in to
+  delete a user) it removes the `symptomLogs` and `habits` subcollections,
+  the profile doc, and the Firebase Auth user itself
+  (`src/services/account.ts`, `deleteAllUserData`) — nothing left behind.
 - **Symptom Log summary card** (`/home`) — its own dark forest-gradient card
   on the dashboard (same treatment as the level card), showing entry count
   and most recent date, or a prompt to start tracking. Tapping it opens the

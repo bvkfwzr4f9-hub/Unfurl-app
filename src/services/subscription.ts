@@ -21,6 +21,8 @@ export interface UserProfile {
   streakDays: number;
   /** YYYY-MM-DD, local date of the last daily-visit credit — see src/services/gamification.ts. */
   lastActiveDate: string | null;
+  /** Expressed interest in the 3-Month Cohort Course (Phase 2 — not yet built/purchasable). */
+  cohortInterested: boolean;
 }
 
 /** Subscribes to a user's profile doc (users/{uid}) and calls onChange whenever it updates. Returns an unsubscribe function. */
@@ -38,6 +40,7 @@ export function subscribeToUserProfile(
       points: (data?.points as number) ?? 0,
       streakDays: (data?.streakDays as number) ?? 0,
       lastActiveDate: (data?.lastActiveDate as string) ?? null,
+      cohortInterested: (data?.cohortInterested as boolean) ?? false,
     });
   });
 }
@@ -64,6 +67,25 @@ export async function setStepCompletion(uid: string, compositeStepId: string, co
   await setDoc(
     doc(db, 'users', uid),
     { completedSteps: completed ? arrayUnion(compositeStepId) : arrayRemove(compositeStepId) },
+    { merge: true }
+  );
+}
+
+/**
+ * The real, user-facing "cancel membership" action. Uses the same
+ * underlying field as devSetSubscriptionStatus (there's no real billing to
+ * cancel yet — see the README's "Billing" section) but this is the honest
+ * user-initiated path, not a testing shortcut.
+ */
+export async function cancelMembership(uid: string) {
+  await devSetSubscriptionStatus(uid, 'free');
+}
+
+/** Records interest in the 3-Month Cohort Course (Phase 2 — no real product yet, just a demand signal). */
+export async function setCohortInterest(uid: string) {
+  await setDoc(
+    doc(db, 'users', uid),
+    { cohortInterested: true, cohortInterestedAt: serverTimestamp() },
     { merge: true }
   );
 }
