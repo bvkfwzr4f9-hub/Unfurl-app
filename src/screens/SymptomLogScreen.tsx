@@ -69,11 +69,18 @@ export function SymptomLogScreen() {
   return (
     <SafeAreaView style={styles.screen} edges={['top', 'bottom']}>
       <ScrollView contentContainerStyle={styles.content}>
-        <Pressable onPress={() => router.back()} hitSlop={12} style={styles.backButton}>
-          <ThemedText variant="bodySmall" color={colors.woodBrown}>
-            ← Back
-          </ThemedText>
-        </Pressable>
+        <View style={styles.navRow}>
+          <Pressable onPress={() => router.back()} hitSlop={12}>
+            <ThemedText variant="bodySmall" color={colors.woodBrown}>
+              ← Back
+            </ThemedText>
+          </Pressable>
+          <Pressable onPress={() => router.replace('/home')} hitSlop={12}>
+            <ThemedText variant="bodySmall" color={colors.woodBrown}>
+              Home
+            </ThemedText>
+          </Pressable>
+        </View>
 
         <ThemedText variant="display" style={styles.spaced}>
           Symptom Log
@@ -209,8 +216,10 @@ const styles = StyleSheet.create({
     padding: spacing.xl,
     paddingBottom: spacing.huge,
   },
-  backButton: {
-    alignSelf: 'flex-start',
+  navRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginBottom: spacing.lg,
   },
   spaced: {

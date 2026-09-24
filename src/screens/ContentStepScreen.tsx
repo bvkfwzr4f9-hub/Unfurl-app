@@ -97,11 +97,18 @@ export function ContentStepScreen() {
       <BrandArcs size={170} style={styles.headerArcs} />
       <SafeAreaView style={styles.screen} edges={['top', 'bottom']}>
         <ScrollView contentContainerStyle={styles.content}>
-          <Pressable onPress={() => router.back()} hitSlop={12} style={styles.backButton}>
-            <ThemedText variant="bodySmall" color={colors.sage}>
-              ← Back
-            </ThemedText>
-          </Pressable>
+          <View style={styles.navRow}>
+            <Pressable onPress={() => router.back()} hitSlop={12}>
+              <ThemedText variant="bodySmall" color={colors.sage}>
+                ← Back
+              </ThemedText>
+            </Pressable>
+            <Pressable onPress={() => router.replace('/home')} hitSlop={12}>
+              <ThemedText variant="bodySmall" color={colors.sage}>
+                Home
+              </ThemedText>
+            </Pressable>
+          </View>
 
           {isPremiumLocked || isSequenceLocked ? (
             <PremiumLock
@@ -224,8 +231,10 @@ const styles = StyleSheet.create({
     padding: spacing.xl,
     paddingBottom: spacing.huge,
   },
-  backButton: {
-    alignSelf: 'flex-start',
+  navRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginBottom: spacing.lg,
   },
   dotStepper: {
