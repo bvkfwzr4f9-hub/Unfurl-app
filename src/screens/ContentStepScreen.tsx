@@ -9,6 +9,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { Button } from '@/components/Button';
 import { PremiumLock } from '@/components/PremiumLock';
 import { BrandArcs } from '@/components/BrandArcs';
+import { ListenButton } from '@/components/ListenButton';
 import {
   getContentSection,
   isStepCompleted,
@@ -150,6 +151,8 @@ export function ContentStepScreen() {
                 {step.title}
               </ThemedText>
 
+              <ListenButton paragraphs={step.body} theme="dark" style={styles.listenButton} />
+
               <View style={styles.readingPanel}>
                 {step.type === 'video' && !step.videoId && (
                   <View style={styles.videoComingSoon}>
@@ -259,6 +262,9 @@ const styles = StyleSheet.create({
     marginBottom: spacing.sm,
   },
   title: {
+    marginBottom: spacing.lg,
+  },
+  listenButton: {
     marginBottom: spacing.lg,
   },
   readingPanel: {

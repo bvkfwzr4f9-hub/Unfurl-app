@@ -4,10 +4,17 @@ import { useRouter } from 'expo-router';
 import { colors, spacing, radius } from '@/theme';
 import { ThemedText } from '@/components/ThemedText';
 import { Button } from '@/components/Button';
+import { ListenButton } from '@/components/ListenButton';
 import { conversationStarters, prepChecklist } from '@/data/doctorToolkit';
 
 export function DoctorToolkitScreen() {
   const router = useRouter();
+  const listenParagraphs = [
+    'What to say.',
+    ...conversationStarters,
+    'Before your visit.',
+    ...prepChecklist,
+  ];
 
   return (
     <SafeAreaView style={styles.screen} edges={['top', 'bottom']}>
@@ -38,6 +45,7 @@ export function DoctorToolkitScreen() {
           A short, structured prep sheet for your next appointment — bring
           it with you, screenshot it, or just review it beforehand.
         </ThemedText>
+        <ListenButton paragraphs={listenParagraphs} theme="light" style={styles.listenButton} />
         <View style={styles.rule} />
 
         <ThemedText variant="caption" color={colors.forestDeep} style={styles.sectionLabel}>
@@ -123,6 +131,9 @@ const styles = StyleSheet.create({
     marginBottom: spacing.md,
   },
   subhead: {
+    marginBottom: spacing.lg,
+  },
+  listenButton: {
     marginBottom: spacing.lg,
   },
   rule: {
