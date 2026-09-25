@@ -17,6 +17,7 @@ import {
   isSectionComplete,
   stepCompletionId,
 } from '@/data/contentLibrary';
+import { getArticleChart } from '@/data/articleCharts';
 import { getStreamPlaybackUrl } from '@/services/cloudflareStream';
 import { useAuth } from '@/services/useAuth';
 import { useUserProfile } from '@/services/useUserProfile';
@@ -65,6 +66,7 @@ export function ContentStepScreen() {
   const isSequenceLocked = !isStepUnlocked(section, stepIndex, completedSteps);
   const isDone = isStepCompleted(completedSteps, section.slug, step.id);
   const nextStep = section.steps[stepIndex + 1];
+  const articleChart = getArticleChart(section.slug, step.id);
 
   async function handleComplete() {
     if (!user || !section || !step || saving || isDone) return;
@@ -164,14 +166,12 @@ export function ContentStepScreen() {
                 {step.videoId && <StreamVideoPlayer videoId={step.videoId} />}
 
                 {step.body.map((paragraph, index) => (
-                  <ThemedText
-                    key={index}
-                    variant="bodyLarge"
-                    color={colors.creamMuted}
-                    style={styles.paragraph}
-                  >
-                    {paragraph}
-                  </ThemedText>
+                  <View key={index}>
+                    <ThemedText variant="bodyLarge" color={colors.creamMuted} style={styles.paragraph}>
+                      {paragraph}
+                    </ThemedText>
+                    {articleChart?.afterParagraph === index && <articleChart.Chart />}
+                  </View>
                 ))}
 
                 <View style={styles.disclaimer}>
