@@ -9,7 +9,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { Button } from '@/components/Button';
 import { PremiumLock } from '@/components/PremiumLock';
 import { BrandArcs } from '@/components/BrandArcs';
-import { ListenButton } from '@/components/ListenButton';
+import { AudioPlayer } from '@/components/AudioPlayer';
 import {
   getContentSection,
   isStepCompleted,
@@ -153,7 +153,7 @@ export function ContentStepScreen() {
                 {step.title}
               </ThemedText>
 
-              <ListenButton paragraphs={step.body} theme="dark" style={styles.listenButton} />
+              <AudioPlayer paragraphs={step.body} theme="dark" style={styles.listenButton} />
 
               <View style={styles.readingPanel}>
                 {step.type === 'video' && !step.videoId && (

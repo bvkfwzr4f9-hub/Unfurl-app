@@ -4,7 +4,7 @@ import { useRouter } from 'expo-router';
 import { colors, spacing, radius } from '@/theme';
 import { ThemedText } from '@/components/ThemedText';
 import { Button } from '@/components/Button';
-import { ListenButton } from '@/components/ListenButton';
+import { AudioPlayer } from '@/components/AudioPlayer';
 import { conversationStarters, prepChecklist } from '@/data/doctorToolkit';
 
 export function DoctorToolkitScreen() {
@@ -45,7 +45,7 @@ export function DoctorToolkitScreen() {
           A short, structured prep sheet for your next appointment — bring
           it with you, screenshot it, or just review it beforehand.
         </ThemedText>
-        <ListenButton paragraphs={listenParagraphs} theme="light" style={styles.listenButton} />
+        <AudioPlayer paragraphs={listenParagraphs} theme="light" style={styles.listenButton} />
         <View style={styles.rule} />
 
         <ThemedText variant="caption" color={colors.forestDeep} style={styles.sectionLabel}>
