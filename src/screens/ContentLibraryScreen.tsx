@@ -44,7 +44,7 @@ export function ContentLibraryScreen() {
             THE LIBRARY
           </ThemedText>
           <ThemedText variant="display" color={colors.cream100} style={styles.headline}>
-            12 sections, at your pace.
+            11 sections, at your pace.
           </ThemedText>
           <ThemedText variant="body" color={colors.creamMuted} style={styles.subhead}>
             General information, not medical advice — start wherever feels

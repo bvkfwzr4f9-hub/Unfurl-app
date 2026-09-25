@@ -54,8 +54,8 @@ Non-medical menopause wellness app. Expo (React Native) + Firebase.
   Log and Doctor Toolkit sit **side by side** as a quick-actions row instead
   of stacked links. Two **horizontal, snap-scrolling rails** replace what
   used to be vertical lists: "Recommended for you" (members, from intake
-  answers) and "Explore the Library" (all 12 sections, each with its own
-  emoji, ending in a "See all 12" card) — closer to a browse experience than
+  answers) and "Explore the Library" (all 11 sections, each with its own
+  emoji, ending in a "See all" card) — closer to a browse experience than
   a link list. Still prompts you to complete the deep-intake quiz if you
   haven't, and surfaces an "unlock your personalized plan" upsell for free
   users.
@@ -70,26 +70,28 @@ Non-medical menopause wellness app. Expo (React Native) + Firebase.
   signed in. `src/data/intakeQuestions.ts` documents which of the 100-question
   bank's items were skipped as duplicates of existing questions.
 - **Content library** (`/library`, `/library/[slug]`, `/library/[slug]/[stepId]`)
-  — the 11 sections named in the build plan, plus a 12th added as a
-  differentiator: Recognition & Validation, The Mishandled Symptom Cluster,
+  — 11 sections: Recognition & Validation, The Mishandled Symptom Cluster,
   Body Literacy, Movement, Nutrition, Sleep, Sexual Health, Mental &
-  Emotional Health, Doctor-Talk Toolkit, HRT Education, Identity &
-  Life-Stage Exploration, and **Wisdom From Around the World** — six short
-  cultural perspectives on this life stage (Japan, India, Mesoamerica, West
-  Africa, China, Indigenous North America), framed as general/cultural
-  information, not medical claims. No app in the comp set combines
-  personalization with this cross-cultural lens. Recognition & Validation,
-  Doctor-Talk Toolkit, and HRT Education are fully free; the other 9 always
-  show a free teaser paragraph on the section overview, with the section's
-  steps gated behind membership.
-  Each section is a short **ordered course of 3 steps** — an article, a
-  video, and a hands-on practice (`src/data/contentLibrary.ts`) — that
-  **unlock sequentially**: step 2 stays locked until step 1 is marked
-  complete, and so on (`isStepUnlocked`). A step can carry a Cloudflare
-  Stream video (`src/services/cloudflareStream.ts`); none are attached yet,
-  so video steps show a "coming soon" note with a short text summary
-  instead, so nobody's blocked from progressing. Completing all of a
-  section's steps is what counts as "finishing" it for badges and points.
+  Emotional Health, Doctor-Talk Toolkit, HRT Education, and Identity &
+  Life-Stage Exploration. Recognition & Validation now folds in a
+  cross-cultural piece — how other cultures (China, Japan, the Maya,
+  several Native American and Māori traditions) have understood this life
+  stage very differently from the Western "decline" framing — rather than
+  living as its own section. Recognition & Validation, Doctor-Talk
+  Toolkit, and HRT Education are fully free; the other 8 always show a
+  free teaser paragraph on the section overview, with the section's steps
+  gated behind membership.
+  Each section is a set of short pieces — 4 to 7 per section, rather than
+  a fixed count — that **unlock sequentially** (`src/data/contentLibrary.ts`):
+  step 2 stays locked until step 1 is marked complete, and so on
+  (`isStepUnlocked`). Roughly half of all pieces are full, research-grounded
+  drafts; the rest are short, honest placeholders for pieces still in
+  drafting, so nobody's ever blocked from finishing a section while content
+  catches up. Every step currently ships as text-only (article); audio
+  narration is planned once real recordings exist, and video is deliberately
+  out of scope for now — it's expected to become its own separate section
+  later rather than a per-step video slot. Completing all of a section's
+  steps is what counts as "finishing" it for badges and points.
   All three library screens (list, section overview, step reading) now
   match Home's dark, layered look — the wood-grain photo full-bleed behind
   glass-panel cards, each section's `emoji` in a circular icon bubble, a

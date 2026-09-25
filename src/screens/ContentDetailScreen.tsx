@@ -165,6 +165,15 @@ export function ContentDetailScreen() {
                   style={styles.toolkitButton}
                 />
               )}
+
+              {section.slug === 'identity-life-stage-exploration' && (
+                <Button
+                  label="See the 3-Month Cohort Course"
+                  variant="secondary"
+                  onPress={() => router.push('/paywall')}
+                  style={styles.toolkitButton}
+                />
+              )}
             </>
           )}
         </ScrollView>
