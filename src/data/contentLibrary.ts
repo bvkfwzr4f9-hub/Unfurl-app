@@ -135,9 +135,11 @@ export const contentLibrary: ContentSection[] = [
           "A living glossary, in plain language — we're adding new terms regularly. Here's where it starts.",
           'Perimenopause — The transitional years leading up to your final period, when hormones fluctuate rather than steadily decline. This is often when symptoms start — sometimes years before periods actually stop.',
           'Menopause — Technically, a single point in time: the day marking 12 full months since your last period. Everything after that is "postmenopause," though most people use "menopause" loosely to mean the whole transition.',
+          'Postmenopause — Every year that follows that single point in time.',
           "Vasomotor symptoms — The clinical term for hot flashes and night sweats. If a doctor uses this phrase, now you'll know exactly what they mean.",
           'Brain fog — Not a formal medical diagnosis, but a widely recognized, real experience: difficulty concentrating, word-finding trouble, forgetfulness tied to hormonal fluctuation.',
           "HRT (Hormone Replacement Therapy) — Medical treatment using hormones to ease symptoms. We don't prescribe or deliver HRT here — but we'll help you understand it well enough to have an informed conversation with your doctor.",
+          'GSM (Genitourinary Syndrome of Menopause) — Vaginal dryness, discomfort, and related bladder changes linked to declining estrogen. Covered in full in the Sexual Health section.',
         ],
       },
       {

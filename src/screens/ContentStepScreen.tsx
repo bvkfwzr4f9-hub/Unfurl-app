@@ -17,7 +17,7 @@ import {
   isSectionComplete,
   stepCompletionId,
 } from '@/data/contentLibrary';
-import { getArticleChart } from '@/data/articleCharts';
+import { getArticleChart, getAlwaysVisibleChart } from '@/data/articleCharts';
 import { getStreamPlaybackUrl } from '@/services/cloudflareStream';
 import { useAuth } from '@/services/useAuth';
 import { useUserProfile } from '@/services/useUserProfile';
@@ -67,6 +67,7 @@ export function ContentStepScreen() {
   const isDone = isStepCompleted(completedSteps, section.slug, step.id);
   const nextStep = section.steps[stepIndex + 1];
   const articleChart = getArticleChart(section.slug, step.id);
+  const AlwaysVisibleChart = getAlwaysVisibleChart(section.slug, step.id);
 
   async function handleComplete() {
     if (!user || !section || !step || saving || isDone) return;
@@ -114,18 +115,21 @@ export function ContentStepScreen() {
           </View>
 
           {isPremiumLocked || isSequenceLocked ? (
-            <PremiumLock
-              title={isPremiumLocked ? 'Members only' : 'Complete the previous step first'}
-              message={
-                isPremiumLocked
-                  ? 'Upgrade to unlock this section.'
-                  : 'This section unlocks one step at a time — head back and finish the step before this one.'
-              }
-              ctaLabel={isPremiumLocked ? 'See membership options' : 'Back to section'}
-              onPress={() =>
-                isPremiumLocked ? router.push('/paywall') : router.replace(`/library/${section.slug}`)
-              }
-            />
+            <>
+              {isPremiumLocked && AlwaysVisibleChart && <AlwaysVisibleChart />}
+              <PremiumLock
+                title={isPremiumLocked ? 'Members only' : 'Complete the previous step first'}
+                message={
+                  isPremiumLocked
+                    ? 'Upgrade to unlock this section.'
+                    : 'This section unlocks one step at a time — head back and finish the step before this one.'
+                }
+                ctaLabel={isPremiumLocked ? 'See membership options' : 'Back to section'}
+                onPress={() =>
+                  isPremiumLocked ? router.push('/paywall') : router.replace(`/library/${section.slug}`)
+                }
+              />
+            </>
           ) : (
             <>
               <View style={styles.dotStepper}>
@@ -165,14 +169,22 @@ export function ContentStepScreen() {
                 )}
                 {step.videoId && <StreamVideoPlayer videoId={step.videoId} />}
 
-                {step.body.map((paragraph, index) => (
-                  <View key={index}>
-                    <ThemedText variant="bodyLarge" color={colors.creamMuted} style={styles.paragraph}>
-                      {paragraph}
-                    </ThemedText>
-                    {articleChart?.afterParagraph === index && <articleChart.Chart />}
-                  </View>
-                ))}
+                {step.body.map((paragraph, index) => {
+                  const hidden = articleChart?.hideParagraphs?.includes(index);
+                  const visuals = articleChart?.visuals.filter((v) => v.afterParagraph === index) ?? [];
+                  return (
+                    <View key={index}>
+                      {!hidden && (
+                        <ThemedText variant="bodyLarge" color={colors.creamMuted} style={styles.paragraph}>
+                          {paragraph}
+                        </ThemedText>
+                      )}
+                      {visuals.map((visual, visualIndex) => (
+                        <visual.Chart key={visualIndex} />
+                      ))}
+                    </View>
+                  );
+                })}
 
                 <View style={styles.disclaimer}>
                   <ThemedText variant="bodySmall" color={colors.creamMuted}>
