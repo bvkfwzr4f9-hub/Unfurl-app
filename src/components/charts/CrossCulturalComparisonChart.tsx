@@ -12,7 +12,7 @@ export function CrossCulturalComparisonChart() {
   return (
     <View style={styles.card}>
       <ThemedText variant="caption" color={colors.creamMuted} style={styles.eyebrow}>
-        HOT FLASHES, PAST 2 WEEKS
+        RECENT HOT FLASHES REPORTED
       </ThemedText>
       {ROWS.map((row) => (
         <View key={row.label} style={styles.row}>
