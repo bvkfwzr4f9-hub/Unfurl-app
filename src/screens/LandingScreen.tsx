@@ -48,7 +48,7 @@ export function LandingScreen() {
               {GAME_LEVELS.map((level, index) => (
                 <View key={level.id} style={styles.levelChipWrap}>
                   <View style={styles.levelChip}>
-                    <UnfurlIcon name={level.icon} size={20} style={styles.levelEmoji} />
+                    <UnfurlIcon name={level.icon} size={32} style={styles.levelEmoji} />
                     <ThemedText variant="caption" color={colors.creamMuted} style={styles.levelName}>
                       {level.name}
                     </ThemedText>
@@ -137,13 +137,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   levelEmoji: {
-    marginBottom: spacing.xs,
+    marginBottom: spacing.sm,
   },
   levelName: {
     textAlign: 'center',
   },
   levelConnector: {
-    width: 12,
+    width: 16,
     height: 1,
     backgroundColor: 'rgba(253, 251, 246, 0.25)',
     marginHorizontal: spacing.xs,
