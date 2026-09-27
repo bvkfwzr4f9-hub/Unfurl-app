@@ -1,4 +1,5 @@
 import { contentLibrary, isStepCompleted, type ContentSection, type ContentStepType } from '@/data/contentLibrary';
+import type { UnfurlIconName } from '@/components/icons/UnfurlIcon';
 
 /**
  * Recommends content sections based on a member's intake answers, matching
@@ -24,7 +25,7 @@ export function getRecommendedSections(
 export interface PlanItem {
   sectionSlug: string;
   sectionTitle: string;
-  sectionEmoji: string;
+  sectionIcon: UnfurlIconName;
   stepId: string;
   stepTitle: string;
   stepType: ContentStepType;
@@ -54,7 +55,7 @@ export function getYourPlan(
       items.push({
         sectionSlug: section.slug,
         sectionTitle: section.title,
-        sectionEmoji: section.emoji,
+        sectionIcon: section.icon,
         stepId: nextStep.id,
         stepTitle: nextStep.title,
         stepType: nextStep.type,

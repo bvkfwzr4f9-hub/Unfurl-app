@@ -1,9 +1,10 @@
 import type { Timestamp } from 'firebase/firestore';
+import type { UnfurlIconName } from '@/components/icons/UnfurlIcon';
 import type { SymptomLogEntry } from './symptomLog';
 
 export interface SymptomInsight {
   id: string;
-  icon: string;
+  icon: UnfurlIconName;
   text: string;
 }
 
@@ -56,7 +57,7 @@ export function getSymptomInsights(entries: SymptomLogEntry[]): SymptomInsight[]
   if (bestTrend) {
     insights.push({
       id: 'trend',
-      icon: bestTrend.delta < 0 ? '📉' : '📈',
+      icon: bestTrend.delta < 0 ? 'trend-down' : 'trend-up',
       text: `Your ${bestTrend.category} severity looks like it's ${
         bestTrend.delta < 0 ? 'easing' : 'increasing'
       } over your recent entries.`,
@@ -85,7 +86,7 @@ export function getSymptomInsights(entries: SymptomLogEntry[]): SymptomInsight[]
     if (worstDay) {
       insights.push({
         id: 'weekday',
-        icon: '🗓️',
+        icon: 'calendar',
         text: `${topCategory} tends to hit hardest on ${WEEKDAY_NAMES[worstDay.day]}s, based on your entries.`,
       });
     }
@@ -96,7 +97,7 @@ export function getSymptomInsights(entries: SymptomLogEntry[]): SymptomInsight[]
     const count = byCategory.get(topCategory)!.length;
     insights.push({
       id: 'most-logged',
-      icon: '📋',
+      icon: 'clipboard',
       text: `${topCategory} is what you've logged most — ${count} of your ${entries.length} entries.`,
     });
   }

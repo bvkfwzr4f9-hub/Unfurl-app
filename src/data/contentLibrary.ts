@@ -32,6 +32,8 @@
  * member's intake answers — see src/services/recommendations.ts.
  */
 
+import type { UnfurlIconName } from '@/components/icons/UnfurlIcon';
+
 export type ContentStepType = 'article' | 'video' | 'practice';
 
 export interface ContentStep {
@@ -45,7 +47,7 @@ export interface ContentStep {
 export interface ContentSection {
   slug: string;
   title: string;
-  emoji: string;
+  icon: UnfurlIconName;
   summary: string;
   isPremium: boolean;
   teaser: string;
@@ -56,7 +58,7 @@ export interface ContentSection {
 export const contentLibrary: ContentSection[] = [
   {
     slug: 'recognition-validation',
-    emoji: '💚',
+    icon: 'recognition',
     title: 'Recognition & Validation',
     summary: "You're not imagining this — and you're not alone in it.",
     isPremium: false,
@@ -160,7 +162,7 @@ export const contentLibrary: ContentSection[] = [
   },
   {
     slug: 'mishandled-symptom-cluster',
-    emoji: '🔥',
+    icon: 'flame',
     title: 'The Mishandled Symptom Cluster',
     summary: 'Hot flashes, palpitations, joint pain — often treated separately, but frequently connected.',
     isPremium: true,
@@ -247,7 +249,7 @@ export const contentLibrary: ContentSection[] = [
   },
   {
     slug: 'body-literacy',
-    emoji: '🧭',
+    icon: 'compass',
     title: 'Body Literacy',
     summary: "What's actually happening hormonally, in plain language.",
     isPremium: true,
@@ -325,7 +327,7 @@ export const contentLibrary: ContentSection[] = [
   },
   {
     slug: 'movement',
-    emoji: '🏃',
+    icon: 'movement',
     title: 'Movement',
     summary: 'Why strength training matters more now, and how to build a routine that sticks.',
     isPremium: true,
@@ -408,7 +410,7 @@ export const contentLibrary: ContentSection[] = [
   },
   {
     slug: 'nutrition',
-    emoji: '🥗',
+    icon: 'nutrition',
     title: 'Nutrition',
     summary: "Eating for this stage of life, not the last one.",
     isPremium: true,
@@ -484,7 +486,7 @@ export const contentLibrary: ContentSection[] = [
   },
   {
     slug: 'sleep',
-    emoji: '🌙',
+    icon: 'moon',
     title: 'Sleep',
     summary: 'The hormonal, night-sweat, and anxiety triad — and what genuinely helps.',
     isPremium: true,
@@ -538,7 +540,7 @@ export const contentLibrary: ContentSection[] = [
   },
   {
     slug: 'sexual-health',
-    emoji: '💗',
+    icon: 'intimacy',
     title: 'Sexual Health',
     summary: 'The most under-discussed symptom cluster — named directly and warmly.',
     isPremium: true,
@@ -598,7 +600,7 @@ export const contentLibrary: ContentSection[] = [
   },
   {
     slug: 'mental-emotional-health',
-    emoji: '🧠',
+    icon: 'mind',
     title: 'Mental & Emotional Health',
     summary: 'Real mental health risk, rage, and grief — named directly.',
     isPremium: true,
@@ -664,7 +666,7 @@ export const contentLibrary: ContentSection[] = [
   },
   {
     slug: 'doctor-talk-toolkit',
-    emoji: '🩺',
+    icon: 'stethoscope',
     title: 'Doctor-Talk Toolkit',
     summary: 'Actionable — usable at your very next appointment.',
     isPremium: false,
@@ -736,7 +738,7 @@ export const contentLibrary: ContentSection[] = [
   },
   {
     slug: 'hrt-education',
-    emoji: '💊',
+    icon: 'capsule',
     title: 'HRT Education',
     summary: 'Corrects outdated fear with current guidance.',
     isPremium: false,
@@ -805,7 +807,7 @@ export const contentLibrary: ContentSection[] = [
   },
   {
     slug: 'identity-life-stage-exploration',
-    emoji: '✨',
+    icon: 'sparkle',
     title: 'Identity & Life-Stage Exploration',
     summary: 'Bridges to the live cohort course.',
     isPremium: true,

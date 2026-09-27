@@ -5,6 +5,7 @@ import ViewShot, { type ViewShotRef } from 'react-native-view-shot';
 import { colors, spacing, fontFamily, type as typeScale } from '@/theme';
 import { ThemedText } from './ThemedText';
 import { BrandArcs } from './BrandArcs';
+import { UnfurlIcon } from './icons/UnfurlIcon';
 
 interface ShareableResultCardProps {
   pathName: string;
@@ -30,9 +31,12 @@ export const ShareableResultCard = forwardRef<ViewShotRef, ShareableResultCardPr
           />
           <BrandArcs size={170} style={styles.arcs} />
 
-          <ThemedText variant="caption" color={colors.sage} style={styles.wordmark}>
-            🌿 UNFURL
-          </ThemedText>
+          <View style={styles.wordmark}>
+            <UnfurlIcon name="sprig" size={14} />
+            <ThemedText variant="caption" color={colors.sage} style={styles.wordmarkText}>
+              UNFURL
+            </ThemedText>
+          </View>
 
           <View style={styles.bottom}>
             <ThemedText variant="caption" color={colors.creamMuted} style={styles.eyebrow}>
@@ -73,6 +77,11 @@ const styles = StyleSheet.create({
     right: -40,
   },
   wordmark: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.xs,
+  },
+  wordmarkText: {
     letterSpacing: 2,
   },
   bottom: {

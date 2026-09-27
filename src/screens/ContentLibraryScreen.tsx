@@ -5,6 +5,7 @@ import { useRouter } from 'expo-router';
 import { colors, spacing, radius } from '@/theme';
 import { ThemedText } from '@/components/ThemedText';
 import { BrandArcs } from '@/components/BrandArcs';
+import { UnfurlIcon } from '@/components/icons/UnfurlIcon';
 import { contentLibrary, isSectionComplete, isStepCompleted } from '@/data/contentLibrary';
 import { useAuth } from '@/services/useAuth';
 import { useUserProfile } from '@/services/useUserProfile';
@@ -64,7 +65,7 @@ export function ContentLibraryScreen() {
                 style={({ pressed }) => [styles.card, pressed && styles.cardPressed]}
               >
                 <View style={styles.iconBubble}>
-                  <ThemedText style={styles.iconEmoji}>{section.emoji}</ThemedText>
+                  <UnfurlIcon name={section.icon} size={26} />
                 </View>
                 <View style={styles.cardTextBlock}>
                   <View style={styles.cardHeader}>
@@ -158,10 +159,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: spacing.md,
-  },
-  iconEmoji: {
-    fontSize: 24,
-    lineHeight: 32,
   },
   cardTextBlock: {
     flex: 1,

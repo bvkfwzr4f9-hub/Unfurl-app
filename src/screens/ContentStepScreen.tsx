@@ -10,6 +10,7 @@ import { Button } from '@/components/Button';
 import { PremiumLock } from '@/components/PremiumLock';
 import { BrandArcs } from '@/components/BrandArcs';
 import { AudioPlayer } from '@/components/AudioPlayer';
+import { UnfurlIcon, type UnfurlIconName } from '@/components/icons/UnfurlIcon';
 import {
   getContentSection,
   isStepCompleted,
@@ -24,10 +25,10 @@ import { useUserProfile } from '@/services/useUserProfile';
 import { setStepCompletion } from '@/services/subscription';
 import { awardPoints, POINTS } from '@/services/gamification';
 
-const STEP_TYPE_EMOJI: Record<string, string> = {
-  article: '📖',
-  video: '🎥',
-  practice: '🌱',
+const STEP_TYPE_ICON: Record<string, UnfurlIconName> = {
+  article: 'book',
+  video: 'video',
+  practice: 'sprout',
 };
 
 function StreamVideoPlayer({ videoId }: { videoId: string }) {
@@ -149,10 +150,12 @@ export function ContentStepScreen() {
                 })}
               </View>
 
-              <ThemedText variant="caption" color={colors.sage} style={styles.stepLabel}>
-                {STEP_TYPE_EMOJI[step.type]} {step.type.toUpperCase()} · STEP {stepIndex + 1} OF{' '}
-                {section.steps.length}
-              </ThemedText>
+              <View style={styles.stepLabelRow}>
+                <UnfurlIcon name={STEP_TYPE_ICON[step.type]} size={14} />
+                <ThemedText variant="caption" color={colors.sage}>
+                  {step.type.toUpperCase()} · STEP {stepIndex + 1} OF {section.steps.length}
+                </ThemedText>
+              </View>
               <ThemedText variant="display" color={colors.cream100} style={styles.title}>
                 {step.title}
               </ThemedText>
@@ -270,7 +273,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(159, 185, 143, 0.6)',
     width: 20,
   },
-  stepLabel: {
+  stepLabelRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.xs,
     marginBottom: spacing.sm,
   },
   title: {

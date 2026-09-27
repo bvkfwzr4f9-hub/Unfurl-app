@@ -6,6 +6,7 @@ import { colors, spacing, type as typeScale, fontFamily } from '@/theme';
 import { ThemedText } from '@/components/ThemedText';
 import { Button } from '@/components/Button';
 import { BrandArcs } from '@/components/BrandArcs';
+import { UnfurlIcon } from '@/components/icons/UnfurlIcon';
 import { GAME_LEVELS } from '@/data/gameLevels';
 
 export function LandingScreen() {
@@ -47,7 +48,7 @@ export function LandingScreen() {
               {GAME_LEVELS.map((level, index) => (
                 <View key={level.id} style={styles.levelChipWrap}>
                   <View style={styles.levelChip}>
-                    <ThemedText style={styles.levelEmoji}>{level.emoji}</ThemedText>
+                    <UnfurlIcon name={level.icon} size={20} style={styles.levelEmoji} />
                     <ThemedText variant="caption" color={colors.creamMuted} style={styles.levelName}>
                       {level.name}
                     </ThemedText>
@@ -136,8 +137,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   levelEmoji: {
-    fontSize: 22,
-    lineHeight: 30,
     marginBottom: spacing.xs,
   },
   levelName: {

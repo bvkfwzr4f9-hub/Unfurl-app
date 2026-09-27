@@ -7,6 +7,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { Button } from '@/components/Button';
 import { PremiumLock } from '@/components/PremiumLock';
 import { BrandArcs } from '@/components/BrandArcs';
+import { UnfurlIcon, type UnfurlIconName } from '@/components/icons/UnfurlIcon';
 import { getContentSection, isStepCompleted, isStepUnlocked } from '@/data/contentLibrary';
 import { useAuth } from '@/services/useAuth';
 import { useUserProfile } from '@/services/useUserProfile';
@@ -17,10 +18,10 @@ const STEP_TYPE_LABEL: Record<string, string> = {
   practice: 'PRACTICE',
 };
 
-const STEP_TYPE_EMOJI: Record<string, string> = {
-  article: '📖',
-  video: '🎥',
-  practice: '🌱',
+const STEP_TYPE_ICON: Record<string, UnfurlIconName> = {
+  article: 'book',
+  video: 'video',
+  practice: 'sprout',
 };
 
 export function ContentDetailScreen() {
@@ -78,7 +79,7 @@ export function ContentDetailScreen() {
           </View>
 
           <View style={styles.iconBubble}>
-            <ThemedText style={styles.iconEmoji}>{section.emoji}</ThemedText>
+            <UnfurlIcon name={section.icon} size={30} />
           </View>
 
           {section.isPremium && (
@@ -132,9 +133,11 @@ export function ContentDetailScreen() {
                         isNextUp && styles.stepIconCircleNextUp,
                       ]}
                     >
-                      <ThemedText style={styles.stepIconEmoji}>
-                        {done ? '✓' : unlocked ? STEP_TYPE_EMOJI[step.type] : '🔒'}
-                      </ThemedText>
+                      <UnfurlIcon
+                        name={done ? 'check' : unlocked ? STEP_TYPE_ICON[step.type] : 'lock'}
+                        size={18}
+                        color={done ? colors.forestDark : colors.sage}
+                      />
                     </View>
                     <View style={styles.stepText}>
                       <ThemedText variant="caption" color={colors.sage}>
@@ -217,10 +220,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginBottom: spacing.lg,
   },
-  iconEmoji: {
-    fontSize: 30,
-    lineHeight: 38,
-  },
   premiumLabel: {
     marginBottom: spacing.sm,
   },
@@ -267,10 +266,6 @@ const styles = StyleSheet.create({
   },
   stepIconCircleNextUp: {
     backgroundColor: 'rgba(159, 185, 143, 0.3)',
-  },
-  stepIconEmoji: {
-    fontSize: 18,
-    lineHeight: 24,
   },
   stepText: {
     flex: 1,

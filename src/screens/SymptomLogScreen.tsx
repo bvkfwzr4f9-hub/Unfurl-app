@@ -11,6 +11,7 @@ import { PremiumLock } from '@/components/PremiumLock';
 import { SymptomChart } from '@/components/SymptomChart';
 import { Card } from '@/components/Card';
 import { BrandArcs } from '@/components/BrandArcs';
+import { UnfurlIcon } from '@/components/icons/UnfurlIcon';
 import { useRequireAuth } from '@/services/useRequireAuth';
 import { useUserProfile } from '@/services/useUserProfile';
 import {
@@ -170,7 +171,7 @@ export function SymptomLogScreen() {
                   </ThemedText>
                   {insights.map((insight) => (
                     <View key={insight.id} style={styles.insightRow}>
-                      <ThemedText style={styles.insightIcon}>{insight.icon}</ThemedText>
+                      <UnfurlIcon name={insight.icon} size={20} style={styles.insightIcon} />
                       <ThemedText variant="body" color={colors.cream100} style={styles.insightText}>
                         {insight.text}
                       </ThemedText>
@@ -298,9 +299,8 @@ const styles = StyleSheet.create({
     marginBottom: spacing.sm,
   },
   insightIcon: {
-    fontSize: 18,
-    lineHeight: 24,
     marginRight: spacing.sm,
+    marginTop: 2,
   },
   insightText: {
     flex: 1,

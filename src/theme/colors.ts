@@ -24,6 +24,10 @@ export const colors = {
   woodBrown: '#6B5D4F',
   woodLight: '#A89A87',
 
+  // Amber — the one warm accent detail on the custom icon set (dark-bg icons use `amber`, the light Doctor Toolkit screen uses `amberDark`)
+  amber: '#D9A95B',
+  amberDark: '#9A6A24',
+
   // Text
   ink: '#1F2A20',           // primary text on light backgrounds
   inkMuted: '#4A5548',      // secondary text on light backgrounds

@@ -8,6 +8,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { Button } from '@/components/Button';
 import { TextField } from '@/components/TextField';
 import { BrandArcs } from '@/components/BrandArcs';
+import { UnfurlIcon, isUnfurlIconName } from '@/components/icons/UnfurlIcon';
 import { useRequireAuth } from '@/services/useRequireAuth';
 import {
   addHabit,
@@ -22,15 +23,25 @@ import {
 import { POINTS } from '@/services/gamification';
 
 const PRESET_HABITS: NewHabit[] = [
-  { emoji: '🌬️', label: 'Breathing exercise' },
-  { emoji: '🏃', label: 'Movement' },
-  { emoji: '💧', label: 'Hydration' },
-  { emoji: '😴', label: 'Sleep wind-down' },
-  { emoji: '📝', label: 'Journaling' },
-  { emoji: '🙏', label: 'Gratitude' },
-  { emoji: '🧘', label: 'Meditation' },
-  { emoji: '🌿', label: 'Time outside' },
+  { emoji: 'breath', label: 'Breathing exercise' },
+  { emoji: 'movement', label: 'Movement' },
+  { emoji: 'droplet', label: 'Hydration' },
+  { emoji: 'winddown', label: 'Sleep wind-down' },
+  { emoji: 'pen', label: 'Journaling' },
+  { emoji: 'gratitude', label: 'Gratitude' },
+  { emoji: 'meditation', label: 'Meditation' },
+  { emoji: 'sprig', label: 'Time outside' },
 ];
+
+/** Renders a habit's stored icon field — an UnfurlIconName for anything added
+ * since the custom icon set shipped, with a plain-text fallback for the rare
+ * pre-existing habit still holding a literal emoji character. */
+function HabitIcon({ name, size }: { name: string; size: number }) {
+  if (isUnfurlIconName(name)) {
+    return <UnfurlIcon name={name} size={size} />;
+  }
+  return <ThemedText style={{ fontSize: size - 2, lineHeight: size + 6 }}>{name}</ThemedText>;
+}
 
 export function DailyHabitsScreen() {
   const router = useRouter();
@@ -60,7 +71,7 @@ export function DailyHabitsScreen() {
 
   async function handleAddCustom() {
     if (!user || customLabel.trim().length === 0) return;
-    await addHabit(user.uid, { emoji: '✅', label: customLabel.trim() });
+    await addHabit(user.uid, { emoji: 'habit', label: customLabel.trim() });
     setCustomLabel('');
   }
 
@@ -143,21 +154,22 @@ export function DailyHabitsScreen() {
                       hitSlop={8}
                       style={[styles.checkCircle, doneToday && styles.checkCircleDone]}
                     >
-                      {doneToday && (
-                        <ThemedText variant="h3" color={colors.forestDark}>
-                          ✓
-                        </ThemedText>
-                      )}
+                      {doneToday && <UnfurlIcon name="check" size={18} color={colors.forestDark} />}
                     </Pressable>
-                    <ThemedText style={styles.habitEmoji}>{habit.emoji}</ThemedText>
+                    <View style={styles.habitEmoji}>
+                      <HabitIcon name={habit.emoji} size={22} />
+                    </View>
                     <View style={styles.habitTextBlock}>
                       <ThemedText variant="h3" color={colors.cream100}>
                         {habit.label}
                       </ThemedText>
                       {streak > 0 && (
-                        <ThemedText variant="caption" color={colors.sage}>
-                          🔥 {streak}-day streak
-                        </ThemedText>
+                        <View style={styles.streakRow}>
+                          <UnfurlIcon name="flame" size={13} />
+                          <ThemedText variant="caption" color={colors.sage}>
+                            {streak}-day streak
+                          </ThemedText>
+                        </View>
                       )}
                     </View>
                     <Pressable onPress={() => handleRemove(habit)} hitSlop={10}>
@@ -187,9 +199,12 @@ export function DailyHabitsScreen() {
                       pressed && styles.cardPressed,
                     ]}
                   >
-                    <ThemedText variant="bodySmall" color={colors.cream100}>
-                      {preset.emoji} {preset.label}
-                    </ThemedText>
+                    <View style={styles.presetChipRow}>
+                      <HabitIcon name={preset.emoji} size={16} />
+                      <ThemedText variant="bodySmall" color={colors.cream100}>
+                        {preset.label}
+                      </ThemedText>
+                    </View>
                   </Pressable>
                 ))}
               </View>
@@ -293,9 +308,12 @@ const styles = StyleSheet.create({
     backgroundColor: colors.sage,
   },
   habitEmoji: {
-    fontSize: 22,
-    lineHeight: 30,
     marginRight: spacing.md,
+  },
+  streakRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.xs,
   },
   habitTextBlock: {
     flex: 1,
@@ -313,6 +331,11 @@ const styles = StyleSheet.create({
   presetChip: {
     paddingVertical: spacing.sm,
     paddingHorizontal: spacing.md,
+  },
+  presetChipRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.xs,
   },
   customRow: {
     flexDirection: 'row',

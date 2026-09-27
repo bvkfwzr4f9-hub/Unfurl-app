@@ -15,13 +15,14 @@ import { getEarnedAchievements } from '@/data/achievements';
 import { contentLibrary } from '@/data/contentLibrary';
 import { BrandArcs } from '@/components/BrandArcs';
 import { LevelUpBanner } from '@/components/LevelUpBanner';
+import { UnfurlIcon, type UnfurlIconName } from '@/components/icons/UnfurlIcon';
 import { subscribeToSymptomLogs, type SymptomLogEntry } from '@/services/symptomLog';
 import { subscribeToHabits, isHabitDoneToday, type Habit } from '@/services/habits';
 
-const STEP_TYPE_EMOJI: Record<string, string> = {
-  article: '📖',
-  video: '🎥',
-  practice: '🌱',
+const STEP_TYPE_ICON: Record<string, UnfurlIconName> = {
+  article: 'book',
+  video: 'video',
+  practice: 'sprout',
 };
 
 export function HomeScreen() {
@@ -115,28 +116,44 @@ export function HomeScreen() {
           <View style={[styles.glassCard, styles.levelCard]}>
             <BrandArcs size={150} style={styles.cornerArcs} />
             <View style={styles.levelHeader}>
-              <ThemedText variant="h2" color={colors.cream100}>
-                {levelProgress.level.emoji} {levelProgress.level.name}
-              </ThemedText>
-              {(profile?.streakDays ?? 0) > 1 && (
-                <ThemedText variant="bodySmall" color={colors.sage}>
-                  🔥 {profile?.streakDays}-day streak
+              <View style={styles.levelNameRow}>
+                <UnfurlIcon name={levelProgress.level.icon} size={22} />
+                <ThemedText variant="h2" color={colors.cream100}>
+                  {levelProgress.level.name}
                 </ThemedText>
+              </View>
+              {(profile?.streakDays ?? 0) > 1 && (
+                <View style={styles.streakRow}>
+                  <UnfurlIcon name="flame" size={14} />
+                  <ThemedText variant="bodySmall" color={colors.sage}>
+                    {profile?.streakDays}-day streak
+                  </ThemedText>
+                </View>
               )}
             </View>
             <ProgressBar progress={levelProgress.progress} />
-            <ThemedText variant="bodySmall" color={colors.creamMuted} style={styles.levelSubtext}>
-              {levelProgress.nextLevel
-                ? `${levelProgress.pointsToNextLevel} pts to ${levelProgress.nextLevel.name} ${levelProgress.nextLevel.emoji}`
-                : `${profile?.points ?? 0} pts — fully unfurled!`}
-            </ThemedText>
+            <View style={styles.levelSubtextRow}>
+              {levelProgress.nextLevel ? (
+                <>
+                  <ThemedText variant="bodySmall" color={colors.creamMuted}>
+                    {levelProgress.pointsToNextLevel} pts to {levelProgress.nextLevel.name}
+                  </ThemedText>
+                  <UnfurlIcon name={levelProgress.nextLevel.icon} size={14} />
+                </>
+              ) : (
+                <ThemedText variant="bodySmall" color={colors.creamMuted}>
+                  {profile?.points ?? 0} pts — fully unfurled!
+                </ThemedText>
+              )}
+            </View>
 
             {earnedAchievements.length > 0 && (
               <View style={styles.badgeRow}>
                 {earnedAchievements.map((achievement) => (
                   <View key={achievement.id} style={styles.badge}>
+                    <UnfurlIcon name={achievement.icon} size={14} />
                     <ThemedText variant="bodySmall" color={colors.cream100}>
-                      {achievement.emoji} {achievement.title}
+                      {achievement.title}
                     </ThemedText>
                   </View>
                 ))}
@@ -154,7 +171,7 @@ export function HomeScreen() {
                 pressed && styles.cardPressed,
               ]}
             >
-              <ThemedText style={styles.quickActionEmoji}>📋</ThemedText>
+              <UnfurlIcon name="clipboard" size={26} style={styles.quickActionIcon} />
               <ThemedText variant="h3" color={colors.cream100} style={styles.quickActionTitle}>
                 Symptom Log
               </ThemedText>
@@ -173,7 +190,7 @@ export function HomeScreen() {
                 pressed && styles.cardPressed,
               ]}
             >
-              <ThemedText style={styles.quickActionEmoji}>✅</ThemedText>
+              <UnfurlIcon name="habit" size={26} style={styles.quickActionIcon} />
               <ThemedText variant="h3" color={colors.cream100} style={styles.quickActionTitle}>
                 Daily Habits
               </ThemedText>
@@ -192,7 +209,7 @@ export function HomeScreen() {
                 pressed && styles.cardPressed,
               ]}
             >
-              <ThemedText style={styles.quickActionEmoji}>🩺</ThemedText>
+              <UnfurlIcon name="stethoscope" size={26} style={styles.quickActionIcon} />
               <ThemedText variant="h3" color={colors.cream100} style={styles.quickActionTitle}>
                 Doctor Toolkit
               </ThemedText>
@@ -238,13 +255,14 @@ export function HomeScreen() {
                         pressed && styles.cardPressed,
                       ]}
                     >
-                      <ThemedText style={styles.planEmoji}>
-                        {STEP_TYPE_EMOJI[item.stepType]}
-                      </ThemedText>
+                      <UnfurlIcon name={STEP_TYPE_ICON[item.stepType]} size={22} style={styles.planIcon} />
                       <View style={styles.planTextBlock}>
-                        <ThemedText variant="caption" color={colors.sage}>
-                          {item.sectionEmoji} {item.sectionTitle}
-                        </ThemedText>
+                        <View style={styles.planSectionRow}>
+                          <UnfurlIcon name={item.sectionIcon} size={13} />
+                          <ThemedText variant="caption" color={colors.sage}>
+                            {item.sectionTitle}
+                          </ThemedText>
+                        </View>
                         <ThemedText variant="h3" color={colors.cream100}>
                           {item.stepTitle}
                         </ThemedText>
@@ -287,7 +305,7 @@ export function HomeScreen() {
                     pressed && styles.cardPressed,
                   ]}
                 >
-                  <ThemedText style={styles.libraryRailEmoji}>{section.emoji}</ThemedText>
+                  <UnfurlIcon name={section.icon} size={28} style={styles.libraryRailIcon} />
                   <ThemedText
                     variant="bodySmall"
                     color={colors.cream100}
@@ -311,7 +329,7 @@ export function HomeScreen() {
                   →
                 </ThemedText>
                 <ThemedText variant="bodySmall" color={colors.sage} style={styles.libraryRailTitle}>
-                  See all 12
+                  See all 11
                 </ThemedText>
               </Pressable>
             </ScrollView>
@@ -388,7 +406,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: spacing.md,
   },
-  levelSubtext: {
+  levelNameRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm,
+  },
+  streakRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.xs,
+  },
+  levelSubtextRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.xs,
     marginTop: spacing.sm,
   },
   badgeRow: {
@@ -398,6 +429,9 @@ const styles = StyleSheet.create({
     marginTop: spacing.lg,
   },
   badge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.xs,
     backgroundColor: 'rgba(253, 251, 246, 0.12)',
     borderRadius: radius.pill,
     paddingVertical: spacing.xs,
@@ -412,9 +446,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: spacing.lg,
   },
-  quickActionEmoji: {
-    fontSize: 26,
-    lineHeight: 34,
+  quickActionIcon: {
     marginBottom: spacing.sm,
   },
   quickActionTitle: {
@@ -451,10 +483,14 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: 'rgba(253, 251, 246, 0.1)',
   },
-  planEmoji: {
-    fontSize: 22,
-    lineHeight: 30,
+  planIcon: {
     marginRight: spacing.md,
+  },
+  planSectionRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.xs,
+    marginBottom: 2,
   },
   planTextBlock: {
     flex: 1,
@@ -468,9 +504,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  libraryRailEmoji: {
-    fontSize: 28,
-    lineHeight: 36,
+  libraryRailIcon: {
     marginBottom: spacing.sm,
   },
   libraryRailTitle: {

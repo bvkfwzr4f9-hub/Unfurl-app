@@ -18,6 +18,7 @@ import { awardPoints, POINTS, localDateString, todayLocalDate } from './gamifica
 export interface Habit {
   id: string;
   label: string;
+  /** An UnfurlIconName (see src/components/icons/UnfurlIcon) — field kept as `emoji` to avoid a Firestore migration; a handful of pre-existing test habits may still hold a literal emoji character, which the UI falls back to rendering as text. */
   emoji: string;
   createdAt: Timestamp | null;
   /** Local (YYYY-MM-DD) dates this habit was marked done, e.g. "2026-03-14". */

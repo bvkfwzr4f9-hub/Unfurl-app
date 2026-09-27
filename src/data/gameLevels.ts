@@ -5,19 +5,21 @@
  * intake, finishing content sections, logging symptoms, and daily streaks.
  */
 
+import type { UnfurlIconName } from '@/components/icons/UnfurlIcon';
+
 export interface GameLevel {
   id: string;
   name: string;
-  emoji: string;
+  icon: UnfurlIconName;
   minPoints: number;
 }
 
 export const GAME_LEVELS: GameLevel[] = [
-  { id: 'seed', name: 'Seed', emoji: '🌰', minPoints: 0 },
-  { id: 'sprout', name: 'Sprout', emoji: '🌱', minPoints: 50 },
-  { id: 'bud', name: 'Bud', emoji: '🌿', minPoints: 150 },
-  { id: 'bloom', name: 'Bloom', emoji: '🌸', minPoints: 300 },
-  { id: 'unfurled', name: 'Unfurled', emoji: '🌷', minPoints: 500 },
+  { id: 'seed', name: 'Seed', icon: 'seed', minPoints: 0 },
+  { id: 'sprout', name: 'Sprout', icon: 'sprout', minPoints: 50 },
+  { id: 'bud', name: 'Bud', icon: 'bud', minPoints: 150 },
+  { id: 'bloom', name: 'Bloom', icon: 'bloom', minPoints: 300 },
+  { id: 'unfurled', name: 'Unfurled', icon: 'unfurled', minPoints: 500 },
 ];
 
 export interface LevelProgress {

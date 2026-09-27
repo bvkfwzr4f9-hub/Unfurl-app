@@ -5,6 +5,7 @@ import { colors, spacing, radius } from '@/theme';
 import { ThemedText } from '@/components/ThemedText';
 import { Button } from '@/components/Button';
 import { AudioPlayer } from '@/components/AudioPlayer';
+import { UnfurlIcon } from '@/components/icons/UnfurlIcon';
 import { conversationStarters, prepChecklist } from '@/data/doctorToolkit';
 
 export function DoctorToolkitScreen() {
@@ -33,7 +34,7 @@ export function DoctorToolkitScreen() {
         </View>
 
         <View style={styles.iconBadge}>
-          <ThemedText style={styles.iconEmoji}>🩺</ThemedText>
+          <UnfurlIcon name="stethoscope" size={28} color={colors.ink} accent={colors.amberDark} />
         </View>
         <ThemedText variant="caption" color={colors.forestDeep} style={styles.eyebrow}>
           DOCTOR TOOLKIT
@@ -118,10 +119,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: spacing.lg,
-  },
-  iconEmoji: {
-    fontSize: 26,
-    lineHeight: 34,
   },
   eyebrow: {
     letterSpacing: 1.5,
