@@ -26,13 +26,17 @@ const ROWS: ComparisonRow[] = [
 const LABEL_FLEX = 1.5;
 const DATA_FLEX = 1;
 
-function Mark({ included }: { included: boolean }) {
+function Mark({ included, highlighted }: { included: boolean; highlighted?: boolean }) {
+  const color = highlighted
+    ? included
+      ? colors.forestDark
+      : 'rgba(31, 42, 32, 0.3)'
+    : included
+      ? colors.sage
+      : 'rgba(253, 251, 246, 0.25)';
   return (
     <View style={styles.markCell}>
-      <ThemedText
-        variant="h3"
-        color={included ? colors.sage : 'rgba(253, 251, 246, 0.25)'}
-      >
+      <ThemedText variant="h3" color={color}>
         {included ? '✓' : '—'}
       </ThemedText>
     </View>
@@ -43,6 +47,15 @@ function Mark({ included }: { included: boolean }) {
 export function PricingComparisonTable() {
   return (
     <View style={styles.table}>
+      {/* Highlights the full Membership column, header through the last row — a
+       *  ghost row sharing the exact flex proportions of the real rows below it. */}
+      <View style={styles.highlightOverlay} pointerEvents="none">
+        <View style={styles.highlightLabelSpacer} />
+        <View style={styles.highlightSpacer} />
+        <View style={[styles.highlightSpacer, styles.highlightFill]} />
+        <View style={styles.highlightSpacer} />
+      </View>
+
       <View style={styles.headerRow}>
         <View style={styles.labelHeaderCell} />
         <View style={styles.headerCell}>
@@ -53,7 +66,7 @@ export function PricingComparisonTable() {
             $0
           </ThemedText>
         </View>
-        <View style={[styles.headerCell, styles.membershipHeaderCell]}>
+        <View style={styles.headerCell}>
           <ThemedText variant="caption" color={colors.forestDark} numberOfLines={1}>
             MEMBER
           </ThemedText>
@@ -86,7 +99,7 @@ export function PricingComparisonTable() {
             {row.label}
           </ThemedText>
           <Mark included={row.free} />
-          <Mark included={row.membership} />
+          <Mark included={row.membership} highlighted />
           <Mark included={row.cohort} />
         </View>
       ))}
@@ -103,6 +116,27 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     marginBottom: spacing.xl,
   },
+  highlightOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    flexDirection: 'row',
+    paddingHorizontal: spacing.md,
+  },
+  highlightLabelSpacer: {
+    flex: LABEL_FLEX,
+    marginRight: spacing.sm,
+  },
+  highlightSpacer: {
+    flex: DATA_FLEX,
+  },
+  highlightFill: {
+    backgroundColor: colors.sage,
+    borderRadius: radius.md,
+    marginVertical: spacing.sm,
+  },
   headerRow: {
     flexDirection: 'row',
     alignItems: 'stretch',
@@ -116,13 +150,6 @@ const styles = StyleSheet.create({
     flex: DATA_FLEX,
     alignItems: 'center',
     paddingHorizontal: spacing.xs,
-  },
-  membershipHeaderCell: {
-    backgroundColor: colors.sage,
-    borderTopLeftRadius: radius.md,
-    borderTopRightRadius: radius.md,
-    paddingTop: spacing.sm,
-    marginTop: -spacing.sm,
   },
   headerPrice: {
     marginTop: spacing.xs,
