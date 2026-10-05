@@ -2,39 +2,34 @@ import { View, StyleSheet } from 'react-native';
 import { colors, spacing, radius, type, fontFamily } from '@/theme';
 import { ThemedText } from '../ThemedText';
 
-// Verbatim from Section 1.6's body text (the part after the em dash) — keep
-// both in sync if the glossary grows, so the audio narration matches exactly.
+// Verbatim from Section 1.6's body text — keep both in sync if the glossary
+// changes, so the audio narration matches exactly.
 const TERMS = [
   {
     term: 'Perimenopause',
     definition:
-      'The transitional years leading up to your final period, when hormones fluctuate rather than steadily decline. This is often when symptoms start — sometimes years before periods actually stop.',
+      'The long run-up — sometimes years — before your periods stop for good, when hormones don\'t decline smoothly so much as lurch. This is usually when symptoms start, often well before anyone mentions the word "menopause" at all.',
   },
   {
     term: 'Menopause',
     definition:
-      'Technically, a single point in time: the day marking 12 full months since your last period. Everything after that is "postmenopause," though most people use "menopause" loosely to mean the whole transition.',
+      "Strictly speaking, a single day: the one that marks twelve full months since your last period. Most people use the word loosely to mean the whole transition, but technically, it's one specific point you pass through, not a place you stay.",
   },
-  { term: 'Postmenopause', definition: 'Every year that follows that single point in time.' },
+  { term: 'Postmenopause', definition: 'Everything after that day — the rest of the map.' },
   {
     term: 'Vasomotor symptoms',
     definition:
-      "The clinical term for hot flashes and night sweats. If a doctor uses this phrase, now you'll know exactly what they mean.",
+      "The clinical umbrella for hot flashes and night sweats. If a doctor uses this phrase, you'll know exactly what's being discussed.",
   },
   {
     term: 'Brain fog',
     definition:
-      'Not a formal medical diagnosis, but a widely recognized, real experience: difficulty concentrating, word-finding trouble, forgetfulness tied to hormonal fluctuation.',
+      "Not an official diagnosis, but a real, widely recognized experience: trouble concentrating, losing a word mid-sentence, forgetfulness that tracks with your hormones, not your character.",
   },
   {
-    term: 'HRT (Hormone Replacement Therapy)',
+    term: 'HRT (Hormone Replacement Therapy / MHT)',
     definition:
-      "Medical treatment using hormones to ease symptoms. We don't prescribe or deliver HRT here — but we'll help you understand it well enough to have an informed conversation with your doctor.",
-  },
-  {
-    term: 'GSM (Genitourinary Syndrome of Menopause)',
-    definition:
-      'Vaginal dryness, discomfort, and related bladder changes linked to declining estrogen. Covered in full in the Sexual Health section.',
+      "Medical treatment using hormones to ease symptoms. We don't prescribe it here — but we'll make sure you understand it clearly enough to ask your own doctor a real, specific question.",
   },
 ];
 

@@ -6,7 +6,7 @@ import { colors, spacing, radius } from '@/theme';
 import { ThemedText } from '../ThemedText';
 
 const SCRIPT =
-  "My body is going through real hormonal changes right now — it's not about you, and I want us to figure out together what intimacy looks like while I'm navigating this.";
+  "My body is going through real hormonal changes right now — it's not about you, and I want us to figure out together what intimacy looks like while I navigate this.";
 
 /** Section 7.3 — the sample line as a borrowable script, with a one-tap copy (clipboard only, never shared or posted). */
 export function ScriptBubble() {

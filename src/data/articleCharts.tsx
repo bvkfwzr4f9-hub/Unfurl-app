@@ -38,14 +38,13 @@ interface ArticleChartConfig {
 const ARTICLE_CHARTS: Record<string, ArticleChartConfig> = {
   [stepCompletionId('recognition-validation', '1-3')]: {
     visuals: [{ afterParagraph: 0, Chart: SymptomIconGrid }],
-    hideParagraphs: [1, 2, 3, 4],
   },
   [stepCompletionId('recognition-validation', '1-5')]: {
     visuals: [{ afterParagraph: 2, Chart: CrossCulturalComparisonChart }],
   },
   [stepCompletionId('recognition-validation', '1-6')]: {
     visuals: [{ afterParagraph: 0, Chart: VocabularyCards }],
-    hideParagraphs: [1, 2, 3, 4, 5, 6, 7],
+    hideParagraphs: [1, 2, 3, 4, 5, 6, 7, 8, 9],
   },
   [stepCompletionId('mishandled-symptom-cluster', '1-2')]: {
     visuals: [
@@ -66,7 +65,7 @@ const ARTICLE_CHARTS: Record<string, ArticleChartConfig> = {
   [stepCompletionId('mishandled-symptom-cluster', '2-1')]: {
     visuals: [
       {
-        afterParagraph: 1,
+        afterParagraph: 0,
         Chart: () => (
           <ArticleStatCard items={[{ value: '2 in 3', label: 'women report brain fog during this transition' }]} />
         ),
@@ -99,13 +98,16 @@ const ARTICLE_CHARTS: Record<string, ArticleChartConfig> = {
   [stepCompletionId('body-literacy', '3-3')]: {
     visuals: [{ afterParagraph: 0, Chart: PerimenopauseTimelineChart }],
   },
+  [stepCompletionId('mishandled-symptom-cluster', '2-4')]: {
+    visuals: [{ afterParagraph: 1, Chart: SleepDonutChart }],
+  },
   [stepCompletionId('nutrition', '5-2')]: {
     visuals: [{ afterParagraph: 2, Chart: EquolSplitChart }],
   },
   [stepCompletionId('nutrition', '5-4')]: {
     visuals: [
       {
-        afterParagraph: 0,
+        afterParagraph: 1,
         Chart: () => (
           <ArticleStatCard
             items={[{ value: '~42% lower', label: 'insulin sensitivity in perimenopause vs. premenopause' }]}
@@ -115,22 +117,22 @@ const ARTICLE_CHARTS: Record<string, ArticleChartConfig> = {
     ],
   },
   [stepCompletionId('nutrition', '5-5')]: {
-    visuals: [{ afterParagraph: 0, Chart: TriggerIconGrid }],
-  },
-  [stepCompletionId('sleep', '6-1')]: {
-    visuals: [{ afterParagraph: 0, Chart: SleepDonutChart }],
+    visuals: [{ afterParagraph: 1, Chart: TriggerIconGrid }],
   },
   [stepCompletionId('sexual-health', '7-3')]: {
     visuals: [{ afterParagraph: 2, Chart: ScriptBubble }],
   },
   [stepCompletionId('mental-emotional-health', '8-1')]: {
-    visuals: [{ afterParagraph: 1, Chart: MoodWindowChart }],
+    visuals: [
+      { afterParagraph: 1, Chart: MoodWindowChart },
+      { afterParagraph: 5, Chart: CrisisResourceCard },
+    ],
   },
   [stepCompletionId('mental-emotional-health', '8-2')]: {
-    visuals: [{ afterParagraph: 5, Chart: CrisisResourceCard }],
+    visuals: [{ afterParagraph: 6, Chart: CrisisResourceCard }],
   },
   [stepCompletionId('mental-emotional-health', '8-3')]: {
-    visuals: [{ afterParagraph: 1, Chart: CrisisResourceCard }],
+    visuals: [{ afterParagraph: 4, Chart: CrisisResourceCard }],
   },
   [stepCompletionId('hrt-education', '10-1')]: {
     visuals: [{ afterParagraph: 3, Chart: HRTTrendChart }],
@@ -153,7 +155,7 @@ export function getArticleChart(sectionSlug: string, stepId: string): ArticleCha
  * checks this before deciding whether to show the full PremiumLock.
  */
 export function getAlwaysVisibleChart(sectionSlug: string, stepId: string): ComponentType | undefined {
-  if (sectionSlug === 'mental-emotional-health' && (stepId === '8-2' || stepId === '8-3')) {
+  if (sectionSlug === 'mental-emotional-health' && (stepId === '8-1' || stepId === '8-2' || stepId === '8-3')) {
     return CrisisResourceCard;
   }
   return undefined;

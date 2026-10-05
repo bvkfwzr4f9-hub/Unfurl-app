@@ -5,13 +5,13 @@ import { ThemedText } from '../ThemedText';
 
 // Verbatim from Section 2.5's body text — no items added beyond what's actually written there.
 const RED_FLAGS = [
-  "Fainting, or feeling like you're about to faint",
+  'Fainting or near-fainting',
   'Chest pain or pressure',
   'Shortness of breath',
-  'Palpitations during physical exertion, not just at rest',
-  'An irregular heartbeat — not just fast, but uneven',
-  'Palpitations frequent or severe enough to disrupt your sleep',
-  'A family history of sudden cardiac problems before age 50',
+  'Happening during exercise rather than at rest',
+  'Feeling irregular rather than simply fast',
+  'Disrupting your sleep',
+  'A family history of sudden cardiac problems before fifty',
 ];
 
 /** Section 2.5 — the safety list, as a card distinct enough from body copy that it can't be skimmed past. */
