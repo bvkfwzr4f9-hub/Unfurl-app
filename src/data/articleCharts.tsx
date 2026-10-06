@@ -14,6 +14,7 @@ import { CrisisResourceCard } from '@/components/charts/CrisisResourceCard';
 import { VocabularyCards } from '@/components/charts/VocabularyCards';
 import { ScriptBubble } from '@/components/charts/ScriptBubble';
 import { BioidenticalCompare } from '@/components/charts/BioidenticalCompare';
+import { OnsetComparisonChart } from '@/components/charts/OnsetComparisonChart';
 import { stepCompletionId } from './contentLibrary';
 
 interface ArticleVisual {
@@ -97,6 +98,9 @@ const ARTICLE_CHARTS: Record<string, ArticleChartConfig> = {
   },
   [stepCompletionId('body-literacy', '3-3')]: {
     visuals: [{ afterParagraph: 0, Chart: PerimenopauseTimelineChart }],
+  },
+  [stepCompletionId('body-literacy', '3-6')]: {
+    visuals: [{ afterParagraph: 1, Chart: OnsetComparisonChart }],
   },
   [stepCompletionId('mishandled-symptom-cluster', '2-4')]: {
     visuals: [{ afterParagraph: 1, Chart: SleepDonutChart }],
