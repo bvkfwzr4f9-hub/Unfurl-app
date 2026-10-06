@@ -254,6 +254,17 @@ export const contentLibrary: ContentSection[] = [
           'Here\'s a small, useful action: the next few times it happens, jot down three things — the time of day, what you were doing, and roughly how long it lasted. Not because you need to self-diagnose. Because a doctor working from "it happens sometimes" can do far less than one working from an actual pattern.',
         ],
       },
+      {
+        id: '2-6',
+        type: 'article',
+        title: 'Postmenopausal Bleeding: The One Exception in This List',
+        body: [
+          "If you've gone twelve full months without a period — the point this library has called menopause throughout — and then notice any bleeding or spotting at all, even once, even very light: that's genuinely different from everything else in this section. It isn't something to watch for a few cycles or mention at your next routine visit. It's worth calling about this week.",
+          "Here's the reassuring context, so this doesn't read as pure alarm: most of the time, the cause turns out to be something benign — thinning vaginal tissue, a small polyp, something straightforward to treat. But because postmenopausal bleeding is also the most common early sign of endometrial cancer, every single instance gets evaluated, not just the ones that seem concerning. That's not because doctors expect the worst. It's because this is one of the rare places in women's health where a simple, quick check can catch something early enough to matter enormously — which is exactly why it's worth taking seriously even when it's probably nothing.",
+          "One honest nuance if you're on hormone therapy: some irregular or breakthrough bleeding in the first few months of starting HRT is common and usually expected, covered in Section 10. What's different here is new bleeding after things had already settled, or any bleeding at all if you're not on hormone therapy — both of those deserve the same prompt attention described above.",
+          'If this happens to you, call your doctor\'s office and use the actual words: "I\'m having postmenopausal bleeding and need to be seen soon." Not "some spotting" mentioned in passing — the specific phrase tends to get you seen faster, and it should.',
+        ],
+      },
     ],
     tags: [
       'hotFlashes:weekly',
