@@ -1,5 +1,5 @@
 import { View, StyleSheet } from 'react-native';
-import Svg, { Path } from 'react-native-svg';
+import Svg, { Path, Rect } from 'react-native-svg';
 import { colors, spacing, radius } from '@/theme';
 import { ThemedText } from '../ThemedText';
 
@@ -30,9 +30,31 @@ const ITEMS = [
     label: 'Spicy food',
     icon: <Path d="M5 19c7 0 12-5 12-11 M17 8c1.5 0 3-1 3-3 M5 19c-1-3 2-8 8-11" {...ICON_PROPS} />,
   },
+  {
+    label: 'Warm rooms',
+    icon: (
+      <>
+        <Path d="M10 14V5a2 2 0 0 1 4 0v9a4 4 0 1 1-4 0z" {...ICON_PROPS} />
+        <Path d="M12 11v6" {...ICON_PROPS} />
+      </>
+    ),
+  },
+  {
+    label: 'Stress',
+    icon: <Path d="M3 12h3l2-5 3 10 3-8 2 3h5" {...ICON_PROPS} />,
+  },
+  {
+    label: 'Blood sugar swings',
+    icon: (
+      <>
+        <Rect x={6} y={6} width={12} height={12} rx={2} {...ICON_PROPS} />
+        <Path d="M6 12h12 M12 6v12" {...ICON_PROPS} />
+      </>
+    ),
+  },
 ];
 
-/** Section 5.5 — exactly the three triggers named in the body text (no invented additions). */
+/** Section 5.5 — the six triggers named in the body text; a nudge to notice patterns, not a banned-foods list. */
 export function TriggerIconGrid() {
   return (
     <View style={styles.grid}>
@@ -41,7 +63,7 @@ export function TriggerIconGrid() {
           <Svg width={24} height={24} viewBox="0 0 24 24">
             {item.icon}
           </Svg>
-          <ThemedText variant="bodySmall" color={colors.cream100} style={styles.label}>
+          <ThemedText variant="caption" color={colors.cream100} style={styles.label}>
             {item.label}
           </ThemedText>
         </View>
@@ -53,11 +75,13 @@ export function TriggerIconGrid() {
 const styles = StyleSheet.create({
   grid: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
     gap: spacing.sm,
     marginBottom: spacing.lg,
   },
   tile: {
-    flex: 1,
+    flexBasis: '30%',
+    flexGrow: 1,
     backgroundColor: 'rgba(253, 251, 246, 0.08)',
     borderWidth: 1,
     borderColor: 'rgba(253, 251, 246, 0.14)',

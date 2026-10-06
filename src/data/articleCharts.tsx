@@ -39,6 +39,7 @@ interface ArticleChartConfig {
 const ARTICLE_CHARTS: Record<string, ArticleChartConfig> = {
   [stepCompletionId('recognition-validation', '1-3')]: {
     visuals: [{ afterParagraph: 0, Chart: SymptomIconGrid }],
+    hideParagraphs: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
   },
   [stepCompletionId('recognition-validation', '1-5')]: {
     visuals: [{ afterParagraph: 2, Chart: CrossCulturalComparisonChart }],
