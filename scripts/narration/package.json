@@ -3,7 +3,14 @@
   "private": true,
   "type": "module",
   "description": "Offline narration generation for the content library — not part of the app bundle.",
+  "scripts": {
+    "samples": "node generate-samples.mjs ./samples",
+    "generate": "tsx generate-narration.ts ./output"
+  },
   "dependencies": {
     "kokoro-js": "^1.2.1"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.2"
   }
 }
