@@ -87,7 +87,7 @@ export function ContentDetailScreen() {
               MEMBERS
             </ThemedText>
           )}
-          <ThemedText variant="display" color={colors.cream100} style={styles.title}>
+          <ThemedText variant="h1" color={colors.cream100} style={styles.title}>
             {section.title}
           </ThemedText>
 

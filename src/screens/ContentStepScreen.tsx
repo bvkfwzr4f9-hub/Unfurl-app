@@ -156,7 +156,7 @@ export function ContentStepScreen() {
                   {step.type.toUpperCase()} · STEP {stepIndex + 1} OF {section.steps.length}
                 </ThemedText>
               </View>
-              <ThemedText variant="display" color={colors.cream100} style={styles.title}>
+              <ThemedText variant="h1" color={colors.cream100} style={styles.title}>
                 {step.title}
               </ThemedText>
 
