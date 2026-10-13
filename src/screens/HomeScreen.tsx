@@ -106,7 +106,7 @@ export function HomeScreen() {
               <ThemedText variant="caption" color={colors.sage} style={styles.eyebrow}>
                 {isActive ? 'MEMBER' : 'FREE PLAN'}
               </ThemedText>
-              <ThemedText variant="display" color={colors.cream100}>
+              <ThemedText variant="h1" color={colors.cream100}>
                 Welcome back.
               </ThemedText>
             </View>
@@ -117,14 +117,14 @@ export function HomeScreen() {
             <BrandArcs size={150} style={styles.cornerArcs} />
             <View style={styles.levelHeader}>
               <View style={styles.levelNameRow}>
-                <UnfurlIcon name={levelProgress.level.icon} size={22} />
+                <UnfurlIcon name={levelProgress.level.icon} size={18} />
                 <ThemedText variant="h2" color={colors.cream100}>
                   {levelProgress.level.name}
                 </ThemedText>
               </View>
               {(profile?.streakDays ?? 0) > 1 && (
                 <View style={styles.streakRow}>
-                  <UnfurlIcon name="flame" size={14} />
+                  <UnfurlIcon name="flame" size={12} />
                   <ThemedText variant="bodySmall" color={colors.sage}>
                     {profile?.streakDays}-day streak
                   </ThemedText>
@@ -138,7 +138,7 @@ export function HomeScreen() {
                   <ThemedText variant="bodySmall" color={colors.creamMuted}>
                     {levelProgress.pointsToNextLevel} pts to {levelProgress.nextLevel.name}
                   </ThemedText>
-                  <UnfurlIcon name={levelProgress.nextLevel.icon} size={14} />
+                  <UnfurlIcon name={levelProgress.nextLevel.icon} size={12} />
                 </>
               ) : (
                 <ThemedText variant="bodySmall" color={colors.creamMuted}>
@@ -151,7 +151,7 @@ export function HomeScreen() {
               <View style={styles.badgeRow}>
                 {earnedAchievements.map((achievement) => (
                   <View key={achievement.id} style={styles.badge}>
-                    <UnfurlIcon name={achievement.icon} size={14} />
+                    <UnfurlIcon name={achievement.icon} size={12} />
                     <ThemedText variant="bodySmall" color={colors.cream100}>
                       {achievement.title}
                     </ThemedText>
@@ -171,8 +171,8 @@ export function HomeScreen() {
                 pressed && styles.cardPressed,
               ]}
             >
-              <UnfurlIcon name="clipboard" size={26} style={styles.quickActionIcon} />
-              <ThemedText variant="h3" color={colors.cream100} style={styles.quickActionTitle}>
+              <UnfurlIcon name="clipboard" size={20} style={styles.quickActionIcon} />
+              <ThemedText variant="bodySmall" color={colors.cream100} style={styles.quickActionTitle}>
                 Symptom Log
               </ThemedText>
               <ThemedText variant="caption" color={colors.creamMuted}>
@@ -190,8 +190,8 @@ export function HomeScreen() {
                 pressed && styles.cardPressed,
               ]}
             >
-              <UnfurlIcon name="habit" size={26} style={styles.quickActionIcon} />
-              <ThemedText variant="h3" color={colors.cream100} style={styles.quickActionTitle}>
+              <UnfurlIcon name="habit" size={20} style={styles.quickActionIcon} />
+              <ThemedText variant="bodySmall" color={colors.cream100} style={styles.quickActionTitle}>
                 Daily Habits
               </ThemedText>
               <ThemedText variant="caption" color={colors.creamMuted}>
@@ -209,8 +209,8 @@ export function HomeScreen() {
                 pressed && styles.cardPressed,
               ]}
             >
-              <UnfurlIcon name="stethoscope" size={26} style={styles.quickActionIcon} />
-              <ThemedText variant="h3" color={colors.cream100} style={styles.quickActionTitle}>
+              <UnfurlIcon name="stethoscope" size={20} style={styles.quickActionIcon} />
+              <ThemedText variant="bodySmall" color={colors.cream100} style={styles.quickActionTitle}>
                 Doctor Toolkit
               </ThemedText>
               <ThemedText variant="caption" color={colors.creamMuted}>
@@ -255,10 +255,10 @@ export function HomeScreen() {
                         pressed && styles.cardPressed,
                       ]}
                     >
-                      <UnfurlIcon name={STEP_TYPE_ICON[item.stepType]} size={22} style={styles.planIcon} />
+                      <UnfurlIcon name={STEP_TYPE_ICON[item.stepType]} size={18} style={styles.planIcon} />
                       <View style={styles.planTextBlock}>
                         <View style={styles.planSectionRow}>
-                          <UnfurlIcon name={item.sectionIcon} size={13} />
+                          <UnfurlIcon name={item.sectionIcon} size={11} />
                           <ThemedText variant="caption" color={colors.sage}>
                             {item.sectionTitle}
                           </ThemedText>
@@ -293,7 +293,7 @@ export function HomeScreen() {
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={styles.railContent}
               decelerationRate="fast"
-              snapToInterval={132}
+              snapToInterval={108}
             >
               {contentLibrary.map((section) => (
                 <Pressable
@@ -305,7 +305,7 @@ export function HomeScreen() {
                     pressed && styles.cardPressed,
                   ]}
                 >
-                  <UnfurlIcon name={section.icon} size={28} style={styles.libraryRailIcon} />
+                  <UnfurlIcon name={section.icon} size={22} style={styles.libraryRailIcon} />
                   <ThemedText
                     variant="bodySmall"
                     color={colors.cream100}
@@ -444,7 +444,7 @@ const styles = StyleSheet.create({
   },
   quickActionCard: {
     flex: 1,
-    padding: spacing.lg,
+    padding: spacing.md,
   },
   quickActionIcon: {
     marginBottom: spacing.sm,
@@ -477,7 +477,7 @@ const styles = StyleSheet.create({
   planRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: spacing.lg,
+    padding: spacing.md,
   },
   planRowBorder: {
     borderBottomWidth: 1,
@@ -497,10 +497,10 @@ const styles = StyleSheet.create({
     marginRight: spacing.sm,
   },
   libraryRailCard: {
-    width: 116,
-    minHeight: 116,
-    padding: spacing.md,
-    marginRight: spacing.md,
+    width: 100,
+    minHeight: 100,
+    padding: spacing.sm,
+    marginRight: spacing.sm,
     alignItems: 'center',
     justifyContent: 'center',
   },
