@@ -11,8 +11,8 @@ import { mkdirSync } from 'node:fs';
 const OUT_DIR = process.argv[2] || '../../../narration-samples';
 mkdirSync(OUT_DIR, { recursive: true });
 
-// Real excerpts from src/data/contentLibrary.ts — one short/emotional, one
-// longer/explanatory, to hear how the voice handles both registers.
+// Real excerpt from src/data/contentLibrary.ts (1.1) — one text, run across
+// many voices, so comparing timbre isn't also comparing content.
 const SAMPLES = {
   'recognition-1-1': [
     "There is a particular kind of loneliness that comes from being told, again and again, that what you feel isn't real.",
@@ -20,13 +20,24 @@ const SAMPLES = {
     "It isn't.",
     "What you are feeling has a name, a cause, and a history far longer than your own.",
   ].join(' '),
-  'brain-fog-2-1': [
-    "You walk into the kitchen for something — you were sure, a second ago, exactly what — and now you're just standing there, hand on the counter, reaching for a thought that's slipped out of reach.",
-    "Here's what's actually happening, without the jargon: estrogen does real, measurable work in the brain — it helps regulate memory, word-finding, and how quickly your mind processes things.",
-  ].join(' '),
 };
 
-const VOICES = ['af_bella', 'af_heart', 'af_nicole'];
+// af_bella, af_heart, af_nicole already tried and rejected — skipped here.
+// Rest of Kokoro's American + British female voices, for a wider pass.
+const VOICES = [
+  'af_alloy',
+  'af_aoede',
+  'af_jessica',
+  'af_kore',
+  'af_nova',
+  'af_river',
+  'af_sarah',
+  'af_sky',
+  'bf_alice',
+  'bf_emma',
+  'bf_isabella',
+  'bf_lily',
+];
 
 console.log('Loading Kokoro-82M (q8 quantized)...');
 const tts = await KokoroTTS.from_pretrained('onnx-community/Kokoro-82M-ONNX', {
