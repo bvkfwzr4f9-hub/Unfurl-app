@@ -3,7 +3,7 @@ import Svg, { G, Circle } from 'react-native-svg';
 import { colors, spacing, radius } from '@/theme';
 import { ThemedText } from '../ThemedText';
 
-/** Section 6.1 — hot flashes account for only about a third of menopausal night waking. */
+/** Section 2.4 — hot flashes account for only about a third of menopausal night waking. */
 export function SleepDonutChart() {
   return (
     <View style={styles.card}>

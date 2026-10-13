@@ -115,7 +115,7 @@ const ARTICLE_CHARTS: Record<string, ArticleChartConfig> = {
         afterParagraph: 1,
         Chart: () => (
           <ArticleStatCard
-            items={[{ value: '~42% lower', label: 'insulin sensitivity in perimenopause vs. premenopause' }]}
+            items={[{ value: '~40% lower', label: 'insulin sensitivity in perimenopause vs. premenopause' }]}
           />
         ),
       },

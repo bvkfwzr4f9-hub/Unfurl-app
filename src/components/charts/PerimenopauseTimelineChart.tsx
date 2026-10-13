@@ -48,7 +48,7 @@ export function PerimenopauseTimelineChart() {
         4–10 years
       </ThemedText>
       <ThemedText variant="bodySmall" color={colors.creamMuted} style={styles.caption}>
-        ~7.4 years average total symptom duration
+        ~7.5 years average total symptom duration
       </ThemedText>
     </View>
   );
