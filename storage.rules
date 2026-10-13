@@ -1,0 +1,26 @@
+rules_version = '2';
+
+// Deploy from the Firebase Console: Storage → Rules → paste this in and
+// Publish. (This sandbox can't reach firebase.google.com to deploy it for
+// you — see firestore.rules for the same note.)
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Narration audio for the content library. Public-read on purpose: the
+    // client plays these via a plain HTTPS URL (src/services/narration.ts),
+    // not the Storage SDK, so there's no Firebase ID token to check against
+    // anyway — a signed/tokened download URL can be reused by anyone who
+    // has it regardless of rules, the same way a shared Google Drive link
+    // works. This is the same "not airtight against a determined user"
+    // tradeoff already accepted for subscriptionStatus in firestore.rules —
+    // worth real enforcement (a Cloud Function checking subscription status
+    // before streaming the file) once real billing exists, not before.
+    //
+    // Writes only via the Admin SDK (scripts/narration/upload-narration.ts),
+    // which bypasses rules entirely — `allow write: if false` here just
+    // blocks writes from the client app itself.
+    match /narration/{fileName} {
+      allow read: if true;
+      allow write: if false;
+    }
+  }
+}

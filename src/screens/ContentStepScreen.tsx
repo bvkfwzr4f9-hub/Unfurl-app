@@ -20,6 +20,7 @@ import {
 } from '@/data/contentLibrary';
 import { getArticleChart, getAlwaysVisibleChart } from '@/data/articleCharts';
 import { getStreamPlaybackUrl } from '@/services/cloudflareStream';
+import { getNarrationUrl } from '@/services/narration';
 import { useAuth } from '@/services/useAuth';
 import { useUserProfile } from '@/services/useUserProfile';
 import { setStepCompletion } from '@/services/subscription';
@@ -160,7 +161,12 @@ export function ContentStepScreen() {
                 {step.title}
               </ThemedText>
 
-              <AudioPlayer paragraphs={step.body} theme="dark" style={styles.listenButton} />
+              <AudioPlayer
+                paragraphs={step.body}
+                narrationUrl={getNarrationUrl(section.slug, step.id)}
+                theme="dark"
+                style={styles.listenButton}
+              />
 
               <View style={styles.readingPanel}>
                 {step.type === 'video' && !step.videoId && (

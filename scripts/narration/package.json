@@ -8,6 +8,7 @@
     "generate": "tsx generate-narration.ts ./output"
   },
   "dependencies": {
+    "firebase-admin": "^13.0.0",
     "kokoro-js": "^1.2.1"
   },
   "devDependencies": {

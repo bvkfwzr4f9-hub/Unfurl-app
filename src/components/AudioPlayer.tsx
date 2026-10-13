@@ -10,18 +10,141 @@ import {
   LayoutChangeEvent,
 } from 'react-native';
 import * as Speech from 'expo-speech';
+import { useAudioPlayer, useAudioPlayerStatus } from 'expo-audio';
 import { colors, spacing, radius } from '@/theme';
 import { ThemedText } from './ThemedText';
 
 interface AudioPlayerProps {
-  /** Paragraphs to read aloud, in order. */
+  /** Paragraphs to read aloud, in order — used for the on-device speech fallback. */
   paragraphs: string[];
+  /** Resolved narration audio URL for this piece (see src/services/narration.ts). Falls back to on-device speech when absent or unreachable (e.g. not generated yet). */
+  narrationUrl?: string;
   /** 'dark' for use on dark/photo backgrounds, 'light' for use on cream cards. */
   theme?: 'dark' | 'light';
   style?: StyleProp<ViewStyle>;
 }
 
-type Status = 'idle' | 'playing' | 'paused';
+/**
+ * Plays real narration audio when it exists, falling back to on-device
+ * speech for pieces that don't have it yet (the narration batch rolls out
+ * gradually — see scripts/narration/). Same play/pause/seek/stop UI either
+ * way; the two backends are swapped underneath it.
+ */
+export function AudioPlayer({ paragraphs, narrationUrl, theme = 'dark', style }: AudioPlayerProps) {
+  // null = still checking whether the file exists; false = use speech.
+  const [audioAvailable, setAudioAvailable] = useState<boolean | null>(narrationUrl ? null : false);
+
+  useEffect(() => {
+    if (!narrationUrl) {
+      setAudioAvailable(false);
+      return;
+    }
+    let cancelled = false;
+    setAudioAvailable(null);
+    fetch(narrationUrl, { method: 'HEAD' })
+      .then((res) => {
+        if (!cancelled) setAudioAvailable(res.ok);
+      })
+      .catch(() => {
+        if (!cancelled) setAudioAvailable(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [narrationUrl]);
+
+  // While checking, render the speech player — the check is a single small
+  // HEAD request and resolves well before anyone reaches for the play
+  // button, so this avoids a layout flash rather than adding a loading state.
+  if (audioAvailable) {
+    return <RealAudioPlayer url={narrationUrl!} theme={theme} style={style} />;
+  }
+  return <SpeechPlayer paragraphs={paragraphs} theme={theme} style={style} />;
+}
+
+function RealAudioPlayer({
+  url,
+  theme,
+  style,
+}: {
+  url: string;
+  theme: 'dark' | 'light';
+  style?: StyleProp<ViewStyle>;
+}) {
+  const player = useAudioPlayer(url);
+  const status = useAudioPlayerStatus(player);
+  const [trackWidth, setTrackWidth] = useState(0);
+
+  const duration = status.duration ?? 0;
+  const progress = duration > 0 ? Math.min(status.currentTime / duration, 1) : 0;
+
+  function handlePlayPause() {
+    if (status.playing) {
+      player.pause();
+      return;
+    }
+    if (status.didJustFinish) {
+      player.seekTo(0);
+    }
+    player.play();
+  }
+
+  function handleStop() {
+    player.pause();
+    player.seekTo(0);
+  }
+
+  function handleSeek(locationX: number) {
+    if (trackWidth === 0 || duration === 0) return;
+    const ratio = Math.max(0, Math.min(1, locationX / trackWidth));
+    player.seekTo(ratio * duration);
+  }
+
+  const panResponder = useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => true,
+      onMoveShouldSetPanResponder: () => true,
+      onPanResponderGrant: (event) => handleSeek(event.nativeEvent.locationX),
+      onPanResponderMove: (event) => handleSeek(event.nativeEvent.locationX),
+    })
+  ).current;
+
+  function handleTrackLayout(event: LayoutChangeEvent) {
+    setTrackWidth(event.nativeEvent.layout.width);
+  }
+
+  const palette = theme === 'dark' ? darkPalette : lightPalette;
+  const atStart = status.currentTime === 0 && !status.playing;
+
+  return (
+    <View style={[styles.base, { backgroundColor: palette.bg, borderColor: palette.border }, style]}>
+      <Pressable onPress={handlePlayPause} hitSlop={8} style={styles.playButton}>
+        <ThemedText variant="h3" color={palette.text}>
+          {status.playing ? '⏸' : '▶'}
+        </ThemedText>
+      </Pressable>
+
+      <View style={styles.track} onLayout={handleTrackLayout} {...panResponder.panHandlers}>
+        <View style={[styles.trackLine, { backgroundColor: palette.trackLine }]} />
+        <View
+          style={[
+            styles.trackFill,
+            { backgroundColor: palette.trackFill, width: `${progress * 100}%` },
+          ]}
+        />
+        <View style={[styles.thumb, { backgroundColor: palette.text, left: `${progress * 100}%` }]} />
+      </View>
+
+      <Pressable onPress={handleStop} hitSlop={8} disabled={atStart} style={styles.stopButton}>
+        <ThemedText variant="body" color={atStart ? palette.disabled : palette.text}>
+          ⏹
+        </ThemedText>
+      </Pressable>
+    </View>
+  );
+}
+
+type SpeechStatus = 'idle' | 'playing' | 'paused';
 
 // expo-speech doesn't re-export this type from its root module.
 type BoundaryEvent = { charIndex: number; charLength: number };
@@ -32,22 +155,25 @@ type BoundaryEvent = { charIndex: number; charLength: number };
 // jump or Android needs to "pause", stopping and re-speaking from that offset.
 const CAN_TRUE_PAUSE = Platform.OS === 'ios' || Platform.OS === 'web';
 
-/**
- * A real audio-style player for reading article text aloud with the on-device
- * voice: play/pause, stop, and a scrubbable progress bar — not just a toggle.
- * No audio files needed — this covers every piece of content today, ahead of
- * any real narration.
- */
-export function AudioPlayer({ paragraphs, theme = 'dark', style }: AudioPlayerProps) {
+/** On-device speech fallback — used until a piece has real narration uploaded. */
+function SpeechPlayer({
+  paragraphs,
+  theme,
+  style,
+}: {
+  paragraphs: string[];
+  theme: 'dark' | 'light';
+  style?: StyleProp<ViewStyle>;
+}) {
   const text = paragraphs.join('.\n\n');
-  const [status, setStatus] = useState<Status>('idle');
+  const [status, setStatus] = useState<SpeechStatus>('idle');
   const [progress, setProgress] = useState(0); // 0..1, absolute position in `text`
   const [trackWidth, setTrackWidth] = useState(0);
 
   // Character offset `text` was last (re)started from — absolute charIndex
   // from onBoundary is relative to whatever substring we last passed to speak().
   const baseOffsetRef = useRef(0);
-  const statusRef = useRef<Status>('idle');
+  const statusRef = useRef<SpeechStatus>('idle');
   statusRef.current = status;
 
   useEffect(() => {
