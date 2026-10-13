@@ -1,0 +1,9 @@
+{
+  "name": "unfurl-narration-tool",
+  "private": true,
+  "type": "module",
+  "description": "Offline narration generation for the content library — not part of the app bundle.",
+  "dependencies": {
+    "kokoro-js": "^1.2.1"
+  }
+}
