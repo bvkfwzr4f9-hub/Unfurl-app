@@ -32,8 +32,12 @@ export function LandingScreen() {
           <ThemedText variant="display" color={colors.cream100} style={styles.headline}>
             Menopause,{'\n'}
             <ThemedText style={[typeScale.display, styles.headlineItalic]} color={colors.sage}>
-              without the guesswork.
+              without guessing.
             </ThemedText>
+          </ThemedText>
+          <ThemedText variant="bodyLarge" color={colors.cream100} style={styles.puzzleLine}>
+            Every section is a puzzle piece, each one a different way of seeing and understanding
+            your body.
           </ThemedText>
           <ThemedText variant="bodyLarge" color={colors.creamMuted} style={styles.subhead}>
             Take our 60-second quiz to find your personalized path — then join
@@ -112,6 +116,9 @@ const styles = StyleSheet.create({
   },
   headlineItalic: {
     fontFamily: fontFamily.serifItalic,
+  },
+  puzzleLine: {
+    marginBottom: spacing.md,
   },
   subhead: {
     marginBottom: spacing.lg,
